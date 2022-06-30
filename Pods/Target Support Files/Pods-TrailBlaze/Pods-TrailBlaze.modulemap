@@ -1,0 +1,6 @@
+framework module Pods_TrailBlaze {
+  umbrella header "Pods-TrailBlaze-umbrella.h"
+
+  export *
+  module * { export * }
+}

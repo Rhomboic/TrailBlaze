@@ -6,6 +6,9 @@ target 'TrailBlaze' do
   use_frameworks!
 
   # Pods for TrailBlaze
+     pod 'Parse'
+     pod 'AFNetworking'
+     pod 'DateTools' 
 
   target 'TrailBlazeTests' do
     inherit! :search_paths
