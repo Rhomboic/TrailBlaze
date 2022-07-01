@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		4EAAB54A286E5FA60093B30B /* keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4EAAB549286E5FA60093B30B /* keys.plist */; };
+		4EAAB54D286E6D960093B30B /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAAB54C286E6D960093B30B /* LoginViewController.m */; };
+		4EAAB550286E6DBB0093B30B /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAAB54F286E6DBB0093B30B /* HomeViewController.m */; };
+		4EAAB553286E6DE00093B30B /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAAB552286E6DE00093B30B /* RegisterViewController.m */; };
 		4EE674C22866D6C800A93C15 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE674C12866D6C800A93C15 /* AppDelegate.m */; };
 		4EE674C52866D6C800A93C15 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE674C42866D6C800A93C15 /* SceneDelegate.m */; };
 		4EE674C82866D6C800A93C15 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE674C72866D6C800A93C15 /* ViewController.m */; };
@@ -46,6 +49,12 @@
 		3E953E4347D732BD1B596D6A /* Pods-TrailBlaze-TrailBlazeUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrailBlaze-TrailBlazeUITests.release.xcconfig"; path = "Target Support Files/Pods-TrailBlaze-TrailBlazeUITests/Pods-TrailBlaze-TrailBlazeUITests.release.xcconfig"; sourceTree = "<group>"; };
 		4E6BD31F585E1E0A201FB7F8 /* Pods-TrailBlaze.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrailBlaze.release.xcconfig"; path = "Target Support Files/Pods-TrailBlaze/Pods-TrailBlaze.release.xcconfig"; sourceTree = "<group>"; };
 		4EAAB549286E5FA60093B30B /* keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = keys.plist; sourceTree = "<group>"; };
+		4EAAB54B286E6D960093B30B /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		4EAAB54C286E6D960093B30B /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		4EAAB54E286E6DBB0093B30B /* HomeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
+		4EAAB54F286E6DBB0093B30B /* HomeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
+		4EAAB551286E6DE00093B30B /* RegisterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
+		4EAAB552286E6DE00093B30B /* RegisterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
 		4EE674BD2866D6C800A93C15 /* TrailBlaze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrailBlaze.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EE674C02866D6C800A93C15 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4EE674C12866D6C800A93C15 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -170,6 +179,12 @@
 		4EE674F52866D6D500A93C15 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				4EAAB54B286E6D960093B30B /* LoginViewController.h */,
+				4EAAB54C286E6D960093B30B /* LoginViewController.m */,
+				4EAAB54E286E6DBB0093B30B /* HomeViewController.h */,
+				4EAAB54F286E6DBB0093B30B /* HomeViewController.m */,
+				4EAAB551286E6DE00093B30B /* RegisterViewController.h */,
+				4EAAB552286E6DE00093B30B /* RegisterViewController.m */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -430,6 +445,9 @@
 				4EE674C22866D6C800A93C15 /* AppDelegate.m in Sources */,
 				4EE674D32866D6C900A93C15 /* main.m in Sources */,
 				4EE674C52866D6C800A93C15 /* SceneDelegate.m in Sources */,
+				4EAAB553286E6DE00093B30B /* RegisterViewController.m in Sources */,
+				4EAAB54D286E6D960093B30B /* LoginViewController.m in Sources */,
+				4EAAB550286E6DBB0093B30B /* HomeViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
