@@ -6,8 +6,10 @@
 //
 
 #import "RegisterViewController.h"
+#import "Parse/Parse.h"
 
 @interface RegisterViewController ()
+
 
 @end
 

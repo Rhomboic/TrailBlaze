@@ -31,6 +31,7 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Login"/>
                                 <connections>
+                                    <action selector="didTapLogin:" destination="BYZ-38-t0r" eventType="touchUpInside" id="BSj-A9-dmg"/>
                                     <segue destination="1PM-lq-Vq9" kind="presentation" id="5oQ-w4-0AH"/>
                                 </connections>
                             </button>
@@ -57,6 +58,11 @@
                             <constraint firstItem="HSC-7L-nf5" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="uRi-T0-GHK"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="loginButton" destination="CQQ-vf-HRq" id="R7m-7w-8LL"/>
+                        <outlet property="passwordField" destination="Ar1-PP-aaq" id="5Oo-av-nRe"/>
+                        <outlet property="usernameField" destination="HSC-7L-nf5" id="ncP-Nk-KSK"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
@@ -75,11 +81,11 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="OE9-CB-LWA">
-                                <rect key="frame" x="120" y="470" width="174" height="34"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wSY-Yx-5EO">
+                                <rect key="frame" x="169.5" y="556" width="75" height="31"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Sign Up"/>
+                            </button>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9Ny-ka-PhW">
                                 <rect key="frame" x="120" y="512" width="174" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -91,11 +97,11 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wSY-Yx-5EO">
-                                <rect key="frame" x="169.5" y="556" width="75" height="31"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Sign Up"/>
-                            </button>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="OE9-CB-LWA">
+                                <rect key="frame" x="120" y="470" width="174" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="FIK-6G-bgG"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
