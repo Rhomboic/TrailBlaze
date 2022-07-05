@@ -14,56 +14,61 @@
 @property (weak, nonatomic) IBOutlet UITextField *usernameField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordField;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
+@property (weak, nonatomic) IBOutlet UIButton *signupButton;
+@property UIAlertController *alert;
 
 @end
 
-@implementation LoginViewController {
-    BOOL _emptyField;
+@implementation LoginViewController 
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    _usernameField.delegate = self;
+    _passwordField.delegate = self;
+    
+    
+    self.alert = [UIAlertController alertControllerWithTitle:@"Empty Fields" message:@"Please fill all fields" preferredStyle:(UIAlertControllerStyleAlert)];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {}];
+    [self.alert addAction:okAction];
 }
 
 - (IBAction)didTapLogin:(id)sender {
     if ([_usernameField.text isEqual:@""] || [_passwordField.text isEqual:@""]) {
-        _emptyField = YES;
+        [self presentViewController:self.alert animated:YES completion:^{}];
+    } else {
+        [self loginUser];
     }
-    
-    [self loginUser];
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
+- (IBAction)didTapSignup:(id)sender {
+    [self performSegueWithIdentifier:@"registerViewControllerSegue" sender:nil];
 }
 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    [self didTapLogin:_loginButton];
+    return YES;
+}
 
 - (void)loginUser {
     NSString *username = self.usernameField.text;
     NSString *password = self.passwordField.text;
 
     [PFUser logInWithUsernameInBackground:username password:password block:^(PFUser * user, NSError *  error) {
-        if (error != nil && !_emptyField) {
+        if (error != nil) {
             NSLog(@"User log in failed: %@", error.localizedDescription);
-        } else
+            [self performSegueWithIdentifier:@"registerViewControllerSegue" sender:nil];
+        } else {
             NSLog(@"User logged in successfully");
             SceneDelegate *sceneDelegate = (SceneDelegate *)UIApplication.sharedApplication.connectedScenes.allObjects.firstObject.delegate;
             UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-            HomeViewController *homeViewController = [storyboard instantiateViewControllerWithIdentifier:@"TabViewController"];
+            HomeViewController *homeViewController = [storyboard instantiateViewControllerWithIdentifier:@"TabBarController"];
             sceneDelegate.window.rootViewController = homeViewController;
-
-            
         }
-    ];
+    }];
 }
 
-
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
