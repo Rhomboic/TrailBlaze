@@ -222,8 +222,29 @@
                     <view key="view" contentMode="scaleToFill" id="MIE-6I-etn">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aon-wL-d7a">
+                                <rect key="frame" x="145" y="133" width="100" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="4kZ-WB-fAF"/>
+                                    <constraint firstAttribute="width" constant="100" id="xmo-BY-GLt"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IzR-bq-ijD">
+                                <rect key="frame" x="174" y="243" width="42" height="20.333333333333314"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="ZfQ-dh-9gX"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="aon-wL-d7a" firstAttribute="top" secondItem="ZfQ-dh-9gX" secondAttribute="top" constant="45" id="gBr-18-r2M"/>
+                            <constraint firstItem="IzR-bq-ijD" firstAttribute="centerX" secondItem="aon-wL-d7a" secondAttribute="centerX" id="lLM-lX-uBK"/>
+                            <constraint firstItem="aon-wL-d7a" firstAttribute="centerX" secondItem="ZfQ-dh-9gX" secondAttribute="centerX" id="lZM-YP-yRP"/>
+                            <constraint firstItem="IzR-bq-ijD" firstAttribute="top" secondItem="aon-wL-d7a" secondAttribute="bottom" constant="10" id="nUt-lZ-JjG"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Profile" id="ze4-Uz-eAl">
                         <barButtonItem key="rightBarButtonItem" title="Logout" id="OZ8-ue-Zo5">
@@ -234,17 +255,19 @@
                     </navigationItem>
                     <connections>
                         <outlet property="logoutButton" destination="OZ8-ue-Zo5" id="WG6-Zk-UMh"/>
+                        <outlet property="profileImage" destination="aon-wL-d7a" id="0pn-Fv-BNT"/>
+                        <outlet property="profileName" destination="IzR-bq-ijD" id="Okl-S0-ZkA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="d9N-rf-kjn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1123" y="2256"/>
+            <point key="canvasLocation" x="1121.5384615384614" y="2255.6872037914691"/>
         </scene>
-        <!--Item-->
+        <!--Me-->
         <scene sceneID="IxU-Ui-9oM">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="XeW-oM-ItT" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" image="person" catalog="system" selectedImage="person.fill" id="cSh-nd-2xm"/>
+                    <tabBarItem key="tabBarItem" title="Me" image="person" catalog="system" selectedImage="person.fill" id="cSh-nd-2xm"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="n9t-zi-rGh">
                         <rect key="frame" x="0.0" y="44" width="390" height="44"/>

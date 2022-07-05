@@ -12,6 +12,8 @@
 
 @interface ProfileViewController ()
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *logoutButton;
+@property (weak, nonatomic) IBOutlet UIImageView *profileImage;
+@property (weak, nonatomic) IBOutlet UILabel *profileName;
 
 @end
 
@@ -19,6 +21,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _profileName.text = PFUser.currentUser.username;
     // Do any additional setup after loading the view.
 }
 - (IBAction)didTapLogout:(id)sender {
