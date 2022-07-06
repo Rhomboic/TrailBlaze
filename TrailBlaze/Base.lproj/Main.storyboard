@@ -89,8 +89,9 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
-                        <segue destination="FMB-vC-zP1" kind="relationship" relationship="viewControllers" id="9g8-83-mcY"/>
                         <segue destination="XeW-oM-ItT" kind="relationship" relationship="viewControllers" id="W2i-Uh-TVr"/>
+                        <segue destination="FMB-vC-zP1" kind="relationship" relationship="viewControllers" id="9g8-83-mcY"/>
+                        <segue destination="iRW-JU-8oR" kind="relationship" relationship="viewControllers" id="ToZ-pq-Ze8"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="h3F-Pn-8hB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -174,22 +175,72 @@
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="T9Y-EL-DwS">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="mutedStandard" showsUserLocation="YES" showsPointsOfInterest="NO" showsTraffic="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T9Y-EL-DwS">
                                 <rect key="frame" x="0.0" y="0.0" width="390" height="761"/>
                             </mapView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Obw-rU-VR0">
+                                <rect key="frame" x="100" y="681" width="190" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="iB8-Nm-bSj"/>
+                                </constraints>
+                                <color key="tintColor" systemColor="systemYellowColor"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Trail Run">
+                                    <fontDescription key="titleFontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
+                                </buttonConfiguration>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VUG-zF-R7H">
+                                <rect key="frame" x="120" y="611" width="150" height="60"/>
+                                <color key="backgroundColor" red="0.94380235180000005" green="0.86339021549999995" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="3t6-Pr-Wsh"/>
+                                </constraints>
+                                <color key="tintColor" red="0.94380235180000005" green="0.86339021549999995" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Free Run">
+                                    <fontDescription key="titleFontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="20"/>
+                                    <color key="baseForegroundColor" systemColor="labelColor"/>
+                                </buttonConfiguration>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2PB-1q-1vO">
+                                <rect key="frame" x="300" y="681" width="60" height="60"/>
+                                <color key="backgroundColor" red="0.1232301824" green="0.22960293170000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="60" id="BCc-tZ-k7O"/>
+                                    <constraint firstAttribute="height" constant="60" id="Ybq-u1-5fs"/>
+                                </constraints>
+                                <color key="tintColor" systemColor="systemYellowColor"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" image="location.fill" catalog="system"/>
+                                <connections>
+                                    <action selector="didTapCurrentLocation:" destination="7Ds-Ra-0om" eventType="touchUpInside" id="asK-jQ-noS"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Tk9-PI-aXB"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="Tk9-PI-aXB" firstAttribute="bottom" secondItem="Obw-rU-VR0" secondAttribute="bottom" constant="20" id="LId-dI-Upz"/>
+                            <constraint firstItem="Obw-rU-VR0" firstAttribute="leading" secondItem="Tk9-PI-aXB" secondAttribute="leading" constant="100" id="RQg-6s-sD5"/>
                             <constraint firstItem="Tk9-PI-aXB" firstAttribute="trailing" secondItem="T9Y-EL-DwS" secondAttribute="trailing" id="SfV-3Q-4SH"/>
+                            <constraint firstItem="VUG-zF-R7H" firstAttribute="leading" secondItem="Tk9-PI-aXB" secondAttribute="leading" constant="120" id="YMd-8U-OS3"/>
+                            <constraint firstItem="Obw-rU-VR0" firstAttribute="top" secondItem="VUG-zF-R7H" secondAttribute="bottom" constant="10" id="Zru-I0-ctt"/>
                             <constraint firstItem="Tk9-PI-aXB" firstAttribute="bottom" secondItem="T9Y-EL-DwS" secondAttribute="bottom" id="ckM-7W-Klf"/>
                             <constraint firstItem="T9Y-EL-DwS" firstAttribute="leading" secondItem="Tk9-PI-aXB" secondAttribute="leading" id="flK-xT-XUx"/>
+                            <constraint firstItem="Tk9-PI-aXB" firstAttribute="trailing" secondItem="VUG-zF-R7H" secondAttribute="trailing" constant="120" id="fw9-el-CCC"/>
                             <constraint firstItem="T9Y-EL-DwS" firstAttribute="top" secondItem="i54-kZ-m9E" secondAttribute="top" id="fy0-P8-Q2b"/>
+                            <constraint firstItem="VUG-zF-R7H" firstAttribute="centerX" secondItem="Obw-rU-VR0" secondAttribute="centerX" id="hfm-8c-eo0"/>
+                            <constraint firstItem="2PB-1q-1vO" firstAttribute="centerY" secondItem="Obw-rU-VR0" secondAttribute="centerY" id="ob3-JH-VUF"/>
+                            <constraint firstItem="Obw-rU-VR0" firstAttribute="centerX" secondItem="T9Y-EL-DwS" secondAttribute="centerX" id="ydJ-9K-LIS"/>
+                            <constraint firstItem="2PB-1q-1vO" firstAttribute="leading" secondItem="Obw-rU-VR0" secondAttribute="trailing" constant="10" id="ypG-7W-Z7v"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Blaze Map" id="tpx-TX-z7r"/>
                     <connections>
+                        <outlet property="freerunButton" destination="VUG-zF-R7H" id="bFu-Au-OfV"/>
+                        <outlet property="locationButton" destination="2PB-1q-1vO" id="t7c-JJ-Rkx"/>
                         <outlet property="mapView" destination="T9Y-EL-DwS" id="OBu-qA-NI5"/>
+                        <outlet property="trailrunButton" destination="Obw-rU-VR0" id="9QI-FN-Ebd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0US-Hz-y89" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -200,7 +251,13 @@
         <scene sceneID="Vq0-hR-sjM">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="FMB-vC-zP1" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Home" image="house" catalog="system" selectedImage="house.fill" id="Chc-Xg-TiW"/>
+                    <tabBarItem key="tabBarItem" title="Home" image="house" catalog="system" selectedImage="house.fill" id="Chc-Xg-TiW">
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
+                                <color key="value" red="0.53670996936276349" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </tabBarItem>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="chc-KY-F2G">
                         <rect key="frame" x="0.0" y="44" width="390" height="44"/>
@@ -213,7 +270,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZG5-23-Hri" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="184.61538461538461" y="1542.654028436019"/>
+            <point key="canvasLocation" x="185" y="1558"/>
         </scene>
         <!--Profile-->
         <scene sceneID="HbI-YA-Pka">
@@ -223,8 +280,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aon-wL-d7a">
-                                <rect key="frame" x="145" y="133" width="100" height="100"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.crop.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="aon-wL-d7a">
+                                <rect key="frame" x="145" y="134" width="100" height="98.666666666666671"/>
+                                <color key="tintColor" systemColor="opaqueSeparatorColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="100" id="4kZ-WB-fAF"/>
                                     <constraint firstAttribute="width" constant="100" id="xmo-BY-GLt"/>
@@ -236,11 +294,23 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9lC-Vn-vcz">
+                                <rect key="frame" x="145" y="133" width="100" height="100"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title=""/>
+                                <connections>
+                                    <action selector="didTapProfileImage:" destination="UxB-Jd-cPy" eventType="touchUpInside" id="cXB-Am-rsP"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ZfQ-dh-9gX"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="9lC-Vn-vcz" firstAttribute="height" secondItem="aon-wL-d7a" secondAttribute="height" id="6bv-Nf-BGe"/>
+                            <constraint firstItem="9lC-Vn-vcz" firstAttribute="width" secondItem="aon-wL-d7a" secondAttribute="width" id="BGn-cQ-Mng"/>
+                            <constraint firstItem="9lC-Vn-vcz" firstAttribute="centerY" secondItem="aon-wL-d7a" secondAttribute="centerY" id="DJP-Pt-QWD"/>
                             <constraint firstItem="aon-wL-d7a" firstAttribute="top" secondItem="ZfQ-dh-9gX" secondAttribute="top" constant="45" id="gBr-18-r2M"/>
+                            <constraint firstItem="9lC-Vn-vcz" firstAttribute="centerX" secondItem="aon-wL-d7a" secondAttribute="centerX" id="jjp-bO-7gO"/>
                             <constraint firstItem="IzR-bq-ijD" firstAttribute="centerX" secondItem="aon-wL-d7a" secondAttribute="centerX" id="lLM-lX-uBK"/>
                             <constraint firstItem="aon-wL-d7a" firstAttribute="centerX" secondItem="ZfQ-dh-9gX" secondAttribute="centerX" id="lZM-YP-yRP"/>
                             <constraint firstItem="IzR-bq-ijD" firstAttribute="top" secondItem="aon-wL-d7a" secondAttribute="bottom" constant="10" id="nUt-lZ-JjG"/>
@@ -256,6 +326,7 @@
                     <connections>
                         <outlet property="logoutButton" destination="OZ8-ue-Zo5" id="WG6-Zk-UMh"/>
                         <outlet property="profileImage" destination="aon-wL-d7a" id="0pn-Fv-BNT"/>
+                        <outlet property="profileImageButton" destination="9lC-Vn-vcz" id="drg-OE-9IL"/>
                         <outlet property="profileName" destination="IzR-bq-ijD" id="Okl-S0-ZkA"/>
                     </connections>
                 </viewController>
@@ -280,16 +351,64 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W50-sG-Dhn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1091" y="1543"/>
+            <point key="canvasLocation" x="1122" y="1558"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="Xfn-Gb-vTM">
+            <objects>
+                <viewController id="VSj-Fa-Yaw" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="MKe-bI-pAb">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="Ub0-j8-xSU"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="F0i-wU-Wsx"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3HY-l5-lqj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-755" y="2256"/>
+        </scene>
+        <!--Mates-->
+        <scene sceneID="xHX-aj-Bga">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="iRW-JU-8oR" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Mates" image="person.3" catalog="system" selectedImage="person.3.fill" id="kBh-Rq-fRU"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="tUt-LE-OI5">
+                        <rect key="frame" x="0.0" y="44" width="390" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="VSj-Fa-Yaw" kind="relationship" relationship="rootViewController" id="kEB-z5-Sdr"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="v4l-ra-4yW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-755" y="1558"/>
         </scene>
     </scenes>
     <resources>
         <image name="house" catalog="system" width="128" height="106"/>
         <image name="house.fill" catalog="system" width="128" height="106"/>
+        <image name="location.fill" catalog="system" width="128" height="121"/>
         <image name="person" catalog="system" width="128" height="117"/>
+        <image name="person.3" catalog="system" width="128" height="62"/>
+        <image name="person.3.fill" catalog="system" width="128" height="61"/>
+        <image name="person.crop.circle" catalog="system" width="128" height="121"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="opaqueSeparatorColor">
+            <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemYellowColor">
+            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
