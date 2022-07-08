@@ -7,6 +7,8 @@
 
 #import "SceneDelegate.h"
 #import "Parse/Parse.h"
+#import "MapViewController.h"
+#import "HomeViewController.h"
 
 @interface SceneDelegate ()
 
@@ -17,26 +19,14 @@
 
 - (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions {
     // Code to initialize Parse
-    ParseClientConfiguration *config = [ParseClientConfiguration  configurationWithBlock:^(id<ParseMutableClientConfiguration> configuration) {
-        
-        NSString *path = [[NSBundle mainBundle] pathForResource: @"keys" ofType: @"plist"];
-        NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: path];
-
-        NSString *appID = [dict objectForKey: @"appID"];
-        NSString *clientKey = [dict objectForKey: @"clientKey"];
-
-        configuration.applicationId = appID;
-        configuration.clientKey = clientKey;
-        configuration.server = @"https://parseapi.back4app.com";
-    }];
-
-    [Parse initializeWithConfiguration:config];
-
     
     if (PFUser.currentUser) {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         
-        self.window.rootViewController = [storyboard instantiateViewControllerWithIdentifier:@"TabBarController"];
+        UITabBarController *tabBarController = [storyboard instantiateViewControllerWithIdentifier:@"TabBarController"];
+        [tabBarController setSelectedViewController: tabBarController.viewControllers[1]];
+        self.window.rootViewController = tabBarController;
+        
     }
 
 }

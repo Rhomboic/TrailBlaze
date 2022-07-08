@@ -1,55 +1,57 @@
 //
-//  HomeViewController.m
+//  MapViewController.m
 //  TrailBlaze
 //
-//  Created by Adam Issah on 6/30/22.
+//  Created by Adam Issah on 7/6/22.
 //
+
+#import "MapViewController.h"
 #import "CoreLocation/CoreLocation.h"
-#import "HomeViewController.h"
 #import "MapKit/MapKit.h"
 
-@interface HomeViewController ()  <MKMapViewDelegate, CLLocationManagerDelegate>
-@property (strong, nonatomic) IBOutlet MKMapView *mapView;
-@property (weak, nonatomic) IBOutlet UIButton *locationButton;
-@property (weak, nonatomic) IBOutlet UIButton *freerunButton;
-@property (weak, nonatomic) IBOutlet UIButton *trailrunButton;
-@property (weak, nonatomic) IBOutlet UIButton *goButton;
-@property (weak, nonatomic) IBOutlet UITextField *locationField;
+@interface MapViewController () <MKMapViewDelegate, CLLocationManagerDelegate, UITextFieldDelegate>
+@property (strong, nonatomic) MKMapView *mapView;
+@property (weak, nonatomic) UIButton *locationButton;
+@property (weak, nonatomic) UIButton *freerunButton;
+@property (weak, nonatomic) UIButton *trailrunButton;
+@property (weak, nonatomic) UIButton *goButton;
+@property (weak, nonatomic) UITextField *locationField;
 
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) CLLocation* currentLocation;
 
 @end
 
-@implementation HomeViewController {
-    BOOL *firstCenteredOnUserLocation;
+@implementation MapViewController {
     NSDictionary *currentRun;
     CLLocation *destinationLocation;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self setRestorationIdentifier:@"MapViewController"];
     [self configureMapView];
     [self configureLocationManager];
     [self configureSubviews];
     [self centerOnUserLocation];
+    [self getLocation];
     
 }
 #pragma mark:  Button Actions
 
-- (IBAction)didTapCurrentLocation:(id)sender {
+- (void) didTapCurrentLocation:(UIButton *)currentlocationButton {
     [self centerOnUserLocation];
 }
 
-- (IBAction)didTapFreeRun:(id)sender {
+- (void)didTapFreeRun:(UIButton *)_freerunButton {
     
 }
 
-- (IBAction)didTapTrailRun:(id)sender {
+- (void)didTapTrailRun:(UIButton *)_trailrunButton {
     [_locationField setHidden:NO];
     [_goButton setHidden:NO];
 }
-- (IBAction)didTapGo:(id)sender {
+- (void)didTapGo:(UIButton *)_goButton {
     [_locationField endEditing:YES];
     [_locationField setHidden:YES];
     [_goButton setHidden:YES];
@@ -59,37 +61,68 @@
 #pragma mark:  Views Configs
 
 - (void) configureMapView {
+    _mapView = [[MKMapView alloc] initWithFrame:self.view.frame];
     _mapView.delegate =  self;
     _mapView.showsUserLocation = YES;
+    [self.view addSubview:_mapView];
 }
 
 - (void) configureSubviews {
+    _locationButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [_locationButton setImage:[UIImage imageNamed:@"location.fill"] forState:UIControlStateNormal];
+    [_locationButton sizeToFit];
     _locationButton.layer.cornerRadius = 30;
     _locationButton.clipsToBounds = true;
     
+    _freerunButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [_freerunButton setTitle:@"Free Run" forState:UIControlStateNormal];
+    [_freerunButton sizeToFit];
     _freerunButton.layer.cornerRadius = 30;
     _freerunButton.clipsToBounds = true;
     
+    
+    _trailrunButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [_trailrunButton setTitle:@"Trail Run" forState:UIControlStateNormal];
+    [_trailrunButton sizeToFit];
     _trailrunButton.layer.cornerRadius = 30;
     _trailrunButton.clipsToBounds = true;
     
+    
+    
+    _locationField = [[UITextField alloc] initWithFrame:CGRectMake(10, 200, 300, 40)];
+    _locationField.borderStyle = UITextBorderStyleRoundedRect;
+    _locationField.font = [UIFont systemFontOfSize:15];
+    _locationField.placeholder = @"enter text";
+    _locationField.autocorrectionType = UITextAutocorrectionTypeNo;
+    _locationField.keyboardType = UIKeyboardTypeDefault;
+    _locationField.returnKeyType = UIReturnKeyDone;
+    _locationField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    _locationField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    _locationField.delegate = self;
     [_locationField setHidden:YES];
+    
+    _goButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [_goButton setTitle:@"Trail Run" forState:UIControlStateNormal];
+    [_goButton sizeToFit];
     [_goButton setHidden:YES];
+    
+    [self.mapView addSubview:_locationButton];
+    [self.mapView addSubview:_locationField];
+    [self.mapView addSubview:_freerunButton];
+    [self.mapView addSubview:_trailrunButton];
+    [self.mapView addSubview:_goButton];
 }
 
 - (void) configureLocationManager {
     _locationManager = [[CLLocationManager alloc] init];
     _locationManager.delegate = self;
-    [_locationManager requestAlwaysAuthorization];
+    [_locationManager requestWhenInUseAuthorization];
     _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [_locationManager startUpdatingLocation];
 }
 #pragma mark:  Delegates
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
-    if (!self->firstCenteredOnUserLocation) {
-        [self centerOnUserLocation];
-        self->firstCenteredOnUserLocation = YES;
-    }
+    [self centerOnUserLocation];
 }
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay {
@@ -105,20 +138,12 @@
     [_mapView setRegion:sfRegion animated:YES];
 }
 
-- (void) addPins:(CLLocationCoordinate2D)destinationCoord {
-    MKPointAnnotation *startPin = [[MKPointAnnotation alloc] initWithCoordinate:_locationManager.location.coordinate title:@"Start" subtitle:@"Me"];
-    MKPointAnnotation *endPin = [[MKPointAnnotation alloc] initWithCoordinate:destinationCoord title:@"End" subtitle:@"Future Me"];
-    [_mapView addAnnotation:startPin];
-    [_mapView addAnnotation:endPin];
-}
-
 - (void) getLocation {
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
-    [geocoder geocodeAddressString:_locationField.text completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
+    [geocoder geocodeAddressString:@"Palo Alto" completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
         if (placemarks) {
              self->destinationLocation = placemarks.firstObject.location;
             NSLog(@"%@", self->destinationLocation);
-            [self addPins: self->destinationLocation.coordinate];
             [self getDirections:(__bridge CLLocationCoordinate2D *)(self->destinationLocation)];
         } else {
             NSLog(@"No location found");
@@ -137,8 +162,8 @@
     MKDirectionsRequest *pathRequest = [[MKDirectionsRequest alloc] init];
     [pathRequest setSource:startItem];
     [pathRequest setDestination:destinationItem];
-    [pathRequest setTransportType:MKDirectionsTransportTypeAutomobile];
-    [pathRequest setRequestsAlternateRoutes:NO];
+    [pathRequest setTransportType:MKDirectionsTransportTypeWalking];
+    [pathRequest setRequestsAlternateRoutes:YES];
     
     MKDirections *path = [[MKDirections alloc] initWithRequest:pathRequest];
     [path calculateDirectionsWithCompletionHandler:^(MKDirectionsResponse * _Nullable response, NSError * _Nullable error) {
@@ -163,3 +188,5 @@
 */
 
 @end
+
+
