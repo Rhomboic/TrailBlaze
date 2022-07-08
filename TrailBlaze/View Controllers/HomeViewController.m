@@ -11,20 +11,22 @@
 @interface HomeViewController ()  <MKMapViewDelegate, CLLocationManagerDelegate>
 @property (strong, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UIButton *locationButton;
-@property (weak, nonatomic) IBOutlet UIButton *freerunButton;
 @property (weak, nonatomic) IBOutlet UIButton *trailrunButton;
 @property (weak, nonatomic) IBOutlet UIButton *goButton;
 @property (weak, nonatomic) IBOutlet UITextField *locationField;
+@property (weak, nonatomic) IBOutlet UIButton *statsButton;
 
-@property (nonatomic, strong) CLLocationManager *locationManager;
-@property (nonatomic, strong) CLLocation* currentLocation;
 
 @end
 
 @implementation HomeViewController {
-    BOOL *firstCenteredOnUserLocation;
-    NSDictionary *currentRun;
+    BOOL firstCenteredOnUserLocation;
+    CLLocationManager *locationManager;
+
+    CLLocation *currentLocation;
     CLLocation *destinationLocation;
+    float destinationLocationLatitude;
+    float destinationLocationLongitude;
 }
 
 - (void)viewDidLoad {
@@ -41,18 +43,21 @@
     [self centerOnUserLocation];
 }
 
-- (IBAction)didTapFreeRun:(id)sender {
-    
+- (IBAction)didTapStats:(id)sender {
 }
+
 
 - (IBAction)didTapTrailRun:(id)sender {
     [_locationField setHidden:NO];
+    [_locationField becomeFirstResponder];
     [_goButton setHidden:NO];
 }
 - (IBAction)didTapGo:(id)sender {
     [_locationField endEditing:YES];
     [_locationField setHidden:YES];
     [_goButton setHidden:YES];
+    [_mapView removeOverlays:_mapView.overlays];
+    [_mapView removeAnnotations:_mapView.annotations];
     [self getLocation];
 }
 
@@ -67,35 +72,44 @@
     _locationButton.layer.cornerRadius = 30;
     _locationButton.clipsToBounds = true;
     
-    _freerunButton.layer.cornerRadius = 30;
-    _freerunButton.clipsToBounds = true;
-    
-    _trailrunButton.layer.cornerRadius = 30;
+    _trailrunButton.layer.cornerRadius = 40;
     _trailrunButton.clipsToBounds = true;
     
+    _statsButton.layer.cornerRadius = 30;
+    _statsButton.clipsToBounds = true;
+    
     [_locationField setHidden:YES];
+    _locationField.layer.cornerRadius = 20;
+    _locationField.clipsToBounds = true;
     [_goButton setHidden:YES];
 }
 
 - (void) configureLocationManager {
-    _locationManager = [[CLLocationManager alloc] init];
-    _locationManager.delegate = self;
-    [_locationManager requestAlwaysAuthorization];
-    _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    [_locationManager startUpdatingLocation];
+    
+    locationManager = [[CLLocationManager alloc] init];
+    locationManager.delegate = self;
+    locationManager.distanceFilter = kCLDistanceFilterNone;
+    [locationManager requestAlwaysAuthorization];
+    locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    [locationManager startUpdatingLocation];
 }
 #pragma mark:  Delegates
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
-    if (!self->firstCenteredOnUserLocation) {
+    if (!firstCenteredOnUserLocation) {
         [self centerOnUserLocation];
-        self->firstCenteredOnUserLocation = YES;
+        firstCenteredOnUserLocation = YES;
     }
 }
 
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay {
-    MKPolygonRenderer *render = [[MKPolygonRenderer alloc] initWithOverlay:overlay];
-    [render setStrokeColor:UIColor.blueColor];
+    MKPolylineRenderer *render = [[MKPolylineRenderer alloc] initWithOverlay:overlay];
+    [render setStrokeColor:UIColor.systemYellowColor];
+    [render setLineWidth:5.0];
     return render;
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+    currentLocation = [locations lastObject];
 }
 
 #pragma mark:  Helpers
@@ -106,7 +120,7 @@
 }
 
 - (void) addPins:(CLLocationCoordinate2D)destinationCoord {
-    MKPointAnnotation *startPin = [[MKPointAnnotation alloc] initWithCoordinate:_locationManager.location.coordinate title:@"Start" subtitle:@"Me"];
+    MKPointAnnotation *startPin = [[MKPointAnnotation alloc] initWithCoordinate:locationManager.location.coordinate title:@"Start" subtitle:@"Me"];
     MKPointAnnotation *endPin = [[MKPointAnnotation alloc] initWithCoordinate:destinationCoord title:@"End" subtitle:@"Future Me"];
     [_mapView addAnnotation:startPin];
     [_mapView addAnnotation:endPin];
@@ -116,21 +130,28 @@
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
     [geocoder geocodeAddressString:_locationField.text completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
         if (placemarks) {
-             self->destinationLocation = placemarks.firstObject.location;
-            NSLog(@"%@", self->destinationLocation);
+            self->destinationLocation = placemarks.firstObject.location;
             [self addPins: self->destinationLocation.coordinate];
-            [self getDirections:(__bridge CLLocationCoordinate2D *)(self->destinationLocation)];
+            self->destinationLocationLatitude = placemarks.firstObject.location.coordinate.latitude;
+            self->destinationLocationLongitude = placemarks.firstObject.location.coordinate.longitude;
+            [self getDirections];
         } else {
             NSLog(@"No location found");
         }
     }];
 }
 
-- (void) getDirections:(CLLocationCoordinate2D *) destinationCoords {
-    CLLocationCoordinate2D startCoords = _locationManager.location.coordinate;
-    MKPlacemark *startPlacemark = [[MKPlacemark alloc] initWithCoordinate:startCoords];
-    MKPlacemark *destinationPlacemark = [[MKPlacemark alloc] initWithCoordinate:*destinationCoords];
+- (void) getDirections{
+    float startlatitude = currentLocation.coordinate.latitude;
+    float startlongitude = currentLocation.coordinate.longitude;
     
+    float destlatitude = destinationLocationLatitude;
+    float destlongitude = destinationLocationLongitude;
+    
+    MKPlacemark *startPlacemark = [[MKPlacemark alloc] initWithCoordinate:CLLocationCoordinate2DMake(startlatitude, startlongitude)];
+    
+    MKPlacemark *destinationPlacemark = [[MKPlacemark alloc] initWithCoordinate:CLLocationCoordinate2DMake(destlatitude, destlongitude)];
+
     MKMapItem *startItem = [[MKMapItem alloc] initWithPlacemark:startPlacemark];
     MKMapItem *destinationItem =  [[MKMapItem alloc] initWithPlacemark:destinationPlacemark];
 
@@ -138,16 +159,18 @@
     [pathRequest setSource:startItem];
     [pathRequest setDestination:destinationItem];
     [pathRequest setTransportType:MKDirectionsTransportTypeAutomobile];
-    [pathRequest setRequestsAlternateRoutes:NO];
+    [pathRequest setRequestsAlternateRoutes:YES];
     
     MKDirections *path = [[MKDirections alloc] initWithRequest:pathRequest];
     [path calculateDirectionsWithCompletionHandler:^(MKDirectionsResponse * _Nullable response, NSError * _Nullable error) {
         if (response) {
             MKRoute *route = [response.routes firstObject];
-            [self->_mapView addOverlay:route.polyline];
-            [self->_mapView setVisibleMapRect:route.polyline.boundingMapRect animated:YES];
+            [self->_mapView addOverlay:route.polyline level:MKOverlayLevelAboveRoads];
+            MKMapRect mapRect = route.polyline.boundingMapRect;
+            [self->_mapView setRegion:MKCoordinateRegionForMapRect(mapRect) animated:YES];
         } else {
-            NSLog(@"Unable to get route");
+            NSLog(@"Unable to get route %@", error.description);
+        
         }
     }];
     
