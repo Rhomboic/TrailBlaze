@@ -48,17 +48,31 @@
 
 
 - (IBAction)didTapTrailRun:(id)sender {
+//    [_goButton setImage:nil forState:UIControlStateHighlighted];
+    [_goButton setImage:[UIImage systemImageNamed:@"point.topleft.down.curvedto.point.filled.bottomright.up"] forState:UIControlStateNormal];
+    _goButton.imageView.image = nil;
+    _goButton.layer.cornerRadius = 15;
+    
     [_locationField setHidden:NO];
     [_locationField becomeFirstResponder];
-    [_goButton setHidden:NO];
+    
 }
 - (IBAction)didTapGo:(id)sender {
-    [_locationField endEditing:YES];
-    [_locationField setHidden:YES];
-    [_goButton setHidden:YES];
-    [_mapView removeOverlays:_mapView.overlays];
-    [_mapView removeAnnotations:_mapView.annotations];
-    [self getLocation];
+    if (!_locationField.isHidden) {
+        [_locationField endEditing:YES];
+        _goButton.layer.cornerRadius = 25;
+        
+        [_locationField setHidden:YES];
+        [_mapView removeOverlays:_mapView.overlays];
+        [_mapView removeAnnotations:_mapView.annotations];
+        [self getLocation];
+    } else {
+        if (_mapView.mapType == MKMapTypeHybridFlyover) {
+            _mapView.mapType = MKMapTypeStandard;
+        } else {
+            _mapView.mapType = MKMapTypeHybridFlyover;
+        }
+    }
 }
 
 #pragma mark:  Views Configs
@@ -81,7 +95,12 @@
     [_locationField setHidden:YES];
     _locationField.layer.cornerRadius = 20;
     _locationField.clipsToBounds = true;
-    [_goButton setHidden:YES];
+    
+    _goButton.layer.cornerRadius = 25;
+    _goButton.clipsToBounds = true;
+    [_goButton setImage:[UIImage systemImageNamed:@"map.fill"] forState:UIControlStateNormal];
+
+
 }
 
 - (void) configureLocationManager {
@@ -165,6 +184,8 @@
     [path calculateDirectionsWithCompletionHandler:^(MKDirectionsResponse * _Nullable response, NSError * _Nullable error) {
         if (response) {
             MKRoute *route = [response.routes firstObject];
+//            NSArray *routeSteps = route.steps;
+            NSLog(@"%@", route.steps.description);
             [self->_mapView addOverlay:route.polyline level:MKOverlayLevelAboveRoads];
             MKMapRect mapRect = route.polyline.boundingMapRect;
             [self->_mapView setRegion:MKCoordinateRegionForMapRect(mapRect) animated:YES];
