@@ -15,8 +15,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *goButton;
 @property (weak, nonatomic) IBOutlet UITextField *locationField;
 @property (weak, nonatomic) IBOutlet UIButton *statsButton;
-
-
 @end
 
 @implementation HomeViewController {
@@ -25,6 +23,7 @@
 
     CLLocation *currentLocation;
     CLLocation *destinationLocation;
+    
     float destinationLocationLatitude;
     float destinationLocationLongitude;
 }
@@ -48,7 +47,6 @@
 
 
 - (IBAction)didTapTrailRun:(id)sender {
-//    [_goButton setImage:nil forState:UIControlStateHighlighted];
     [_goButton setImage:[UIImage systemImageNamed:@"point.topleft.down.curvedto.point.filled.bottomright.up"] forState:UIControlStateNormal];
     _goButton.imageView.image = nil;
     _goButton.layer.cornerRadius = 15;
@@ -59,6 +57,7 @@
 }
 - (IBAction)didTapGo:(id)sender {
     if (!_locationField.isHidden) {
+        [_goButton setImage:[UIImage systemImageNamed:@"map.fill"] forState:UIControlStateNormal];
         [_locationField endEditing:YES];
         _goButton.layer.cornerRadius = 25;
         
@@ -80,6 +79,7 @@
 - (void) configureMapView {
     _mapView.delegate =  self;
     _mapView.showsUserLocation = YES;
+    [_mapView setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
 }
 
 - (void) configureSubviews {
@@ -95,7 +95,7 @@
     [_locationField setHidden:YES];
     _locationField.layer.cornerRadius = 20;
     _locationField.clipsToBounds = true;
-    
+           
     _goButton.layer.cornerRadius = 25;
     _goButton.clipsToBounds = true;
     [_goButton setImage:[UIImage systemImageNamed:@"map.fill"] forState:UIControlStateNormal];
@@ -113,13 +113,6 @@
     [locationManager startUpdatingLocation];
 }
 #pragma mark:  Delegates
-- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation {
-    if (!firstCenteredOnUserLocation) {
-        [self centerOnUserLocation];
-        firstCenteredOnUserLocation = YES;
-    }
-}
-
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay {
     MKPolylineRenderer *render = [[MKPolylineRenderer alloc] initWithOverlay:overlay];
     [render setStrokeColor:UIColor.systemYellowColor];
@@ -184,11 +177,11 @@
     [path calculateDirectionsWithCompletionHandler:^(MKDirectionsResponse * _Nullable response, NSError * _Nullable error) {
         if (response) {
             MKRoute *route = [response.routes firstObject];
-//            NSArray *routeSteps = route.steps;
-            NSLog(@"%@", route.steps.description);
+
             [self->_mapView addOverlay:route.polyline level:MKOverlayLevelAboveRoads];
             MKMapRect mapRect = route.polyline.boundingMapRect;
             [self->_mapView setRegion:MKCoordinateRegionForMapRect(mapRect) animated:YES];
+            
         } else {
             NSLog(@"Unable to get route %@", error.description);
         
@@ -196,14 +189,5 @@
     }];
     
 }
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
