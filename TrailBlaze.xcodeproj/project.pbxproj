@@ -7,12 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4E701DF7287606DF00DD375B /* MatesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E701DF6287606DF00DD375B /* MatesViewController.m */; };
+		4E701DFA2876084800DD375B /* MateCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E701DF92876084800DD375B /* MateCell.m */; };
+		4E701DFD28768D0900DD375B /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E701DFC28768D0900DD375B /* MapViewController.m */; };
 		4EAAB54A286E5FA60093B30B /* keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4EAAB549286E5FA60093B30B /* keys.plist */; };
 		4EAAB54D286E6D960093B30B /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAAB54C286E6D960093B30B /* LoginViewController.m */; };
 		4EAAB550286E6DBB0093B30B /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAAB54F286E6DBB0093B30B /* HomeViewController.m */; };
 		4EAAB553286E6DE00093B30B /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAAB552286E6DE00093B30B /* RegisterViewController.m */; };
 		4EAAB555287001CE0093B30B /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EAAB554287001CE0093B30B /* MapKit.framework */; };
 		4EAAB558287002C60093B30B /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAAB557287002C60093B30B /* ProfileViewController.m */; };
+		4EB1C50E2874F7EB00A61A10 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EB1C50D2874F7EB00A61A10 /* CoreLocation.framework */; };
 		4EE674C22866D6C800A93C15 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE674C12866D6C800A93C15 /* AppDelegate.m */; };
 		4EE674C52866D6C800A93C15 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE674C42866D6C800A93C15 /* SceneDelegate.m */; };
 		4EE674C82866D6C800A93C15 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE674C72866D6C800A93C15 /* ViewController.m */; };
@@ -50,6 +54,12 @@
 		2B508F8BD64314AE3DE51636 /* Pods-TrailBlazeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrailBlazeTests.debug.xcconfig"; path = "Target Support Files/Pods-TrailBlazeTests/Pods-TrailBlazeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		3E953E4347D732BD1B596D6A /* Pods-TrailBlaze-TrailBlazeUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrailBlaze-TrailBlazeUITests.release.xcconfig"; path = "Target Support Files/Pods-TrailBlaze-TrailBlazeUITests/Pods-TrailBlaze-TrailBlazeUITests.release.xcconfig"; sourceTree = "<group>"; };
 		4E6BD31F585E1E0A201FB7F8 /* Pods-TrailBlaze.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrailBlaze.release.xcconfig"; path = "Target Support Files/Pods-TrailBlaze/Pods-TrailBlaze.release.xcconfig"; sourceTree = "<group>"; };
+		4E701DF5287606DF00DD375B /* MatesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MatesViewController.h; sourceTree = "<group>"; };
+		4E701DF6287606DF00DD375B /* MatesViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MatesViewController.m; sourceTree = "<group>"; };
+		4E701DF82876084800DD375B /* MateCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MateCell.h; sourceTree = "<group>"; };
+		4E701DF92876084800DD375B /* MateCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MateCell.m; sourceTree = "<group>"; };
+		4E701DFB28768D0900DD375B /* MapViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
+		4E701DFC28768D0900DD375B /* MapViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		4EAAB549286E5FA60093B30B /* keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = keys.plist; sourceTree = "<group>"; };
 		4EAAB54B286E6D960093B30B /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		4EAAB54C286E6D960093B30B /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
@@ -60,6 +70,7 @@
 		4EAAB554287001CE0093B30B /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		4EAAB556287002C60093B30B /* ProfileViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
 		4EAAB557287002C60093B30B /* ProfileViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
+		4EB1C50D2874F7EB00A61A10 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		4EE674BD2866D6C800A93C15 /* TrailBlaze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrailBlaze.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EE674C02866D6C800A93C15 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4EE674C12866D6C800A93C15 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -89,6 +100,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4EB1C50E2874F7EB00A61A10 /* CoreLocation.framework in Frameworks */,
 				4EAAB555287001CE0093B30B /* MapKit.framework in Frameworks */,
 				AC0D7A2EC36B47816651B6E2 /* Pods_TrailBlaze.framework in Frameworks */,
 			);
@@ -116,12 +128,22 @@
 		0AF952D79930C5C7133CCB26 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4EB1C50D2874F7EB00A61A10 /* CoreLocation.framework */,
 				4EAAB554287001CE0093B30B /* MapKit.framework */,
 				BFA2DD5153D29C4ED300B44B /* Pods_TrailBlaze.framework */,
 				0EE07284A8FB90611D21CCB8 /* Pods_TrailBlaze_TrailBlazeUITests.framework */,
 				EF8A80D6274FD869813BF164 /* Pods_TrailBlazeTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4EA7BFB82874B9D800D1D797 /* Objects */ = {
+			isa = PBXGroup;
+			children = (
+				4E701DF82876084800DD375B /* MateCell.h */,
+				4E701DF92876084800DD375B /* MateCell.m */,
+			);
+			path = Objects;
 			sourceTree = "<group>";
 		};
 		4EE674B42866D6C800A93C15 = {
@@ -149,6 +171,7 @@
 		4EE674BF2866D6C800A93C15 /* TrailBlaze */ = {
 			isa = PBXGroup;
 			children = (
+				4EA7BFB82874B9D800D1D797 /* Objects */,
 				4EE674F52866D6D500A93C15 /* View Controllers */,
 				4EE674C02866D6C800A93C15 /* AppDelegate.h */,
 				4EE674C12866D6C800A93C15 /* AppDelegate.m */,
@@ -194,6 +217,10 @@
 				4EAAB552286E6DE00093B30B /* RegisterViewController.m */,
 				4EAAB556287002C60093B30B /* ProfileViewController.h */,
 				4EAAB557287002C60093B30B /* ProfileViewController.m */,
+				4E701DF5287606DF00DD375B /* MatesViewController.h */,
+				4E701DF6287606DF00DD375B /* MatesViewController.m */,
+				4E701DFB28768D0900DD375B /* MapViewController.h */,
+				4E701DFC28768D0900DD375B /* MapViewController.m */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -450,14 +477,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E701DF7287606DF00DD375B /* MatesViewController.m in Sources */,
 				4EE674C82866D6C800A93C15 /* ViewController.m in Sources */,
 				4EE674C22866D6C800A93C15 /* AppDelegate.m in Sources */,
 				4EAAB558287002C60093B30B /* ProfileViewController.m in Sources */,
+				4E701DFA2876084800DD375B /* MateCell.m in Sources */,
 				4EE674D32866D6C900A93C15 /* main.m in Sources */,
 				4EE674C52866D6C800A93C15 /* SceneDelegate.m in Sources */,
 				4EAAB553286E6DE00093B30B /* RegisterViewController.m in Sources */,
 				4EAAB54D286E6D960093B30B /* LoginViewController.m in Sources */,
 				4EAAB550286E6DBB0093B30B /* HomeViewController.m in Sources */,
+				4E701DFD28768D0900DD375B /* MapViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -634,6 +664,11 @@
 				DEVELOPMENT_TEAM = 37QBJHTCRH;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TrailBlaze/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "We need access to your location to set a run start point";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need access to your location to set a run start point";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -662,6 +697,11 @@
 				DEVELOPMENT_TEAM = 37QBJHTCRH;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TrailBlaze/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "We need access to your location to set a run start point";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need access to your location to set a run start point";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
