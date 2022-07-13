@@ -46,8 +46,12 @@
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     MateCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MateCell" forIndexPath:indexPath];
-
-    User *thisUserObject = [[User alloc] initWithDictionary: self->users[indexPath.row]];
+    User *thisUserObject;
+    if (isFiltered) {
+        thisUserObject = [[User alloc] initWithDictionary: self->filteredUsers[indexPath.row]];
+    } else {
+        thisUserObject = [[User alloc] initWithDictionary: self->users[indexPath.row]];
+    }
     
     cell.profileName.text = thisUserObject.username;
     
@@ -61,7 +65,11 @@
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self->users.count;
+    if (isFiltered) {
+        return self->filteredUsers.count;
+    } else {
+        return self->users.count;
+    }
 }
 
 - (void) searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
@@ -72,10 +80,14 @@
         filteredUsers = [[NSMutableArray alloc] init];
         
         for (PFObject *user in users) {
-            User *thisUser = [[User alloc] initWithDictionary:user];
-//            NSRange *nameRange = [thisUser.username];a
+//            User *thisUser = [[User alloc] initWithDictionary:user];
+            NSRange nameRange = [user[@"username"] rangeOfString:searchText options:NSCaseInsensitiveSearch];
+            if (nameRange.location != NSNotFound) {
+                [filteredUsers addObject:user];
+            }
         }
     }
+    [self.tableView reloadData];
 }
 
 @end

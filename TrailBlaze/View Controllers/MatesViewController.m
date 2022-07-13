@@ -11,14 +11,17 @@
 #import "User.h"
 #import "QueryManager.h"
 
-@interface MatesViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface MatesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *findMatesButton;
+@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 
 @end
 
 @implementation MatesViewController {
     NSArray *mates;
+    NSMutableArray *filteredMates;
+    BOOL isFiltered;
 }
 
 - (void)viewDidLoad {
@@ -29,6 +32,8 @@
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    self.searchBar.delegate = self;
+    isFiltered = false;
     
     [[[QueryManager alloc] init] queryMates:10 completion:^(NSArray * _Nonnull mates, NSError * _Nonnull err) {
         if (mates) {
@@ -43,8 +48,12 @@
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     MateCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MateCell" forIndexPath:indexPath];
 
-    User *thisMateObject = [[User alloc] initWithDictionary: self->mates[indexPath.row]];
-    NSLog(@" 🥹🥹🥹🥹🥹%@", thisMateObject.friends);
+    User *thisMateObject;
+    if (isFiltered) {
+        thisMateObject = [[User alloc] initWithDictionary: filteredMates[indexPath.row]];
+    } else {
+        thisMateObject = [[User alloc] initWithDictionary: mates[indexPath.row]];
+    }
     
     cell.profileName.text = thisMateObject.username;
     if (thisMateObject.isRunning == NO) {
@@ -65,20 +74,29 @@
 }
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self->mates.count;
+    if (isFiltered) {
+        return filteredMates.count;
+    } else {
+        return mates.count;
+    }
 }
 
-
-//#pragma mark - Navigation
-//
-//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-//    NSIndexPath *indexPath = [self.movieCollView indexPathForCell:cell];
-//
-//    DetailsViewController *detailView = [segue destinationViewController];
-//
-//}
-
-
-
+- (void) searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    if (searchText.length == 0) {
+        isFiltered = false;
+    } else {
+        isFiltered = true;
+        filteredMates = [[NSMutableArray alloc] init];
+        
+        for (PFObject *user in mates) {
+//            User *thisUser = [[User alloc] initWithDictionary:user];
+            NSRange nameRange = [user[@"username"] rangeOfString:searchText options:NSCaseInsensitiveSearch];
+            if (nameRange.location != NSNotFound) {
+                [filteredMates addObject:user];
+            }
+        }
+    }
+    [self.tableView reloadData];
+}
 
 @end
