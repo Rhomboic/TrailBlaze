@@ -13,6 +13,7 @@
 
 @interface MatesViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *findMatesButton;
 
 @end
 
@@ -54,8 +55,12 @@
         cell.runningStatus.textColor = UIColor.greenColor;
     }
     
-    cell.layer.cornerRadius = 30;
+    cell.layer.cornerRadius = 20;
+    [cell.layer setBorderColor:[UIColor systemBackgroundColor].CGColor];
+    [cell.layer setBorderWidth:5.0f];
     cell.clipsToBounds = true;
+    cell.contentView.backgroundColor = UIColor.secondarySystemBackgroundColor;
+   
     return cell;
 }
 
@@ -63,15 +68,16 @@
     return self->mates.count;
 }
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+//#pragma mark - Navigation
+//
+//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+//    NSIndexPath *indexPath = [self.movieCollView indexPathForCell:cell];
+//
+//    DetailsViewController *detailView = [segue destinationViewController];
+//
+//}
+
 
 
 

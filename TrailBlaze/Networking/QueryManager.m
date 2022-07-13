@@ -29,4 +29,20 @@
         }
     }];
 }
+
+- (void)queryUsers: (NSInteger *) limit completion:(void (^)(NSArray *mates, NSError *))completion {
+    PFQuery *query = [PFQuery queryWithClassName:@"_User"];
+    [query orderByDescending:@"createdAt"];
+    [[PFUser currentUser] fetchIfNeeded];
+    [query whereKey:@"objectId" notEqualTo:[[PFUser currentUser] objectId]];
+
+        query.limit = limit;
+    [query findObjectsInBackgroundWithBlock:^(NSArray *friends, NSError *error) {
+        if (friends) {
+            completion(friends, nil);
+        } else {
+            NSLog(@"%@", error.localizedDescription);
+        }
+    }];
+}
 @end
