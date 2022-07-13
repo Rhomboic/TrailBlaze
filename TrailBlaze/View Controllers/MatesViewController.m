@@ -9,10 +9,10 @@
 #import "MateCell.h"
 #import "Parse/Parse.h"
 #import "User.h"
+#import "QueryManager.h"
 
 @interface MatesViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-//@property (weak, nonatomic) NSArray *mates;
 
 @end
 
@@ -26,30 +26,15 @@
     self.navigationItem.title = @"Mates";
     self.navigationController.navigationBar.prefersLargeTitles = YES;
     
-//    [ParseFetch fetchMates:self];
-    [self fetchMates];
-    
-    
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-
-}
-
-- (void) fetchMates{
-    PFQuery *query = [PFQuery queryWithClassName:@"_User"];
-    [query orderByDescending:@"createdAt"];
-//    [query whereKey:@"objectId" containedIn:[PFUser currentUser][@"friends"]];
-
-        query.limit = 20;
-    [query findObjectsInBackgroundWithBlock:^(NSArray *friends, NSError *error) {
-        if (friends) {
-//            [users fetchIfNeeded];
-            self->mates = friends;
+    
+    [[[QueryManager alloc] init] queryMates:10 completion:^(NSArray * _Nonnull mates, NSError * _Nonnull err) {
+        if (mates) {
+            self->mates = mates;
             [self.tableView reloadData];
-            NSLog(@"%lu", (unsigned long)self->mates.count);
         } else {
-            NSLog(@"%@", error.localizedDescription);
-            NSLog(@"error");
+            NSLog(@"Unable to get mates %@", err.localizedDescription);
         }
     }];
 }
