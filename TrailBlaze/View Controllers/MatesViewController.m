@@ -8,9 +8,11 @@
 #import "MatesViewController.h"
 #import "MateCell.h"
 #import "Parse/Parse.h"
+#import "ParseFetch.h"
 
 @interface MatesViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+//@property (weak, nonatomic) NSArray *mates;
 
 @end
 
@@ -20,7 +22,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    self.navigationItem.title = @"Mates";
+    self.navigationController.navigationBar.prefersLargeTitles = YES;
+    
+//    [ParseFetch fetchMates:self];
     [self fetchMates];
+    
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -28,16 +36,15 @@
 }
 
 - (void) fetchMates{
-    PFQuery *query = [PFQuery queryWithClassName:@"User"];
+    PFQuery *query = [PFQuery queryWithClassName:@"_User"];
     [query orderByDescending:@"createdAt"];
+//    [query whereKey:@"objectId" containedIn:[PFUser currentUser][@"friends"]];
+
         query.limit = 20;
-    [query findObjectsInBackgroundWithBlock:^(NSArray *users, NSError *error) {
-        if (users) {
+    [query findObjectsInBackgroundWithBlock:^(NSArray *friends, NSError *error) {
+        if (friends) {
 //            [users fetchIfNeeded];
-            self->mates = users;
-            for (PFUser *p in self->mates) {
-                NSLog(@"%@", p);
-            }
+            self->mates = friends;
             [self.tableView reloadData];
             NSLog(@"%lu", (unsigned long)self->mates.count);
         } else {
@@ -46,6 +53,7 @@
         }
     }];
 }
+
 
 /*
 #pragma mark - Navigation
@@ -60,8 +68,22 @@
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     MateCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MateCell" forIndexPath:indexPath];
-    NSString *thisMate = self->mates[indexPath.row];
-    cell.profileName.text = thisMate;
+    NSDictionary *thisMate = self->mates[indexPath.row];
+//    PFUser *thisMate = self.mates[indexPath.row];
+    NSLog(@" 🥹🥹🥹🥹🥹%@", thisMate[@"friends"]);
+//    [thisMate[@"username"] fetchIfNeeded];
+    
+    cell.profileName.text = thisMate[@"username"];
+    if (thisMate[@"isRunning"] == NO) {
+        cell.runningStatus.text = @"Inactive";
+        cell.runningStatus.textColor = UIColor.grayColor;
+    } else {
+        cell.runningStatus.text = @"Running";
+        cell.runningStatus.textColor = UIColor.greenColor;
+    }
+    
+    cell.layer.cornerRadius = 30;
+    cell.clipsToBounds = true;
     return cell;
 }
 

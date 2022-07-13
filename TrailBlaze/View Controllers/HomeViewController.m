@@ -7,6 +7,8 @@
 #import "CoreLocation/CoreLocation.h"
 #import "HomeViewController.h"
 #import "MapKit/MapKit.h"
+@import FirebaseDatabase;
+#import "Run.h"
 
 @interface HomeViewController ()  <MKMapViewDelegate, CLLocationManagerDelegate>
 @property (strong, nonatomic) IBOutlet MKMapView *mapView;
@@ -26,6 +28,8 @@
     
     float destinationLocationLatitude;
     float destinationLocationLongitude;
+    
+    MKRoute *currentRoute;
 }
 
 - (void)viewDidLoad {
@@ -34,6 +38,10 @@
     [self configureLocationManager];
     [self configureSubviews];
     [self centerOnUserLocation];
+    FIRDatabaseReference *ref = [FIRDatabaseReference new];
+
+    [[ref child:@"someid/boy"] setValue:@{@"name" : @"Gon", @"age" : @12}];
+    
     
 }
 #pragma mark:  Button Actions
@@ -47,12 +55,18 @@
 
 
 - (IBAction)didTapTrailRun:(id)sender {
+    if ([_trailrunButton.titleLabel.text isEqual:@"Start"]) {
+        [Run uploadRun:currentRoute withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+            NSLog(@"%@", @"Successfully uploaded route");
+        }];
+    } else {
     [_goButton setImage:[UIImage systemImageNamed:@"point.topleft.down.curvedto.point.filled.bottomright.up"] forState:UIControlStateNormal];
     _goButton.imageView.image = nil;
     _goButton.layer.cornerRadius = 15;
     
     [_locationField setHidden:NO];
     [_locationField becomeFirstResponder];
+    }
     
 }
 - (IBAction)didTapGo:(id)sender {
@@ -147,6 +161,8 @@
             self->destinationLocationLatitude = placemarks.firstObject.location.coordinate.latitude;
             self->destinationLocationLongitude = placemarks.firstObject.location.coordinate.longitude;
             [self getDirections];
+            [self->_trailrunButton setImage:nil forState:UIControlStateNormal];
+            [self->_trailrunButton setTitle:@"Start" forState:UIControlStateNormal];
         } else {
             NSLog(@"No location found");
         }
@@ -170,13 +186,14 @@
     MKDirectionsRequest *pathRequest = [[MKDirectionsRequest alloc] init];
     [pathRequest setSource:startItem];
     [pathRequest setDestination:destinationItem];
-    [pathRequest setTransportType:MKDirectionsTransportTypeAutomobile];
+    [pathRequest setTransportType:MKDirectionsTransportTypeWalking];
     [pathRequest setRequestsAlternateRoutes:YES];
     
     MKDirections *path = [[MKDirections alloc] initWithRequest:pathRequest];
     [path calculateDirectionsWithCompletionHandler:^(MKDirectionsResponse * _Nullable response, NSError * _Nullable error) {
         if (response) {
             MKRoute *route = [response.routes firstObject];
+            self->currentRoute = route;
 
             [self->_mapView addOverlay:route.polyline level:MKOverlayLevelAboveRoads];
             MKMapRect mapRect = route.polyline.boundingMapRect;

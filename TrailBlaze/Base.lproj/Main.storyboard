@@ -395,8 +395,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="I1b-Wb-qhD">
-                                <rect key="frame" x="0.0" y="95" width="390" height="673"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="I1b-Wb-qhD">
+                                <rect key="frame" x="0.0" y="88" width="390" height="673"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="MateCell" rowHeight="121" id="yep-gL-VRN" customClass="MateCell">
@@ -414,8 +414,8 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="206-vH-6Oj">
-                                                    <rect key="frame" x="120" y="21" width="42" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <rect key="frame" x="120" y="21" width="59" height="30"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="25"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -431,6 +431,8 @@
                                                 <constraint firstItem="cGw-hT-Ctq" firstAttribute="leading" secondItem="fUq-H1-LO7" secondAttribute="leadingMargin" constant="10" id="Flw-Ge-BTu"/>
                                                 <constraint firstItem="zkk-JU-yeQ" firstAttribute="bottom" secondItem="cGw-hT-Ctq" secondAttribute="bottom" id="NTb-Gg-WG3"/>
                                                 <constraint firstItem="206-vH-6Oj" firstAttribute="top" secondItem="cGw-hT-Ctq" secondAttribute="top" id="V4Q-A5-LVZ"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="zkk-JU-yeQ" secondAttribute="trailing" constant="20" symbolic="YES" id="VcE-G8-Ptt"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="206-vH-6Oj" secondAttribute="trailing" constant="10" id="dl0-BV-jS7"/>
                                                 <constraint firstItem="cGw-hT-Ctq" firstAttribute="top" secondItem="fUq-H1-LO7" secondAttribute="topMargin" constant="10" id="jya-ku-fLz"/>
                                                 <constraint firstItem="206-vH-6Oj" firstAttribute="leading" secondItem="cGw-hT-Ctq" secondAttribute="trailing" constant="10" id="pNz-qz-EAz"/>
                                                 <constraint firstItem="zkk-JU-yeQ" firstAttribute="leading" secondItem="cGw-hT-Ctq" secondAttribute="trailing" constant="10" id="yOm-PL-E3c"/>
