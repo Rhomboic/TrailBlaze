@@ -8,7 +8,7 @@
 #import "MatesViewController.h"
 #import "MateCell.h"
 #import "Parse/Parse.h"
-#import "ParseFetch.h"
+#import "User.h"
 
 @interface MatesViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -54,27 +54,14 @@
     }];
 }
 
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
-
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     MateCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MateCell" forIndexPath:indexPath];
-    NSDictionary *thisMate = self->mates[indexPath.row];
-//    PFUser *thisMate = self.mates[indexPath.row];
-    NSLog(@" 🥹🥹🥹🥹🥹%@", thisMate[@"friends"]);
-//    [thisMate[@"username"] fetchIfNeeded];
+
+    User *thisMateObject = [[User alloc] initWithDictionary: self->mates[indexPath.row]];
+    NSLog(@" 🥹🥹🥹🥹🥹%@", thisMateObject.friends);
     
-    cell.profileName.text = thisMate[@"username"];
-    if (thisMate[@"isRunning"] == NO) {
+    cell.profileName.text = thisMateObject.username;
+    if (thisMateObject.isRunning == NO) {
         cell.runningStatus.text = @"Inactive";
         cell.runningStatus.textColor = UIColor.grayColor;
     } else {
@@ -89,6 +76,18 @@
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self->mates.count;
-//    return 10;
 }
+
+/*
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+}
+*/
+
+
+
 @end

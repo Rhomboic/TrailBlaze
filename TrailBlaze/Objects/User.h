@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property BOOL *isRunning;
 @property (nonatomic, strong) NSArray *currentLocation;
 
+- (id)initWithDictionary:(NSDictionary *)dictionary;
 @end
 
 NS_ASSUME_NONNULL_END
