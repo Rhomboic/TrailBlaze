@@ -46,9 +46,9 @@
     [queryManager1 queryUsers:10 completion:^(NSArray * _Nonnull users, NSError * _Nonnull err) {
         if (users) {
             self->users = users;
-            [queryManager2 queryRequests:10 completion:^(NSArray * _Nonnull myRequests, NSError * _Nonnull err) {
+            [self->queryManager2 queryRequests:10 completion:^(NSArray * _Nonnull myRequests, NSError * _Nonnull err) {
                 if (myRequests) {
-                    [PFUser.currentUser fetchIfNeeded];
+//                    [PFUser.currentUser fetchIfNeeded];
                     for (NSDictionary *obj in myRequests) {
                         if ([obj[@"requester"] isEqual:PFUser.currentUser.objectId]) {
                             [self->requested addObject:obj[@"receiver"]];
@@ -79,11 +79,19 @@
     }
     [thisUserObject fetchIfNeeded];
     cell.profileName.text = thisUserObject[@"username"];
-    NSLog(@"🐤🐤🐤🐤🐤🐤🐤🐤%@", ((NSDictionary *)thisUserObject)[@"objectId"]);
+    [cell.friendStatusIcon setImage:nil];
+    
     for (NSString *st in requested) {
-        if ([st isEqualToString:((NSDictionary *)thisUserObject)[@"objectId"]]) {
+        NSLog(@"🐤🐤🐤🐤🐤🐤🐤🐤%@, %@", thisUserObject.objectId, st);
+        if ([st isEqualToString:thisUserObject.objectId]) {
             [cell.friendStatusIcon setImage:[UIImage systemImageNamed:@"person.badge.clock.fill"]];
+            goto found;
         }
+        
+    }
+    found:
+    if (cell.friendStatusIcon.image == nil) {
+        [cell.friendStatusIcon setImage:[UIImage systemImageNamed:@"person.fill.badge.plus"]];
     }
 //    if ([requested containsObject:((NSDictionary *)thisUserObject)[@"objectId"]]) {
 //        [cell.friendStatusIcon setImage:[UIImage systemImageNamed:@"person.badge.clock.fill"]];

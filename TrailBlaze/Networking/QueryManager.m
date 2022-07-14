@@ -14,7 +14,7 @@
     return self;
 }
 
-- (void)queryMates: (NSInteger *) limit completion:(void (^)(NSArray *mates, NSError *))completion {
+- (void)queryMates: (NSInteger ) limit completion:(void (^)(NSArray *mates, NSError *))completion {
     PFQuery *query = [PFQuery queryWithClassName:@"_User"];
     [query orderByDescending:@"createdAt"];
     [[PFUser currentUser] fetchIfNeeded];
@@ -30,7 +30,7 @@
     }];
 }
 
-- (void)queryUsers: (NSInteger *) limit completion:(void (^)(NSArray *mates, NSError *))completion {
+- (void)queryUsers: (NSInteger ) limit completion:(void (^)(NSArray *mates, NSError *))completion {
     PFQuery *query = [PFQuery queryWithClassName:@"_User"];
     [query includeKey:@"objectId"];
     [query orderByDescending:@"createdAt"];
@@ -47,7 +47,7 @@
     }];
 }
 
-- (void)queryRequests: (NSInteger *) limit completion:(void (^)(NSArray *friendRequests, NSError *))completion {
+- (void)queryRequests: (NSInteger ) limit completion:(void (^)(NSArray *friendRequests, NSError *))completion {
     PFQuery *query = [PFQuery queryWithClassName:@"FriendRequest"];
     [query orderByDescending:@"createdAt"];
     [[PFUser currentUser] fetchIfNeeded];
