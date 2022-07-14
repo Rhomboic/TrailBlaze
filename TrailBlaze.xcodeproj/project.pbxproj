@@ -10,6 +10,8 @@
 		4E3483E5287EB0EE0032C796 /* QueryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3483E4287EB0EE0032C796 /* QueryManager.m */; };
 		4E3483EC287F42430032C796 /* FindMatesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3483EB287F42430032C796 /* FindMatesViewController.m */; };
 		4E560D26287DE9C00048BF37 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4E560D25287DE9C00048BF37 /* GoogleService-Info.plist */; };
+		4E5831F7287F7CB7006D9982 /* FriendRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5831F6287F7CB7006D9982 /* FriendRequest.m */; };
+		4E5831FA287FA565006D9982 /* RunCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5831F9287FA565006D9982 /* RunCell.m */; };
 		4E64D18E287E1151007A87A1 /* Run.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E64D18D287E1151007A87A1 /* Run.m */; };
 		4E64D191287E21F8007A87A1 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E64D190287E21F8007A87A1 /* User.m */; };
 		4E701DF7287606DF00DD375B /* MatesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E701DF6287606DF00DD375B /* MatesViewController.m */; };
@@ -63,6 +65,10 @@
 		4E3483EA287F42430032C796 /* FindMatesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FindMatesViewController.h; sourceTree = "<group>"; };
 		4E3483EB287F42430032C796 /* FindMatesViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FindMatesViewController.m; sourceTree = "<group>"; };
 		4E560D25287DE9C00048BF37 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		4E5831F5287F7CB7006D9982 /* FriendRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FriendRequest.h; sourceTree = "<group>"; };
+		4E5831F6287F7CB7006D9982 /* FriendRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FriendRequest.m; sourceTree = "<group>"; };
+		4E5831F8287FA565006D9982 /* RunCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RunCell.h; sourceTree = "<group>"; };
+		4E5831F9287FA565006D9982 /* RunCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RunCell.m; sourceTree = "<group>"; };
 		4E64D18C287E1151007A87A1 /* Run.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Run.h; sourceTree = "<group>"; };
 		4E64D18D287E1151007A87A1 /* Run.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Run.m; sourceTree = "<group>"; };
 		4E64D18F287E21F8007A87A1 /* User.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
@@ -169,6 +175,10 @@
 				4E64D18D287E1151007A87A1 /* Run.m */,
 				4E64D18F287E21F8007A87A1 /* User.h */,
 				4E64D190287E21F8007A87A1 /* User.m */,
+				4E5831F5287F7CB7006D9982 /* FriendRequest.h */,
+				4E5831F6287F7CB7006D9982 /* FriendRequest.m */,
+				4E5831F8287FA565006D9982 /* RunCell.h */,
+				4E5831F9287FA565006D9982 /* RunCell.m */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -511,6 +521,7 @@
 			files = (
 				4E64D191287E21F8007A87A1 /* User.m in Sources */,
 				4E3483EC287F42430032C796 /* FindMatesViewController.m in Sources */,
+				4E5831FA287FA565006D9982 /* RunCell.m in Sources */,
 				4E701DF7287606DF00DD375B /* MatesViewController.m in Sources */,
 				4EE674C82866D6C800A93C15 /* ViewController.m in Sources */,
 				4EE674C22866D6C800A93C15 /* AppDelegate.m in Sources */,
@@ -520,6 +531,7 @@
 				4EE674C52866D6C800A93C15 /* SceneDelegate.m in Sources */,
 				4EAAB553286E6DE00093B30B /* RegisterViewController.m in Sources */,
 				4EAAB54D286E6D960093B30B /* LoginViewController.m in Sources */,
+				4E5831F7287F7CB7006D9982 /* FriendRequest.m in Sources */,
 				4E3483E5287EB0EE0032C796 /* QueryManager.m in Sources */,
 				4E64D18E287E1151007A87A1 /* Run.m in Sources */,
 				4EAAB550286E6DBB0093B30B /* HomeViewController.m in Sources */,

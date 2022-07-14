@@ -9,16 +9,20 @@
 #import "LoginViewController.h"
 #import "Parse/Parse.h"
 #import "SceneDelegate.h"
+#import "RunCell.h"
 
-@interface ProfileViewController () <UINavigationControllerDelegate,UIImagePickerControllerDelegate>
+@interface ProfileViewController () <UINavigationControllerDelegate,UIImagePickerControllerDelegate, UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *logoutButton;
 @property (weak, nonatomic) IBOutlet UIImageView *profileImage;
 @property (weak, nonatomic) IBOutlet UILabel *profileName;
 @property (weak, nonatomic) IBOutlet UIButton *profileImageButton;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end
 
-@implementation ProfileViewController
+@implementation ProfileViewController {
+    NSArray *pastRuns;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -56,11 +60,25 @@
     UIImage *originalImage = info[UIImagePickerControllerOriginalImage];
     
     [self.profileImage setImage: originalImage];
-//    [PFUser.currentUser.profileImage ]
    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    RunCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MateCell" forIndexPath:indexPath];
+    
+    cell.layer.cornerRadius = 20;
+    [cell.layer setBorderColor:[UIColor systemBackgroundColor].CGColor];
+    [cell.layer setBorderWidth:5.0f];
+    cell.clipsToBounds = true;
+    cell.contentView.backgroundColor = UIColor.secondarySystemBackgroundColor;
+    
+    return cell;
+}
+
+- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return pastRuns.count;
+}
 
 /*
 #pragma mark - Navigation

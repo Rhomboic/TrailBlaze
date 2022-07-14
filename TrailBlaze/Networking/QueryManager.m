@@ -32,6 +32,7 @@
 
 - (void)queryUsers: (NSInteger *) limit completion:(void (^)(NSArray *mates, NSError *))completion {
     PFQuery *query = [PFQuery queryWithClassName:@"_User"];
+    [query includeKey:@"objectId"];
     [query orderByDescending:@"createdAt"];
     [[PFUser currentUser] fetchIfNeeded];
     [query whereKey:@"objectId" notEqualTo:[[PFUser currentUser] objectId]];
@@ -45,4 +46,25 @@
         }
     }];
 }
+
+- (void)queryRequests: (NSInteger *) limit completion:(void (^)(NSArray *friendRequests, NSError *))completion {
+    PFQuery *query = [PFQuery queryWithClassName:@"FriendRequest"];
+    [query orderByDescending:@"createdAt"];
+    [[PFUser currentUser] fetchIfNeeded];
+    [query whereKey:@"requester" equalTo:PFUser.currentUser.objectId];
+    
+//    [query includeKey:@"receiver"];
+    
+
+    query.limit = limit;
+    [query findObjectsInBackgroundWithBlock:^(NSArray *friendRequests, NSError *error) {
+        if (friendRequests) {
+            completion(friendRequests, nil);
+//            NSLog(@"💃🏼💃🏼💃🏼💃🏼💃🏼💃🏼💃🏼%@", friendRequests);
+        } else {
+            NSLog(@"%@", error.localizedDescription);
+        }
+    }];
+}
+
 @end

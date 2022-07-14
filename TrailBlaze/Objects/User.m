@@ -17,7 +17,7 @@
     self.email = dictionary[@"email"];
     self.friends = dictionary[@"friends"];
     self.outGoingFriendRequests = dictionary[@"outGoingFriendRequests"];
-    self.incomingFreindRequests = dictionary[@"incomingFreindRequests"];
+    self.incomingFriendRequests = dictionary[@"incomingFreindRequests"];
     self.isRunning = [dictionary[@"isRunning"] boolValue];
     self.currentLocation = dictionary[@"currentLocation"];
     

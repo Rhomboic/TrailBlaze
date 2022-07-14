@@ -10,6 +10,7 @@
 #import "Parse/Parse.h"
 #import "User.h"
 #import "QueryManager.h"
+#import "FriendRequest.h"
 
 @interface FindMatesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -21,6 +22,11 @@
     NSArray *users;
     NSMutableArray *filteredUsers;
     BOOL isFiltered;
+    
+    NSMutableArray *requested;
+    
+    QueryManager *queryManager1;
+    QueryManager *queryManager2;
 }
 
 - (void)viewDidLoad {
@@ -32,29 +38,58 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     self.searchBar.delegate = self;
+    queryManager1 = [[QueryManager alloc] init];
+    queryManager2 = [[QueryManager alloc] init];
+    requested = [[NSMutableArray alloc] init];
     isFiltered = false;
     
-    [[[QueryManager alloc] init] queryUsers:10 completion:^(NSArray * _Nonnull users, NSError * _Nonnull err) {
+    [queryManager1 queryUsers:10 completion:^(NSArray * _Nonnull users, NSError * _Nonnull err) {
         if (users) {
             self->users = users;
-            [self.tableView reloadData];
+            [queryManager2 queryRequests:10 completion:^(NSArray * _Nonnull myRequests, NSError * _Nonnull err) {
+                if (myRequests) {
+                    [PFUser.currentUser fetchIfNeeded];
+                    for (NSDictionary *obj in myRequests) {
+                        if ([obj[@"requester"] isEqual:PFUser.currentUser.objectId]) {
+                            [self->requested addObject:obj[@"receiver"]];
+                            NSLog(@"💅🏼💅🏼💅🏼💅🏼💅🏼%@", obj[@"receiver"]);
+                        }
+                    }
+                    [self.tableView reloadData];
+                } else {
+                    NSLog(@"Unable to get users %@", err.localizedDescription);
+                }
+            }];
+            
         } else {
             NSLog(@"Unable to get users %@", err.localizedDescription);
         }
     }];
+    
+    
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     MateCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MateCell" forIndexPath:indexPath];
-    User *thisUserObject;
+    PFObject *thisUserObject;
     if (isFiltered) {
-        thisUserObject = [[User alloc] initWithDictionary: self->filteredUsers[indexPath.row]];
+        thisUserObject = self->filteredUsers[indexPath.row];
     } else {
-        thisUserObject = [[User alloc] initWithDictionary: self->users[indexPath.row]];
+        thisUserObject = self->users[indexPath.row];
     }
-    
-    cell.profileName.text = thisUserObject.username;
-    
+    [thisUserObject fetchIfNeeded];
+    cell.profileName.text = thisUserObject[@"username"];
+    NSLog(@"🐤🐤🐤🐤🐤🐤🐤🐤%@", ((NSDictionary *)thisUserObject)[@"objectId"]);
+    for (NSString *st in requested) {
+        if ([st isEqualToString:((NSDictionary *)thisUserObject)[@"objectId"]]) {
+            [cell.friendStatusIcon setImage:[UIImage systemImageNamed:@"person.badge.clock.fill"]];
+        }
+    }
+//    if ([requested containsObject:((NSDictionary *)thisUserObject)[@"objectId"]]) {
+//        [cell.friendStatusIcon setImage:[UIImage systemImageNamed:@"person.badge.clock.fill"]];
+//    } else {
+//        [cell.friendStatusIcon setImage:[UIImage systemImageNamed:@"person.fill.badge.plus"]];
+//    }
     cell.layer.cornerRadius = 20;
     [cell.layer setBorderColor:[UIColor systemBackgroundColor].CGColor];
     [cell.layer setBorderWidth:5.0f];
@@ -88,6 +123,25 @@
         }
     }
     [self.tableView reloadData];
+}
+
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    PFObject *thisUser;
+    if (isFiltered) {
+        thisUser = filteredUsers[indexPath.row];
+    } else {
+        thisUser = users[indexPath.row];
+    }
+    [FriendRequest uploadRequest:[[PFUser currentUser] objectId] receiverID:[thisUser objectId] withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+        if (succeeded) {
+            NSLog(@"Request Confirmed to be sent");
+        } else {
+            NSLog(@"Could not send request");
+        }
+    }];
+    MateCell *cell = (MateCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    [cell.friendStatusIcon setImage:[UIImage systemImageNamed:@"person.badge.clock.fill"]];
+    
 }
 
 @end

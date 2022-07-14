@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *email;
 @property (nonatomic, strong) NSMutableArray *friends;
 @property (nonatomic, strong) NSMutableArray *outGoingFriendRequests;
-@property (nonatomic, strong) NSMutableArray *incomingFreindRequests;
+@property (nonatomic, strong) NSMutableArray *incomingFriendRequests;
 @property BOOL *isRunning;
 @property (nonatomic, strong) NSArray *currentLocation;
 

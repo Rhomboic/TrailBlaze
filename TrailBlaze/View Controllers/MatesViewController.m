@@ -43,6 +43,7 @@
             NSLog(@"Unable to get mates %@", err.localizedDescription);
         }
     }];
+    
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
