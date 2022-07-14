@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)queryMates: (NSInteger ) limit completion:(void (^)(NSArray *mates, NSError *))completion;
 - (void)queryUsers: (NSInteger ) limit completion:(void (^)(NSArray *mates, NSError *))completion;
 - (void)queryRequests: (NSInteger ) limit completion:(void (^)(NSArray *mates, NSError *))completion;
+- (void)queryReceives: (NSInteger ) limit completion:(void (^)(NSArray *friendReceives, NSError *))completion;
 @end
 
 NS_ASSUME_NONNULL_END
