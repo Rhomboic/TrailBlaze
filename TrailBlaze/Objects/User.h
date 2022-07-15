@@ -18,7 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSMutableArray *friends;
 @property (nonatomic, strong) NSMutableArray *outGoingFriendRequests;
 @property (nonatomic, strong) NSMutableArray *incomingFriendRequests;
-@property BOOL *isRunning;
+@property BOOL isRunning;
+@property NSString *profileImage;
 @property (nonatomic, strong) NSArray *currentLocation;
 
 - (id)initWithDictionary:(NSDictionary *)dictionary;

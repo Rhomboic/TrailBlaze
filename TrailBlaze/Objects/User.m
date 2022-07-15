@@ -20,6 +20,7 @@
     self.incomingFriendRequests = dictionary[@"incomingFreindRequests"];
     self.isRunning = [dictionary[@"isRunning"] boolValue];
     self.currentLocation = dictionary[@"currentLocation"];
+    self.profileImage = dictionary[@"profileImage"];
     
     return self;
 }

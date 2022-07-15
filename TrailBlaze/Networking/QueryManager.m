@@ -30,7 +30,7 @@
     }];
 }
 
-- (void)queryUsers: (NSInteger ) limit completion:(void (^)(NSArray *mates, NSError *))completion {
+- (void)queryUsers: (NSInteger ) limit completion:(void (^)(NSArray *users, NSError *))completion {
     PFQuery *query = [PFQuery queryWithClassName:@"_User"];
     [query includeKey:@"objectId"];
     [query orderByAscending:@"username"];
@@ -52,9 +52,6 @@
     [query orderByDescending:@"createdAt"];
     [[PFUser currentUser] fetchIfNeeded];
     [query whereKey:@"requester" equalTo:PFUser.currentUser.objectId];
-    
-//    [query includeKey:@"receiver"];
-    
 
     query.limit = limit;
     [query findObjectsInBackgroundWithBlock:^(NSArray *friendRequests, NSError *error) {
@@ -83,26 +80,22 @@
     }];
 }
 
-//- (void)friendingQuery: (NSInteger ) limit otherUser :(NSString *) otherUserId completion:(void (^)(NSArray *matches, NSError *))completion {
-//    [[PFUser currentUser] fetchIfNeeded];
-//    PFQuery *query1 = [PFQuery queryWithClassName:@"FriendRequest"];
-//    [query1 whereKey:@"receiver" equalTo:[PFUser currentUser][@"objectId"]];
-//    [query1 whereKey:@"requester" equalTo:otherUserId];
-//
-//    PFQuery *query2 = [PFQuery queryWithClassName:@"FriendRequest"];
-//    [query2 whereKey:@"receiver" equalTo:otherUserId];
-//    [query2 whereKey:@"requester" equalTo:[PFUser currentUser][@"objectId"]];
-//
-//    PFQuery *mainQuery = [PFQuery orQueryWithSubqueries:@[query1,query2]];
-//    mainQuery.limit = limit;
-//    [mainQuery findObjectsInBackgroundWithBlock:^(NSArray *matches, NSError *error) {
-//        if (matches) {
-//            for (PFObject *obj in matches) {
-//                [obj deleteInBackground];
-//            }
-//        } else {
-//            NSLog(@"%@", error.localizedDescription);
-//        }
-//    }];
-//}
+- (void) uploadProfileImage:  ( PFFileObject * _Nullable )image withCompletion: (PFBooleanResultBlock  _Nullable)completion {
+    [[PFUser currentUser] setObject:image forKey:@"profileImage"];
+    [[PFUser currentUser] saveInBackground];
+}
+
++ (PFFileObject *)getPFFileFromImage: (UIImage * _Nullable)image {
+    if (!image) {
+        return nil;
+    }
+    NSData *imageData = UIImagePNGRepresentation(image);
+    if (!imageData) {
+        return nil;
+    }
+    
+    return [PFFileObject fileObjectWithName:@"ProfileImage.png" data:imageData];
+}
+
+
 @end

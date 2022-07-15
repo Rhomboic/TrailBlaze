@@ -10,11 +10,13 @@
 #import "Parse/Parse.h"
 #import "User.h"
 #import "QueryManager.h"
+#import "UIImageView+AFNetworking.h"
 
 @interface MatesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *findMatesButton;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
 
 @end
 
@@ -23,6 +25,11 @@
     NSMutableArray *filteredMates;
     BOOL isFiltered;
 }
+-(void)viewWillAppear:(BOOL)animated {
+     [super viewWillAppear:animated];
+    [self fetchMates];
+   
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -30,34 +37,55 @@
     self.navigationItem.title = @"Mates";
     self.navigationController.navigationBar.prefersLargeTitles = YES;
     
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(fetchMates) forControlEvents:(UIControlEventValueChanged)];
+    
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    [self.tableView insertSubview:self.refreshControl atIndex:0];
+    
     self.searchBar.delegate = self;
     isFiltered = false;
     
+    [self fetchMates];
+    
+}
+
+- (void) fetchMates {
     [[[QueryManager alloc] init] queryMates:10 completion:^(NSArray * _Nonnull mates, NSError * _Nonnull err) {
         if (mates) {
             self->mates = mates;
             [self.tableView reloadData];
+            [self.refreshControl endRefreshing];
         } else {
             NSLog(@"Unable to get mates %@", err.localizedDescription);
         }
     }];
-    
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     MateCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MateCell" forIndexPath:indexPath];
 
-    User *thisMateObject;
+    PFUser *thisMateObject;
     if (isFiltered) {
-        thisMateObject = [[User alloc] initWithDictionary: filteredMates[indexPath.row]];
+        thisMateObject = filteredMates[indexPath.row];
     } else {
-        thisMateObject = [[User alloc] initWithDictionary: mates[indexPath.row]];
+        thisMateObject = mates[indexPath.row];
     }
     
     cell.profileName.text = thisMateObject.username;
-    if (thisMateObject.isRunning == NO) {
+    NSLog(@"🐸🐸🐸🐸🐸🐸%@", thisMateObject);
+    PFFileObject *image = [thisMateObject objectForKey:@"profileImage"];
+    NSLog(@"%@",image.url);
+    if (image) {
+    [cell.profileImage setImageWithURL:[NSURL URLWithString:[image url]]];
+    } else {
+        [cell.profileImage setImage: [UIImage systemImageNamed:@"person.crop.circle"]];
+    }
+    cell.profileImage.layer.cornerRadius = 30;
+    cell.profileImage.clipsToBounds = true;
+    
+    if (thisMateObject[@"isRunning"] == NO) {
         cell.runningStatus.text = @"Inactive";
         cell.runningStatus.textColor = UIColor.grayColor;
     } else {
@@ -90,7 +118,6 @@
         filteredMates = [[NSMutableArray alloc] init];
         
         for (PFObject *user in mates) {
-//            User *thisUser = [[User alloc] initWithDictionary:user];
             NSRange nameRange = [user[@"username"] rangeOfString:searchText options:NSCaseInsensitiveSearch];
             if (nameRange.location != NSNotFound) {
                 [filteredMates addObject:user];

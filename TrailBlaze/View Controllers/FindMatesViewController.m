@@ -11,10 +11,13 @@
 #import "User.h"
 #import "QueryManager.h"
 #import "FriendRequest.h"
+#import "UIImageView+AFNetworking.h"
 
 @interface FindMatesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
+
 
 @end
 
@@ -36,10 +39,14 @@
     [super viewDidLoad];
 
     self.navigationItem.title = @"Find Mates";
-//    self.navigationController.navigationBar.prefersLargeTitles = YES;
+    self.navigationController.navigationBar.prefersLargeTitles = NO;
+    
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(fetchUsers) forControlEvents:(UIControlEventValueChanged)];
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
+    [self.tableView insertSubview:self.refreshControl atIndex:0];
     self.searchBar.delegate = self;
     
     queryManager1 = [[QueryManager alloc] init];
@@ -51,6 +58,12 @@
     
     isFiltered = false;
     
+    [self fetchUsers];
+
+    
+}
+
+- (void) fetchUsers {
     [queryManager1 queryUsers:10 completion:^(NSArray * _Nonnull users, NSError * _Nonnull err) {
         if (users) {
             
@@ -89,6 +102,7 @@
                             
                             
                             [self.tableView reloadData];
+                            [self.refreshControl endRefreshing];
                         } else {
                             NSLog(@"Unable to get users %@", err.localizedDescription);
                         }
@@ -102,8 +116,6 @@
             NSLog(@"Unable to get users %@", err.localizedDescription);
         }
     }];
-    
-    
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
@@ -116,6 +128,17 @@
     }
     [thisUserObject fetchIfNeeded];
     cell.profileName.text = thisUserObject[@"username"];
+    PFFileObject *image = [thisUserObject objectForKey:@"profileImage"];
+    
+    NSLog(@"%@",image.url);
+    if (image) {
+    [cell.profileImage setImageWithURL:[NSURL URLWithString:[image url]]];
+    } else {
+        [cell.profileImage setImage: [UIImage systemImageNamed:@"person.crop.circle"]];
+    }
+    cell.profileImage.layer.cornerRadius = 30;
+    cell.profileImage.clipsToBounds = true;
+    
     [cell.friendStatusIcon setImage:nil];
     [cell.friendStatusIcon setTintColor:UIColor.systemBlueColor];
     
@@ -139,7 +162,6 @@
     
     [[PFUser currentUser] fetchIfNeeded];
     for (NSString *st in [PFUser currentUser][@"friends"]) {
-//        NSLog(@"🐤🐤🐤🐤🐤🐤🐤🐤%@, %@", thisUserObject.objectId, st);
         if ([st isEqual:thisUserObject.objectId]) {
             [cell.friendStatusIcon setImage:[UIImage systemImageNamed:@"person.fill.checkmark"]];
             [cell.friendStatusIcon setTintColor:UIColor.systemGreenColor];
@@ -147,7 +169,6 @@
         
     }
     
-//    found:
     if (cell.friendStatusIcon.image == nil) {
         [cell.friendStatusIcon setImage:[UIImage systemImageNamed:@"person.fill.badge.plus"]];
     }
@@ -177,7 +198,6 @@
         filteredUsers = [[NSMutableArray alloc] init];
         
         for (PFObject *user in users) {
-//            User *thisUser = [[User alloc] initWithDictionary:user];
             NSRange nameRange = [user[@"username"] rangeOfString:searchText options:NSCaseInsensitiveSearch];
             if (nameRange.location != NSNotFound) {
                 [filteredUsers addObject:user];

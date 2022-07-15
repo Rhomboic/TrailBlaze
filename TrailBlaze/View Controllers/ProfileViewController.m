@@ -10,6 +10,8 @@
 #import "Parse/Parse.h"
 #import "SceneDelegate.h"
 #import "RunCell.h"
+#import "QueryManager.h"
+#import "UIImageView+AFNetworking.h"
 
 @interface ProfileViewController () <UINavigationControllerDelegate,UIImagePickerControllerDelegate, UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *logoutButton;
@@ -26,8 +28,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [[PFUser currentUser][@"pastRuns"] fetchIfNeeded];
+    pastRuns = [PFUser currentUser][@"pastRuns"];
     _profileName.text = PFUser.currentUser.username;
-    // Do any additional setup after loading the view.
+    PFFileObject *image = [PFUser.currentUser objectForKey:@"profileImage"];
+    NSLog(@"%@",image.url);
+    [_profileImage setImageWithURL:[NSURL URLWithString:[image url]]];
+    
+    _profileImage.layer.cornerRadius = 50;
+    _profileImage.clipsToBounds = true;
+    
 }
 - (IBAction)didTapLogout:(id)sender {
     SceneDelegate *sceneDelegate = (SceneDelegate *)UIApplication.sharedApplication.connectedScenes.allObjects.firstObject.delegate;
@@ -60,6 +70,14 @@
     UIImage *originalImage = info[UIImagePickerControllerOriginalImage];
     
     [self.profileImage setImage: originalImage];
+    [[[QueryManager alloc] init] uploadProfileImage:[QueryManager getPFFileFromImage:originalImage] withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+            if (succeeded) {
+                NSLog(@"Updated user profile image");
+            } else {
+                NSLog(@"Unable to update profile image");
+            }
+    }];
+    
    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
