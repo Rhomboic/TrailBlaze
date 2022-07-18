@@ -7,7 +7,6 @@
 #import "CoreLocation/CoreLocation.h"
 #import "HomeViewController.h"
 #import "MapKit/MapKit.h"
-@import FirebaseDatabase;
 #import "Run.h"
 
 @interface HomeViewController ()  <MKMapViewDelegate, CLLocationManagerDelegate>
@@ -30,6 +29,10 @@
     float destinationLocationLongitude;
     
     MKRoute *currentRoute;
+    BOOL isReady;
+    NSString *pointsJson;
+    MKPolyline *currentPolyline;
+    MKPolyline *cloudpolyline;
 }
 
 - (void)viewDidLoad {
@@ -38,9 +41,6 @@
     [self configureLocationManager];
     [self configureSubviews];
     [self centerOnUserLocation];
-    FIRDatabaseReference *ref = [FIRDatabaseReference new];
-
-    [[ref child:@"someid/boy"] setValue:@{@"name" : @"Gon", @"age" : @12}];
     
     
 }
@@ -55,18 +55,17 @@
 
 
 - (IBAction)didTapTrailRun:(id)sender {
-    if ([_trailrunButton.titleLabel.text isEqual:@"Start"]) {
-        [Run uploadRun:currentRoute withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
-            NSLog(@"%@", @"Successfully uploaded route");
-        }];
+    if (isReady) {
+        
     } else {
-    [_goButton setImage:[UIImage systemImageNamed:@"point.topleft.down.curvedto.point.filled.bottomright.up"] forState:UIControlStateNormal];
-    _goButton.imageView.image = nil;
-    _goButton.layer.cornerRadius = 15;
-    
-    [_locationField setHidden:NO];
-    [_locationField becomeFirstResponder];
+        [_goButton setImage:[UIImage systemImageNamed:@"point.topleft.down.curvedto.point.filled.bottomright.up"] forState:UIControlStateNormal];
+        _goButton.imageView.image = nil;
+        _goButton.layer.cornerRadius = 15;
+        
+        [_locationField setHidden:NO];
+        [_locationField becomeFirstResponder];
     }
+    
     
 }
 - (IBAction)didTapGo:(id)sender {
@@ -113,8 +112,6 @@
     _goButton.layer.cornerRadius = 25;
     _goButton.clipsToBounds = true;
     [_goButton setImage:[UIImage systemImageNamed:@"map.fill"] forState:UIControlStateNormal];
-
-
 }
 
 - (void) configureLocationManager {
@@ -125,12 +122,19 @@
     [locationManager requestAlwaysAuthorization];
     locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [locationManager startUpdatingLocation];
+    isReady = false;
 }
 #pragma mark:  Delegates
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay {
     MKPolylineRenderer *render = [[MKPolylineRenderer alloc] initWithOverlay:overlay];
-    [render setStrokeColor:UIColor.systemYellowColor];
-    [render setLineWidth:5.0];
+    if (overlay == currentPolyline) {
+        [render setStrokeColor:UIColor.systemYellowColor];
+        [render setLineWidth:5.0];
+
+    } else {
+        [render setStrokeColor:UIColor.systemGreenColor];
+        [render setLineWidth:5.0];
+    }
     return render;
 }
 
@@ -194,8 +198,9 @@
         if (response) {
             MKRoute *route = [response.routes firstObject];
             self->currentRoute = route;
-
-            [self->_mapView addOverlay:route.polyline level:MKOverlayLevelAboveRoads];
+            self->isReady = true;
+            self->currentPolyline = route.polyline;
+            [self->_mapView addOverlay:self->currentPolyline level:MKOverlayLevelAboveRoads];
             MKMapRect mapRect = route.polyline.boundingMapRect;
             [self->_mapView setRegion:MKCoordinateRegionForMapRect(mapRect) animated:YES];
             
