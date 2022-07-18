@@ -6,6 +6,7 @@
 //
 
 #import "QueryManager.h"
+#import "MapKit/MapKit.h"
 @import Parse;
 
 @implementation QueryManager
@@ -68,7 +69,7 @@
     [query orderByDescending:@"createdAt"];
     [[PFUser currentUser] fetchIfNeeded];
     [query whereKey:@"receiver" equalTo:PFUser.currentUser.objectId];
-    
+
 
     query.limit = limit;
     [query findObjectsInBackgroundWithBlock:^(NSArray *friendReceives, NSError *error) {
@@ -93,7 +94,7 @@
     if (!imageData) {
         return nil;
     }
-    
+
     return [PFFileObject fileObjectWithName:@"ProfileImage.png" data:imageData];
 }
 
