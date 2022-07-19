@@ -629,6 +629,7 @@
                                             <outlet property="profileImage" destination="cGw-hT-Ctq" id="lFk-MP-sN2"/>
                                             <outlet property="profileName" destination="206-vH-6Oj" id="Yh3-cw-M31"/>
                                             <outlet property="runningStatus" destination="zkk-JU-yeQ" id="Nac-nT-Er1"/>
+                                            <segue destination="12u-Ld-4Ol" kind="presentation" id="kGT-Lm-WsO"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -689,8 +690,68 @@
             </objects>
             <point key="canvasLocation" x="-755" y="1558"/>
         </scene>
+        <!--Mate Detail View Controller-->
+        <scene sceneID="C6K-np-57d">
+            <objects>
+                <viewController storyboardIdentifier="MateDetailViewController" id="12u-Ld-4Ol" customClass="MateDetailViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="4Mt-6k-dav">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="790"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="U7b-GM-C8M">
+                                <rect key="frame" x="145" y="89" width="100" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="6oU-vh-dYC"/>
+                                    <constraint firstAttribute="width" constant="100" id="jwe-2T-hNG"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cR3-tQ-lfV">
+                                <rect key="frame" x="135" y="680" width="120" height="60"/>
+                                <color key="backgroundColor" red="1" green="0.95076917660000004" blue="0.0064871742859999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="UOi-DW-aHK"/>
+                                    <constraint firstAttribute="width" constant="120" id="gmX-Ky-rpZ"/>
+                                </constraints>
+                                <color key="tintColor" red="0.097565182139999998" green="0.094910537840000003" blue="0.2288474871" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="arrow.triangle.pull" catalog="system" title="Intercept">
+                                    <fontDescription key="titleFontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="didTapIntercept:" destination="12u-Ld-4Ol" eventType="touchUpInside" id="1k7-7Q-JIu"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dDD-N9-3ZG">
+                                <rect key="frame" x="174" y="209" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="1gw-8u-wFG"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="dDD-N9-3ZG" firstAttribute="centerX" secondItem="U7b-GM-C8M" secondAttribute="centerX" id="5n0-tL-s6f"/>
+                            <constraint firstItem="1gw-8u-wFG" firstAttribute="bottom" secondItem="cR3-tQ-lfV" secondAttribute="bottom" constant="50" id="NSS-uU-jdu"/>
+                            <constraint firstItem="cR3-tQ-lfV" firstAttribute="centerX" secondItem="1gw-8u-wFG" secondAttribute="centerX" id="SvU-qL-Chm"/>
+                            <constraint firstItem="U7b-GM-C8M" firstAttribute="centerX" secondItem="1gw-8u-wFG" secondAttribute="centerX" id="UJG-3x-Idc"/>
+                            <constraint firstItem="dDD-N9-3ZG" firstAttribute="top" secondItem="U7b-GM-C8M" secondAttribute="bottom" constant="20" id="UrN-zK-y59"/>
+                            <constraint firstItem="U7b-GM-C8M" firstAttribute="top" secondItem="1gw-8u-wFG" secondAttribute="top" constant="45" id="mhR-UN-iHV"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="interceptButton" destination="cR3-tQ-lfV" id="N4f-YR-tfu"/>
+                        <outlet property="profileName" destination="dDD-N9-3ZG" id="q91-me-q4U"/>
+                        <outlet property="profilePhoto" destination="U7b-GM-C8M" id="kJi-aX-qRg"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jsD-vX-kM7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1597" y="2928"/>
+        </scene>
     </scenes>
     <resources>
+        <image name="arrow.triangle.pull" catalog="system" width="93" height="128"/>
         <image name="camera.circle" catalog="system" width="128" height="121"/>
         <image name="chart.bar.fill" catalog="system" width="128" height="92"/>
         <image name="house" catalog="system" width="128" height="106"/>

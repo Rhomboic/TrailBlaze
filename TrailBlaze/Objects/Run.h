@@ -17,9 +17,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) PFUser *user;
 @property (nonatomic, strong) NSString *startTime;
 @property (nonatomic, strong) NSString *endTime;
-@property (nonatomic, strong) NSData *routeObject;
+@property (nonatomic, strong) NSString *polylineCoords;
 
 + (void) uploadRun: (MKRoute *) route withCompletion: (PFBooleanResultBlock _Nullable)completion;
++ (void) retreiveRun : (PFUser *) runner completion:(void (^)(MKPolyline *polyline, NSError * _Nullable))completion ;
 
 @end
 

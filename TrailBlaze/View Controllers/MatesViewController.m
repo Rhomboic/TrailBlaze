@@ -11,7 +11,8 @@
 #import "User.h"
 #import "QueryManager.h"
 #import "UIImageView+AFNetworking.h"
-
+#import "Run.h"
+#import "MateDetailViewController.h"
 @interface MatesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *findMatesButton;
@@ -24,6 +25,7 @@
     NSArray *mates;
     NSMutableArray *filteredMates;
     BOOL isFiltered;
+    PFUser *selectedMate;
 }
 -(void)viewWillAppear:(BOOL)animated {
      [super viewWillAppear:animated];
@@ -126,5 +128,37 @@
     }
     [self.tableView reloadData];
 }
+
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (isFiltered) {
+        selectedMate = filteredMates[indexPath.row];
+    } else {
+        selectedMate = mates[indexPath.row];
+    }
+    [selectedMate fetchIfNeeded];
+//    if (selectedMate[@"isRunning"]) {
+//        [Run retreiveRun:(PFUser *) selectedMate withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+//            if (succeeded) {
+//                NSLog(@"run retreived!");
+//            } else {
+//                NSLog(@"run not retreived");
+//            }
+//        }];
+//    }
+
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    MateDetailViewController *detailView = [segue destinationViewController];
+    detailView.profileName.text = selectedMate.username;
+    detailView.thisUser = selectedMate;
+}
+#pragma mark - Navigation
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+
+
+
 
 @end

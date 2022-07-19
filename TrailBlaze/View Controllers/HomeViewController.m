@@ -32,7 +32,6 @@
     BOOL isReady;
     NSString *pointsJson;
     MKPolyline *currentPolyline;
-    MKPolyline *cloudpolyline;
 }
 
 - (void)viewDidLoad {
@@ -56,7 +55,17 @@
 
 - (IBAction)didTapTrailRun:(id)sender {
     if (isReady) {
-        
+        [Run uploadRun:currentRoute withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+            if (succeeded) {
+                NSLog(@"run sent!");
+            } else {
+                NSLog(@"run not sent");
+            }
+        }];
+        [PFUser.currentUser setValue: [NSNumber numberWithBool:YES] forKey:@"isRunning"];
+        [PFUser.currentUser saveInBackground];
+    } else if (_cloudPolyline != nil) {
+        [self.mapView addOverlay:_cloudPolyline];
     } else {
         [_goButton setImage:[UIImage systemImageNamed:@"point.topleft.down.curvedto.point.filled.bottomright.up"] forState:UIControlStateNormal];
         _goButton.imageView.image = nil;
@@ -93,6 +102,11 @@
     _mapView.delegate =  self;
     _mapView.showsUserLocation = YES;
     [_mapView setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
+    if (_cloudPolyline) {
+        [_mapView addOverlay:_cloudPolyline];
+        MKMapRect mapRect = _cloudPolyline.boundingMapRect;
+        [self->_mapView setRegion:MKCoordinateRegionForMapRect(mapRect) animated:YES];
+    }
 }
 
 - (void) configureSubviews {
@@ -211,5 +225,9 @@
     }];
     
 }
+
+//- (void)sendPolylineToHomeVC:(nonnull MKPolyline *)polyline {
+//    _cloudPolyline = polyline;
+//}
 
 @end
