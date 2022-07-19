@@ -10,9 +10,6 @@
 #import "MapKit/MapKit.h"
 
 NS_ASSUME_NONNULL_BEGIN
-//@protocol RetrievedPolylineDelegate <NSObject>
-//- (void) sendPolylineToHomeVC: (MKPolyline *)polyline;
-//@end
 
 @interface MateDetailViewController : UIViewController
 @property (strong, nonatomic) PFUser *thisUser;

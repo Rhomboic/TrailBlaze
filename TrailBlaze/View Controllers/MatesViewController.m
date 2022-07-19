@@ -13,6 +13,7 @@
 #import "UIImageView+AFNetworking.h"
 #import "Run.h"
 #import "MateDetailViewController.h"
+#import "FindMatesViewController.h"
 @interface MatesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *findMatesButton;
@@ -52,6 +53,9 @@
     [self fetchMates];
     
 }
+- (IBAction)findMatesButton:(id)sender {
+    [self performSegueWithIdentifier:@"findMatesSegue" sender:nil];
+}
 
 - (void) fetchMates {
     [[[QueryManager alloc] init] queryMates:10 completion:^(NSArray * _Nonnull mates, NSError * _Nonnull err) {
@@ -74,16 +78,13 @@
     } else {
         thisMateObject = mates[indexPath.row];
     }
-    
+    [cell.profileImage setImage: [UIImage systemImageNamed:@"person.crop.circle"]];
     cell.profileName.text = thisMateObject.username;
     NSLog(@"🐸🐸🐸🐸🐸🐸%@", thisMateObject);
     PFFileObject *image = [thisMateObject objectForKey:@"profileImage"];
     NSLog(@"%@",image.url);
-    if (image) {
-    [cell.profileImage setImageWithURL:[NSURL URLWithString:[image url]]];
-    } else {
-        [cell.profileImage setImage: [UIImage systemImageNamed:@"person.crop.circle"]];
-    }
+    if (image) {[cell.profileImage setImageWithURL:[NSURL URLWithString:[image url]]];}
+
     cell.profileImage.layer.cornerRadius = 30;
     cell.profileImage.clipsToBounds = true;
     
@@ -130,38 +131,23 @@
 }
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     if (isFiltered) {
         selectedMate = filteredMates[indexPath.row];
     } else {
         selectedMate = mates[indexPath.row];
     }
     [selectedMate fetchIfNeeded];
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    UIViewController *ivc = [storyboard instantiateViewControllerWithIdentifier:@"MateDetailViewController"];
-    MateDetailViewController *detailView = [[MateDetailViewController alloc] init];
-    detailView.profileName.text = selectedMate.username;
-    detailView.thisUser = selectedMate;
-    [detailView presentViewController:ivc animated:YES completion:nil];
-    
-    NSLog(@"It's hitting log");
-//    if (selectedMate[@"isRunning"]) {
-//        [Run retreiveRun:(PFUser *) selectedMate withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
-//            if (succeeded) {
-//                NSLog(@"run retreived!");
-//            } else {
-//                NSLog(@"run not retreived");
-//            }
-//        }];
-//    }
-
+    [self performSegueWithIdentifier:@"detailSegue" sender:nil];
 }
 
-//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-//    MateDetailViewController *detailView = [segue destinationViewController];
-//    detailView.profileName.text = selectedMate.username;
-//    detailView.thisUser = selectedMate;
-//}
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([[segue identifier] isEqualToString:@"detailSegue"]) {
+    MateDetailViewController *detailView = [segue destinationViewController];
+        detailView.thisUser = selectedMate;}
+    else {
+        FindMatesViewController *findMatesView = [segue destinationViewController];
+    }
+}
 //#pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation

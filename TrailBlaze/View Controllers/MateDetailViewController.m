@@ -9,6 +9,7 @@
 #import "Run.h"
 #import "SceneDelegate.h"
 #import "HomeViewController.h"
+#import "UIImageView+AFNetworking.h"
 
 @interface MateDetailViewController ()
 @property (weak, nonatomic) IBOutlet UIButton *interceptButton;
@@ -18,8 +19,17 @@
 @end
 
 @implementation MateDetailViewController
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.profileName.text = _thisUser.username;
+    PFFileObject *image = [_thisUser objectForKey:@"profileImage"];
+//    [image fetchItNeeded];
+    NSLog(@"ttttt%@",image.url);
+    [_profilePhoto setImageWithURL:[NSURL URLWithString:[image url]]];
+}
+
 - (IBAction)didTapIntercept:(id)sender {
-     [Run retreiveRun:self.thisUser completion:^(MKPolyline * _Nonnull polyline, NSError * _Nullable err) {
+     [Run retreiveRun:_thisUser completion:^(MKPolyline * _Nonnull polyline, NSError * _Nullable err) {
         if (polyline) {
             SceneDelegate *sceneDelegate = (SceneDelegate *)UIApplication.sharedApplication.connectedScenes.allObjects.firstObject.delegate;
             UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
@@ -36,26 +46,4 @@
         }
     }];
 }
-
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    self.profileName.text = _thisUser.username;
-}
-//
-//- (void) saveCloudRoute  {
-//    [self.delegate sendPolylineToHomeVC:downloadedLine];
-//}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 @end

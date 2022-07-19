@@ -556,7 +556,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fk9-4r-sb6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-755.38461538461536" y="2971.5639810426537"/>
+            <point key="canvasLocation" x="-1517" y="2319"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="zKO-OF-AZy">
@@ -629,7 +629,6 @@
                                             <outlet property="profileImage" destination="cGw-hT-Ctq" id="lFk-MP-sN2"/>
                                             <outlet property="profileName" destination="206-vH-6Oj" id="Yh3-cw-M31"/>
                                             <outlet property="runningStatus" destination="zkk-JU-yeQ" id="Nac-nT-Er1"/>
-                                            <segue destination="12u-Ld-4Ol" kind="presentation" id="kGT-Lm-WsO"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -657,7 +656,8 @@
                     <navigationItem key="navigationItem" id="F0i-wU-Wsx">
                         <barButtonItem key="rightBarButtonItem" image="plus" catalog="system" id="kM8-un-4u6">
                             <connections>
-                                <segue destination="E8T-uN-WBU" kind="show" id="b8s-LY-YhS"/>
+                                <action selector="findMatesButton:" destination="VSj-Fa-Yaw" id="7iv-p8-AmJ"/>
+                                <segue destination="E8T-uN-WBU" kind="show" identifier="findMatesSegue" id="b8s-LY-YhS"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -665,11 +665,12 @@
                         <outlet property="findMatesButton" destination="kM8-un-4u6" id="D3f-7T-u49"/>
                         <outlet property="searchBar" destination="Dp4-F3-QyS" id="5C7-Rd-eyg"/>
                         <outlet property="tableView" destination="I1b-Wb-qhD" id="Ysh-2V-uBs"/>
+                        <segue destination="12u-Ld-4Ol" kind="showDetail" identifier="detailSegue" id="J3l-E0-XUg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3HY-l5-lqj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-755.38461538461536" y="2255.6872037914691"/>
+            <point key="canvasLocation" x="-755" y="2248"/>
         </scene>
         <!--Mates-->
         <scene sceneID="xHX-aj-Bga">
@@ -747,7 +748,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jsD-vX-kM7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1597" y="2928"/>
+            <point key="canvasLocation" x="-708" y="3027"/>
         </scene>
     </scenes>
     <resources>

@@ -58,7 +58,7 @@
 + (void) retreiveRun : (PFUser *) runner completion:(void (^)(MKPolyline *polyline, NSError * _Nullable))completion {
     [runner fetchIfNeeded];
     PFQuery *query = [PFQuery queryWithClassName:@"Run"];
-    [query whereKey:@"objectId" equalTo:runner[@"objectId"]];
+    [query whereKey:@"user" equalTo:runner];
       [query orderByDescending:@"createdAt"];
       query.limit = 1;
       [query findObjectsInBackgroundWithBlock:^(NSArray *runs, NSError *error) {
