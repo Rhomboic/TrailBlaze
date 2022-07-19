@@ -47,6 +47,7 @@
 
     [newRun saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
     if (succeeded) {
+        [PFUser.currentUser setValue:newRun forKey:@"currentRun"];
         NSLog(@"Save run successfully!");
     } else {
         NSLog(@"%@", error.localizedDescription);    }
@@ -55,7 +56,9 @@
 }
 
 + (void) retreiveRun : (PFUser *) runner completion:(void (^)(MKPolyline *polyline, NSError * _Nullable))completion {
+    [runner fetchIfNeeded];
     PFQuery *query = [PFQuery queryWithClassName:@"Run"];
+    [query whereKey:@"objectId" equalTo:runner[@"objectId"]];
       [query orderByDescending:@"createdAt"];
       query.limit = 1;
       [query findObjectsInBackgroundWithBlock:^(NSArray *runs, NSError *error) {

@@ -32,14 +32,17 @@
     BOOL isReady;
     NSString *pointsJson;
     MKPolyline *currentPolyline;
+    
+    BOOL localIsRunning;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self centerOnUserLocation];
     [self configureMapView];
     [self configureLocationManager];
     [self configureSubviews];
-    [self centerOnUserLocation];
+    
     
     
 }
@@ -58,14 +61,26 @@
         [Run uploadRun:currentRoute withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
             if (succeeded) {
                 NSLog(@"run sent!");
+                self->localIsRunning = true;
             } else {
                 NSLog(@"run not sent");
             }
         }];
         [PFUser.currentUser setValue: [NSNumber numberWithBool:YES] forKey:@"isRunning"];
         [PFUser.currentUser saveInBackground];
+        [_statsButton setHidden:YES];
+        [_locationButton setHidden:YES];
+        [_trailrunButton setImage:nil forState:UIControlStateNormal];
+        [_trailrunButton setTitle:@"END" forState:UIControlStateNormal];
+        
     } else if (_cloudPolyline != nil) {
         [self.mapView addOverlay:_cloudPolyline];
+    } else if (localIsRunning) {
+        localIsRunning = false;
+        [PFUser.currentUser setValue: [NSNumber numberWithBool:YES] forKey:@"isRunning"];
+        [PFUser.currentUser setValue: nil forKey:@"currentRun"];
+
+        [PFUser.currentUser saveInBackground];
     } else {
         [_goButton setImage:[UIImage systemImageNamed:@"point.topleft.down.curvedto.point.filled.bottomright.up"] forState:UIControlStateNormal];
         _goButton.imageView.image = nil;
@@ -137,6 +152,7 @@
     locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [locationManager startUpdatingLocation];
     isReady = false;
+    localIsRunning = false;
 }
 #pragma mark:  Delegates
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay {

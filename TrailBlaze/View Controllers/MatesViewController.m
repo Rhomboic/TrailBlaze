@@ -137,6 +137,14 @@
         selectedMate = mates[indexPath.row];
     }
     [selectedMate fetchIfNeeded];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UIViewController *ivc = [storyboard instantiateViewControllerWithIdentifier:@"MateDetailViewController"];
+    MateDetailViewController *detailView = [[MateDetailViewController alloc] init];
+    detailView.profileName.text = selectedMate.username;
+    detailView.thisUser = selectedMate;
+    [detailView presentViewController:ivc animated:YES completion:nil];
+    
+    NSLog(@"It's hitting log");
 //    if (selectedMate[@"isRunning"]) {
 //        [Run retreiveRun:(PFUser *) selectedMate withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
 //            if (succeeded) {
@@ -149,12 +157,12 @@
 
 }
 
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    MateDetailViewController *detailView = [segue destinationViewController];
-    detailView.profileName.text = selectedMate.username;
-    detailView.thisUser = selectedMate;
-}
-#pragma mark - Navigation
+//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+//    MateDetailViewController *detailView = [segue destinationViewController];
+//    detailView.profileName.text = selectedMate.username;
+//    detailView.thisUser = selectedMate;
+//}
+//#pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 

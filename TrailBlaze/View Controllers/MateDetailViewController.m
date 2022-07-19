@@ -19,7 +19,7 @@
 
 @implementation MateDetailViewController
 - (IBAction)didTapIntercept:(id)sender {
-    [Run retreiveRun:self.thisUser completion:^(MKPolyline * _Nonnull polyline, NSError * _Nullable err) {
+     [Run retreiveRun:self.thisUser completion:^(MKPolyline * _Nonnull polyline, NSError * _Nullable err) {
         if (polyline) {
             SceneDelegate *sceneDelegate = (SceneDelegate *)UIApplication.sharedApplication.connectedScenes.allObjects.firstObject.delegate;
             UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
