@@ -237,9 +237,7 @@
                                     <constraint firstAttribute="height" constant="80" id="aOO-gO-c6F"/>
                                 </constraints>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" image="logo_button-removebg">
-                                    <color key="baseForegroundColor" systemColor="systemBackgroundColor"/>
-                                </buttonConfiguration>
+                                <buttonConfiguration key="configuration" style="plain" title=""/>
                                 <connections>
                                     <action selector="didTapTrailRun:" destination="7Ds-Ra-0om" eventType="touchUpInside" id="Wyu-ln-eQJ"/>
                                 </connections>
@@ -758,7 +756,6 @@
         <image name="house" catalog="system" width="128" height="106"/>
         <image name="house.fill" catalog="system" width="128" height="106"/>
         <image name="location.fill" catalog="system" width="128" height="121"/>
-        <image name="logo_button-removebg" width="80" height="80"/>
         <image name="person" catalog="system" width="128" height="117"/>
         <image name="person.3" catalog="system" width="128" height="62"/>
         <image name="person.3.fill" catalog="system" width="128" height="61"/>

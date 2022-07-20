@@ -31,7 +31,10 @@
     MKRoute *currentRoute;
     BOOL isReady;
     NSString *pointsJson;
+    
     MKPolyline *currentPolyline;
+    MKMapItem *startItem;
+    MKMapItem *destinationItem;
     
     BOOL localIsRunning;
 }
@@ -58,10 +61,12 @@
 
 - (IBAction)didTapTrailRun:(id)sender {
     if (isReady) {
+        self->localIsRunning = true;
+        self->isReady = false;
         [Run uploadRun:currentRoute withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
             if (succeeded) {
                 NSLog(@"run sent!");
-                self->localIsRunning = true;
+                
             } else {
                 NSLog(@"run not sent");
             }
@@ -70,17 +75,22 @@
         [PFUser.currentUser saveInBackground];
         [_statsButton setHidden:YES];
         [_locationButton setHidden:YES];
-        [_trailrunButton setImage:nil forState:UIControlStateNormal];
+        [_trailrunButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
         [_trailrunButton setTitle:@"END" forState:UIControlStateNormal];
-        
-    } else if (_cloudPolyline != nil) {
-        [self.mapView addOverlay:_cloudPolyline];
     } else if (localIsRunning) {
         localIsRunning = false;
-        [PFUser.currentUser setValue: [NSNumber numberWithBool:YES] forKey:@"isRunning"];
-        [PFUser.currentUser setValue: nil forKey:@"currentRun"];
-
-        [PFUser.currentUser saveInBackground];
+        [_trailrunButton setTitle:@"" forState:UIControlStateNormal];
+        [_mapView removeOverlay:currentPolyline];
+        
+        [_mapView removeAnnotations:_mapView.annotations];
+        [PFUser.currentUser setValue: [NSNumber numberWithBool:NO] forKey:@"isRunning"];
+        [PFUser.currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+            if (succeeded) {
+                NSLog(@"isRunning = False");
+            } else {
+                NSLog(@"could not save is running");
+            }
+        }];
     } else {
         [_goButton setImage:[UIImage systemImageNamed:@"point.topleft.down.curvedto.point.filled.bottomright.up"] forState:UIControlStateNormal];
         _goButton.imageView.image = nil;
@@ -89,7 +99,6 @@
         [_locationField setHidden:NO];
         [_locationField becomeFirstResponder];
     }
-    
     
 }
 - (IBAction)didTapGo:(id)sender {
@@ -118,6 +127,7 @@
     _mapView.showsUserLocation = YES;
     [_mapView setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
     if (_cloudPolyline) {
+        [self->_trailrunButton setTitle:@"Rendezvous" forState:UIControlStateNormal];
         [_mapView addOverlay:_cloudPolyline];
         MKMapRect mapRect = _cloudPolyline.boundingMapRect;
         [self->_mapView setRegion:MKCoordinateRegionForMapRect(mapRect) animated:YES];
@@ -128,6 +138,7 @@
     _locationButton.layer.cornerRadius = 30;
     _locationButton.clipsToBounds = true;
     
+    [_trailrunButton setImage:[UIImage imageNamed:@"logo_button-removebg"] forState:UIControlStateNormal];
     _trailrunButton.layer.cornerRadius = 40;
     _trailrunButton.clipsToBounds = true;
     
@@ -154,6 +165,7 @@
     isReady = false;
     localIsRunning = false;
 }
+
 #pragma mark:  Delegates
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay {
     MKPolylineRenderer *render = [[MKPolylineRenderer alloc] initWithOverlay:overlay];
@@ -195,7 +207,7 @@
             self->destinationLocationLatitude = placemarks.firstObject.location.coordinate.latitude;
             self->destinationLocationLongitude = placemarks.firstObject.location.coordinate.longitude;
             [self getDirections];
-            [self->_trailrunButton setImage:nil forState:UIControlStateNormal];
+            [_trailrunButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
             [self->_trailrunButton setTitle:@"Start" forState:UIControlStateNormal];
         } else {
             NSLog(@"No location found");
@@ -214,8 +226,8 @@
     
     MKPlacemark *destinationPlacemark = [[MKPlacemark alloc] initWithCoordinate:CLLocationCoordinate2DMake(destlatitude, destlongitude)];
 
-    MKMapItem *startItem = [[MKMapItem alloc] initWithPlacemark:startPlacemark];
-    MKMapItem *destinationItem =  [[MKMapItem alloc] initWithPlacemark:destinationPlacemark];
+    startItem = [[MKMapItem alloc] initWithPlacemark:startPlacemark];
+    destinationItem =  [[MKMapItem alloc] initWithPlacemark:destinationPlacemark];
 
     MKDirectionsRequest *pathRequest = [[MKDirectionsRequest alloc] init];
     [pathRequest setSource:startItem];
@@ -241,9 +253,5 @@
     }];
     
 }
-
-//- (void)sendPolylineToHomeVC:(nonnull MKPolyline *)polyline {
-//    _cloudPolyline = polyline;
-//}
 
 @end

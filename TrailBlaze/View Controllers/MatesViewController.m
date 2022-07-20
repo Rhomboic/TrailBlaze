@@ -78,17 +78,18 @@
     } else {
         thisMateObject = mates[indexPath.row];
     }
-    [cell.profileImage setImage: [UIImage systemImageNamed:@"person.crop.circle"]];
+    
     cell.profileName.text = thisMateObject.username;
-    NSLog(@"🐸🐸🐸🐸🐸🐸%@", thisMateObject);
+    [cell.profileImage setImage: [UIImage systemImageNamed:@"person.crop.circle"]];
     PFFileObject *image = [thisMateObject objectForKey:@"profileImage"];
-    NSLog(@"%@",image.url);
+
     if (image) {[cell.profileImage setImageWithURL:[NSURL URLWithString:[image url]]];}
 
     cell.profileImage.layer.cornerRadius = 30;
     cell.profileImage.clipsToBounds = true;
-    
-    if (thisMateObject[@"isRunning"] == NO) {
+    NSLog(@"%@", thisMateObject);
+    NSLog(@"%@", [thisMateObject objectForKey: @"isRunning"] );
+    if ([thisMateObject[@"isRunning"] boolValue] == false) {
         cell.runningStatus.text = @"Inactive";
         cell.runningStatus.textColor = UIColor.grayColor;
     } else {
@@ -136,22 +137,17 @@
     } else {
         selectedMate = mates[indexPath.row];
     }
-    [selectedMate fetchIfNeeded];
+
+    if ([[selectedMate valueForKey:@"isRunning"] boolValue]) {
     [self performSegueWithIdentifier:@"detailSegue" sender:nil];
+    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     if ([[segue identifier] isEqualToString:@"detailSegue"]) {
     MateDetailViewController *detailView = [segue destinationViewController];
         detailView.thisUser = selectedMate;}
-    else {
-        FindMatesViewController *findMatesView = [segue destinationViewController];
-    }
 }
-//#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-
 
 
 

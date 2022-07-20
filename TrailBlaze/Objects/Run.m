@@ -47,7 +47,6 @@
 
     [newRun saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
     if (succeeded) {
-        [PFUser.currentUser setValue:newRun forKey:@"currentRun"];
         NSLog(@"Save run successfully!");
     } else {
         NSLog(@"%@", error.localizedDescription);    }

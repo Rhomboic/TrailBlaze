@@ -23,8 +23,6 @@
     [super viewDidLoad];
     self.profileName.text = _thisUser.username;
     PFFileObject *image = [_thisUser objectForKey:@"profileImage"];
-//    [image fetchItNeeded];
-    NSLog(@"ttttt%@",image.url);
     [_profilePhoto setImageWithURL:[NSURL URLWithString:[image url]]];
 }
 
