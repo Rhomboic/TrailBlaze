@@ -37,11 +37,11 @@
     MKMapItem *startItem;
     MKMapItem *destinationItem;
     
-    BOOL isReady;
-    BOOL localIsRunning;
+    BOOL isReadyToStartRun;
+    BOOL isCurrentlyRunning;
     
     NSTimer *timer;
-    int count;
+    int timerCount;
     
     
 }
@@ -66,9 +66,9 @@
 }
 
 - (IBAction)didTapTrailRun:(id)sender {
-    if (isReady) {
-        self->localIsRunning = true;
-        self->isReady = false;
+    if (isReadyToStartRun) {
+        self->isCurrentlyRunning = true;
+        self->isReadyToStartRun = false;
         _timerLabel.text = @"00:00:00";
         [_timerLabel setHidden:NO];
         timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerCounter) userInfo:nil repeats:true];
@@ -85,10 +85,10 @@
         [_locationButton setHidden:YES];
         [_trailrunButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
         [_trailrunButton setTitle:@"END" forState:UIControlStateNormal];
-    } else if (localIsRunning) {
-        localIsRunning = false;
+    } else if (isCurrentlyRunning) {
+        isCurrentlyRunning = false;
+        timerCount = 0;
         [timer invalidate];
-        count = 0;
         [_trailrunButton setTitle:@"" forState:UIControlStateNormal];
         [_mapView removeOverlay:currentPolyline];
         
@@ -151,7 +151,7 @@
 - (void) configureMapView {
     _mapView.delegate =  self;
     _mapView.showsUserLocation = YES;
-    count = 0;
+    timerCount = 0;
     [_mapView setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
     if (_cloudPolyline) {
         [self->_trailrunButton setTitle:@"Rendezvous" forState:UIControlStateNormal];
@@ -186,15 +186,14 @@
 }
 
 - (void) configureLocationManager {
-    
     locationManager = [[CLLocationManager alloc] init];
     locationManager.delegate = self;
     locationManager.distanceFilter = kCLDistanceFilterNone;
     [locationManager requestAlwaysAuthorization];
     locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [locationManager startUpdatingLocation];
-    isReady = false;
-    localIsRunning = false;
+    isReadyToStartRun = false;
+    isCurrentlyRunning = false;
 }
 
 #pragma mark:  Delegates
@@ -217,8 +216,8 @@
 
 #pragma mark:  Helpers
 - (void) timerCounter {
-    count = count + 1;
-    NSString *timeString = [self secondsToHMS:count];
+    timerCount = timerCount + 1;
+    NSString *timeString = [self secondsToHMS:timerCount];
     _timerLabel.text = timeString;
 }
 
@@ -283,7 +282,7 @@
         if (response) {
             MKRoute *route = [response.routes firstObject];
             self->currentRoute = route;
-            self->isReady = true;
+            self->isReadyToStartRun = true;
             self->currentPolyline = route.polyline;
             [self->_mapView addOverlay:self->currentPolyline level:MKOverlayLevelAboveRoads];
             MKMapRect mapRect = route.polyline.boundingMapRect;

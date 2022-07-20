@@ -22,7 +22,6 @@
     
     if (PFUser.currentUser) {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        
         UITabBarController *tabBarController = [storyboard instantiateViewControllerWithIdentifier:@"TabBarController"];
         [tabBarController setSelectedViewController: tabBarController.viewControllers[1]];
         self.window.rootViewController = tabBarController;

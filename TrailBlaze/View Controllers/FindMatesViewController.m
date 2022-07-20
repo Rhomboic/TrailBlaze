@@ -30,9 +30,9 @@
     NSMutableArray *received;
 
     
-    QueryManager *queryManager1;
-    QueryManager *queryManager2;
-    QueryManager *queryManager3;
+    QueryManager *userQueryManager;
+    QueryManager *friendRequestQueryManager;
+    QueryManager *friendReceivesQueryManager;
 }
 
 - (void)viewDidLoad {
@@ -49,9 +49,9 @@
     [self.tableView insertSubview:self.refreshControl atIndex:0];
     self.searchBar.delegate = self;
     
-    queryManager1 = [[QueryManager alloc] init];
-    queryManager2 = [[QueryManager alloc] init];
-    queryManager3 = [[QueryManager alloc] init];
+    userQueryManager = [[QueryManager alloc] init];
+    friendRequestQueryManager = [[QueryManager alloc] init];
+    friendReceivesQueryManager = [[QueryManager alloc] init];
     
     requested = [[NSMutableArray alloc] init];
     received = [[NSMutableArray alloc] init];
@@ -64,19 +64,19 @@
 }
 
 - (void) fetchUsers {
-    [queryManager1 queryUsers:10 completion:^(NSArray * _Nonnull users, NSError * _Nonnull err) {
+    [userQueryManager queryUsers:10 completion:^(NSArray * _Nonnull users, NSError * _Nonnull err) {
         if (users) {
             
             self->users = users;
             
-            [self->queryManager2 queryRequests:10 completion:^(NSArray * _Nonnull myRequests, NSError * _Nonnull err) {
+            [self->friendRequestQueryManager queryRequests:10 completion:^(NSArray * _Nonnull myRequests, NSError * _Nonnull err) {
                 if (myRequests) {
                     
                     for (NSDictionary *obj in myRequests) {
                         [self->requested addObject:obj[@"receiver"]];
                     }
                     
-                    [self->queryManager3 queryReceives:10 completion:^(NSArray * _Nonnull myReceives, NSError * _Nonnull err) {
+                    [self->friendReceivesQueryManager queryReceives:10 completion:^(NSArray * _Nonnull myReceives, NSError * _Nonnull err) {
                         if (myReceives) {
                             
                             for (NSDictionary *obj in myReceives) {
@@ -95,12 +95,6 @@
                                     }];
                                 }
                             }
-                            
-                            
-                            
-                            
-                            
-                            
                             [self.tableView reloadData];
                             [self.refreshControl endRefreshing];
                         } else {
@@ -152,7 +146,6 @@
         
     }
     for (NSString *st in requested) {
-//        NSLog(@"🐤🐤🐤🐤🐤🐤🐤🐤%@, %@", thisUserObject.objectId, st);
         if ([st isEqualToString:thisUserObject.objectId]) {
             [cell.friendStatusIcon setImage:[UIImage systemImageNamed:@"person.badge.clock.fill"]];
             [cell.friendStatusIcon setTintColor:UIColor.darkGrayColor];
