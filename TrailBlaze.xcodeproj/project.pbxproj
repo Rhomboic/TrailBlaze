@@ -25,6 +25,7 @@
 		4EAAB558287002C60093B30B /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAAB557287002C60093B30B /* ProfileViewController.m */; };
 		4EB1C50E2874F7EB00A61A10 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EB1C50D2874F7EB00A61A10 /* CoreLocation.framework */; };
 		4ECC3773287DDE4200708C8E /* keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4ECC3772287DDE4200708C8E /* keys.plist */; };
+		4EE182E72888AED9001A60DD /* Interceptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE182E62888AED9001A60DD /* Interceptor.m */; };
 		4EE674C22866D6C800A93C15 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE674C12866D6C800A93C15 /* AppDelegate.m */; };
 		4EE674C52866D6C800A93C15 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE674C42866D6C800A93C15 /* SceneDelegate.m */; };
 		4EE674C82866D6C800A93C15 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE674C72866D6C800A93C15 /* ViewController.m */; };
@@ -94,6 +95,8 @@
 		4EAAB557287002C60093B30B /* ProfileViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
 		4EB1C50D2874F7EB00A61A10 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		4ECC3772287DDE4200708C8E /* keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = keys.plist; sourceTree = "<group>"; };
+		4EE182E52888AED9001A60DD /* Interceptor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Interceptor.h; sourceTree = "<group>"; };
+		4EE182E62888AED9001A60DD /* Interceptor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Interceptor.m; sourceTree = "<group>"; };
 		4EE674BD2866D6C800A93C15 /* TrailBlaze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrailBlaze.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EE674C02866D6C800A93C15 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4EE674C12866D6C800A93C15 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -165,6 +168,8 @@
 			children = (
 				4E3483E3287EB0EE0032C796 /* QueryManager.h */,
 				4E3483E4287EB0EE0032C796 /* QueryManager.m */,
+				4EE182E52888AED9001A60DD /* Interceptor.h */,
+				4EE182E62888AED9001A60DD /* Interceptor.m */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -541,6 +546,7 @@
 				4E3483E5287EB0EE0032C796 /* QueryManager.m in Sources */,
 				4E64D18E287E1151007A87A1 /* Run.m in Sources */,
 				4EAAB550286E6DBB0093B30B /* HomeViewController.m in Sources */,
+				4EE182E72888AED9001A60DD /* Interceptor.m in Sources */,
 				4E701DFD28768D0900DD375B /* MapViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

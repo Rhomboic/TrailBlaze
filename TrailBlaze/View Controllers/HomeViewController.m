@@ -91,6 +91,8 @@
         [timer invalidate];
         [_trailrunButton setTitle:@"" forState:UIControlStateNormal];
         [_mapView removeOverlay:currentPolyline];
+        [PFUser.currentUser setValue:[NSNull null] forKey:@"currentLocation"];
+        [PFUser.currentUser saveInBackground];
         
         [_mapView removeAnnotations:_mapView.annotations];
         [PFUser.currentUser setValue: [NSNumber numberWithBool:NO] forKey:@"isRunning"];
@@ -194,6 +196,10 @@
     [locationManager startUpdatingLocation];
     isReadyToStartRun = false;
     isCurrentlyRunning = false;
+    
+    //sending user location to Parse 
+    [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
+
 }
 
 #pragma mark:  Delegates
@@ -225,7 +231,15 @@
     return [NSString stringWithFormat:@"%02d:%02d:%02d", seconds/3600, (seconds % 3600)/60, (seconds % 3600)%60];
 }
 
-
+- (void) onTimer {
+    if (isCurrentlyRunning) {
+        PFGeoPoint *userLocationGeoPoint = [[PFGeoPoint alloc] init];
+        userLocationGeoPoint.latitude = locationManager.location.coordinate.latitude;
+        userLocationGeoPoint.longitude = locationManager.location.coordinate.longitude;
+        [PFUser.currentUser setValue:userLocationGeoPoint forKey:@"currentLocation"];
+        [PFUser.currentUser saveInBackground];
+    }
+}
 
 - (void) centerOnUserLocation {
     [_mapView setCenterCoordinate:_mapView.userLocation.location.coordinate animated:YES];
