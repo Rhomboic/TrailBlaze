@@ -16,6 +16,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *goButton;
 @property (weak, nonatomic) IBOutlet UITextField *locationField;
 @property (weak, nonatomic) IBOutlet UIButton *statsButton;
+@property (weak, nonatomic) IBOutlet UILabel *timerLabel;
+
 @end
 
 @implementation HomeViewController {
@@ -29,14 +31,19 @@
     float destinationLocationLongitude;
     
     MKRoute *currentRoute;
-    BOOL isReady;
     NSString *pointsJson;
     
     MKPolyline *currentPolyline;
     MKMapItem *startItem;
     MKMapItem *destinationItem;
     
+    BOOL isReady;
     BOOL localIsRunning;
+    
+    NSTimer *timer;
+    int count;
+    
+    
 }
 
 - (void)viewDidLoad {
@@ -58,20 +65,21 @@
 - (IBAction)didTapStats:(id)sender {
 }
 
-
 - (IBAction)didTapTrailRun:(id)sender {
     if (isReady) {
         self->localIsRunning = true;
         self->isReady = false;
+        _timerLabel.text = @"00:00:00";
+        [_timerLabel setHidden:NO];
+        timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerCounter) userInfo:nil repeats:true];
         [Run uploadRun:currentRoute withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
             if (succeeded) {
                 NSLog(@"run sent!");
-                
             } else {
                 NSLog(@"run not sent");
             }
         }];
-        [PFUser.currentUser setValue: [NSNumber numberWithBool:YES] forKey:@"isRunning"];
+        [PFUser.currentUser setValue:[NSNumber numberWithBool:YES] forKey:@"isRunning"];
         [PFUser.currentUser saveInBackground];
         [_statsButton setHidden:YES];
         [_locationButton setHidden:YES];
@@ -79,11 +87,24 @@
         [_trailrunButton setTitle:@"END" forState:UIControlStateNormal];
     } else if (localIsRunning) {
         localIsRunning = false;
+        [timer invalidate];
+        count = 0;
         [_trailrunButton setTitle:@"" forState:UIControlStateNormal];
         [_mapView removeOverlay:currentPolyline];
         
         [_mapView removeAnnotations:_mapView.annotations];
         [PFUser.currentUser setValue: [NSNumber numberWithBool:NO] forKey:@"isRunning"];
+        [Run retreiveRunObject:PFUser.currentUser completion:^(PFObject * _Nonnull runObject, NSError * _Nullable err) {
+            if (runObject) {
+                NSDateFormatter *DateFormatter=[[NSDateFormatter alloc] init];
+                [DateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+                [runObject setValue:[DateFormatter stringFromDate:[NSDate date]] forKey:@"endTime"];
+                [runObject setValue:self->_timerLabel.text forKey:@"duration"];
+                [runObject saveInBackground];
+            } else {
+                NSLog(@"%@", err.localizedDescription);
+            }
+        }];
         [PFUser.currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
             if (succeeded) {
                 NSLog(@"isRunning = False");
@@ -91,6 +112,11 @@
                 NSLog(@"could not save is running");
             }
         }];
+        [NSThread sleepForTimeInterval: 1];
+        [_timerLabel setHidden:YES];
+        [_locationButton setHidden:NO];
+        [_statsButton setHidden:NO];
+        
     } else {
         [_goButton setImage:[UIImage systemImageNamed:@"point.topleft.down.curvedto.point.filled.bottomright.up"] forState:UIControlStateNormal];
         _goButton.imageView.image = nil;
@@ -125,6 +151,7 @@
 - (void) configureMapView {
     _mapView.delegate =  self;
     _mapView.showsUserLocation = YES;
+    count = 0;
     [_mapView setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
     if (_cloudPolyline) {
         [self->_trailrunButton setTitle:@"Rendezvous" forState:UIControlStateNormal];
@@ -152,6 +179,10 @@
     _goButton.layer.cornerRadius = 25;
     _goButton.clipsToBounds = true;
     [_goButton setImage:[UIImage systemImageNamed:@"map.fill"] forState:UIControlStateNormal];
+    
+    _timerLabel.layer.cornerRadius = 30;
+    _timerLabel.clipsToBounds = true;
+    [_timerLabel setHidden:YES];
 }
 
 - (void) configureLocationManager {
@@ -185,6 +216,18 @@
 }
 
 #pragma mark:  Helpers
+- (void) timerCounter {
+    count = count + 1;
+    NSString *timeString = [self secondsToHMS:count];
+    _timerLabel.text = timeString;
+}
+
+- (NSString *) secondsToHMS: (int ) seconds {
+    return [NSString stringWithFormat:@"%02d:%02d:%02d", seconds/3600, (seconds % 3600)/60, (seconds % 3600)%60];
+}
+
+
+
 - (void) centerOnUserLocation {
     [_mapView setCenterCoordinate:_mapView.userLocation.location.coordinate animated:YES];
      MKCoordinateRegion sfRegion = MKCoordinateRegionMake(_mapView.userLocation.location.coordinate,  MKCoordinateSpanMake(0.01, 0.01));

@@ -27,7 +27,7 @@
 }
 
 - (IBAction)didTapIntercept:(id)sender {
-     [Run retreiveRun:_thisUser completion:^(MKPolyline * _Nonnull polyline, NSError * _Nullable err) {
+     [Run retreiveRunPolyline:_thisUser completion:^(MKPolyline * _Nonnull polyline, NSError * _Nullable err) {
         if (polyline) {
             SceneDelegate *sceneDelegate = (SceneDelegate *)UIApplication.sharedApplication.connectedScenes.allObjects.firstObject.delegate;
             UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];

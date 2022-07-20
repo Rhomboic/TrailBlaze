@@ -242,12 +242,24 @@
                                     <action selector="didTapTrailRun:" destination="7Ds-Ra-0om" eventType="touchUpInside" id="Wyu-ln-eQJ"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="poh-Rn-6JW">
+                                <rect key="frame" x="70" y="541" width="250" height="100"/>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="55q-HU-fIs"/>
+                                    <constraint firstAttribute="width" constant="250" id="izh-xz-l3f"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="50"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Tk9-PI-aXB"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="l21-ku-eI0" firstAttribute="centerY" secondItem="Vwl-V6-YMQ" secondAttribute="centerY" id="8BX-iY-cdM"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Vwl-V6-YMQ" secondAttribute="trailing" constant="80" id="9Dn-hW-akU"/>
+                            <constraint firstItem="Vwl-V6-YMQ" firstAttribute="top" secondItem="poh-Rn-6JW" secondAttribute="bottom" constant="20" id="DkP-ql-CcP"/>
                             <constraint firstItem="Vwl-V6-YMQ" firstAttribute="leading" secondItem="i54-kZ-m9E" secondAttribute="leadingMargin" constant="80" id="IBc-8Y-yn1"/>
                             <constraint firstItem="Vwl-V6-YMQ" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="l21-ku-eI0" secondAttribute="trailing" constant="8" symbolic="YES" id="JDu-po-Kdz"/>
                             <constraint firstItem="Bda-Vi-N8l" firstAttribute="centerY" secondItem="Vwl-V6-YMQ" secondAttribute="centerY" id="JaX-Ky-qWh"/>
@@ -261,6 +273,7 @@
                             <constraint firstItem="T9Y-EL-DwS" firstAttribute="top" secondItem="i54-kZ-m9E" secondAttribute="top" id="fy0-P8-Q2b"/>
                             <constraint firstItem="Ftg-OI-953" firstAttribute="leading" secondItem="Tk9-PI-aXB" secondAttribute="leading" constant="20" id="hMa-Hz-vss"/>
                             <constraint firstItem="ajY-Cg-Gmf" firstAttribute="leading" secondItem="Ftg-OI-953" secondAttribute="trailing" constant="5" id="nxc-sU-9Ru"/>
+                            <constraint firstItem="poh-Rn-6JW" firstAttribute="centerX" secondItem="Vwl-V6-YMQ" secondAttribute="centerX" id="oKz-TZ-HvO"/>
                             <constraint firstItem="Tk9-PI-aXB" firstAttribute="bottom" secondItem="Vwl-V6-YMQ" secondAttribute="bottom" constant="20" id="sfY-qg-HpL"/>
                             <constraint firstItem="Bda-Vi-N8l" firstAttribute="leading" secondItem="Vwl-V6-YMQ" secondAttribute="trailing" constant="10" id="xil-F7-TQW"/>
                             <constraint firstItem="Tk9-PI-aXB" firstAttribute="trailing" secondItem="ajY-Cg-Gmf" secondAttribute="trailing" constant="20" id="ytN-MK-A3o"/>
@@ -273,12 +286,13 @@
                         <outlet property="locationField" destination="Ftg-OI-953" id="Z5Z-GS-mur"/>
                         <outlet property="mapView" destination="T9Y-EL-DwS" id="OBu-qA-NI5"/>
                         <outlet property="statsButton" destination="l21-ku-eI0" id="vKb-Tb-caX"/>
+                        <outlet property="timerLabel" destination="poh-Rn-6JW" id="wUV-s9-ceb"/>
                         <outlet property="trailrunButton" destination="Vwl-V6-YMQ" id="7tx-eS-Oo5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0US-Hz-y89" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="185" y="2256"/>
+            <point key="canvasLocation" x="184.61538461538461" y="2255.6872037914691"/>
         </scene>
         <!--Home-->
         <scene sceneID="Vq0-hR-sjM">

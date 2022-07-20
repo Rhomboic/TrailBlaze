@@ -54,7 +54,7 @@
 
 }
 
-+ (void) retreiveRun : (PFUser *) runner completion:(void (^)(MKPolyline *polyline, NSError * _Nullable))completion {
++ (void) retreiveRunPolyline : (PFUser *) runner completion:(void (^)(MKPolyline *polyline, NSError * _Nullable))completion {
     [runner fetchIfNeeded];
     PFQuery *query = [PFQuery queryWithClassName:@"Run"];
     [query whereKey:@"user" equalTo:runner];
@@ -74,6 +74,22 @@
             }
               MKPolyline *thisUserRunPolyline = [MKPolyline polylineWithCoordinates:CLLocations count:pointsPairs.count];
               completion(thisUserRunPolyline, nil);
+          } else {
+              NSLog(@"Could not retrieve run");
+          }
+      }];
+}
+
++ (void) retreiveRunObject : (PFUser *) runner completion:(void (^)(PFObject *runObject, NSError * _Nullable))completion {
+    [runner fetchIfNeeded];
+    PFQuery *query = [PFQuery queryWithClassName:@"Run"];
+    [query whereKey:@"user" equalTo:runner];
+      [query orderByDescending:@"createdAt"];
+      query.limit = 1;
+      [query findObjectsInBackgroundWithBlock:^(NSArray *runs, NSError *error) {
+          if (runs) {
+              PFObject *thisUserRunObject = [runs firstObject];
+              completion(thisUserRunObject, nil);
           } else {
               NSLog(@"Could not retrieve run");
           }

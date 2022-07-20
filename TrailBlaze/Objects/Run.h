@@ -20,7 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *polylineCoords;
 
 + (void) uploadRun: (MKRoute *) route withCompletion: (PFBooleanResultBlock _Nullable)completion;
-+ (void) retreiveRun : (PFUser *) runner completion:(void (^)(MKPolyline *polyline, NSError * _Nullable))completion ;
++ (void) retreiveRunPolyline : (PFUser *) runner completion:(void (^)(MKPolyline *polyline, NSError * _Nullable))completion ;
++ (void) retreiveRunObject : (PFUser *) runner completion:(void (^)(PFObject *runObject, NSError * _Nullable))completion;
 
 @end
 
