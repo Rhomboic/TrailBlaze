@@ -26,7 +26,16 @@
 @implementation ProfileViewController {
     NSArray *pastRuns;
 }
-
+- (void) viewWillAppear:(BOOL)animated {
+    [Run retreiveRunObjects:PFUser.currentUser limit:10 completion:^(NSArray * _Nonnull runObjects, NSError * _Nullable err) {
+        if (runObjects) {
+            self->pastRuns = runObjects;
+            [self->_tableView reloadData];
+        } else {
+            NSLog(@"No past runs");
+        }
+    }];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableView.dataSource = self;
