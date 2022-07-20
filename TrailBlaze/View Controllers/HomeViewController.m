@@ -7,6 +7,7 @@
 #import "CoreLocation/CoreLocation.h"
 #import "HomeViewController.h"
 #import "MapKit/MapKit.h"
+#import "Run.h"
 
 @interface HomeViewController ()  <MKMapViewDelegate, CLLocationManagerDelegate>
 @property (strong, nonatomic) IBOutlet MKMapView *mapView;
@@ -15,6 +16,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *goButton;
 @property (weak, nonatomic) IBOutlet UITextField *locationField;
 @property (weak, nonatomic) IBOutlet UIButton *statsButton;
+@property (weak, nonatomic) IBOutlet UILabel *timerLabel;
+
 @end
 
 @implementation HomeViewController {
@@ -26,14 +29,31 @@
     
     float destinationLocationLatitude;
     float destinationLocationLongitude;
+    
+    MKRoute *currentRoute;
+    NSString *pointsJson;
+    
+    MKPolyline *currentPolyline;
+    MKMapItem *startItem;
+    MKMapItem *destinationItem;
+    
+    BOOL isReadyToStartRun;
+    BOOL isCurrentlyRunning;
+    
+    NSTimer *timer;
+    int timerCount;
+    
+    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self centerOnUserLocation];
     [self configureMapView];
     [self configureLocationManager];
     [self configureSubviews];
-    [self centerOnUserLocation];
+    
+    
     
 }
 #pragma mark:  Button Actions
@@ -45,14 +65,66 @@
 - (IBAction)didTapStats:(id)sender {
 }
 
-
 - (IBAction)didTapTrailRun:(id)sender {
-    [_goButton setImage:[UIImage systemImageNamed:@"point.topleft.down.curvedto.point.filled.bottomright.up"] forState:UIControlStateNormal];
-    _goButton.imageView.image = nil;
-    _goButton.layer.cornerRadius = 15;
-    
-    [_locationField setHidden:NO];
-    [_locationField becomeFirstResponder];
+    if (isReadyToStartRun) {
+        self->isCurrentlyRunning = true;
+        self->isReadyToStartRun = false;
+        _timerLabel.text = @"00:00:00";
+        [_timerLabel setHidden:NO];
+        timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerCounter) userInfo:nil repeats:true];
+        [Run uploadRun:currentRoute withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+            if (succeeded) {
+                NSLog(@"run sent!");
+            } else {
+                NSLog(@"run not sent");
+            }
+        }];
+        [PFUser.currentUser setValue:[NSNumber numberWithBool:YES] forKey:@"isRunning"];
+        [PFUser.currentUser saveInBackground];
+        [_statsButton setHidden:YES];
+        [_locationButton setHidden:YES];
+        [_trailrunButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+        [_trailrunButton setTitle:@"END" forState:UIControlStateNormal];
+    } else if (isCurrentlyRunning) {
+        isCurrentlyRunning = false;
+        timerCount = 0;
+        [timer invalidate];
+        [_trailrunButton setTitle:@"" forState:UIControlStateNormal];
+        [_mapView removeOverlay:currentPolyline];
+        
+        [_mapView removeAnnotations:_mapView.annotations];
+        [PFUser.currentUser setValue: [NSNumber numberWithBool:NO] forKey:@"isRunning"];
+        [Run retreiveRunObject:PFUser.currentUser completion:^(PFObject * _Nonnull runObject, NSError * _Nullable err) {
+            if (runObject) {
+                NSDateFormatter *DateFormatter=[[NSDateFormatter alloc] init];
+                [DateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+                [runObject setValue:[DateFormatter stringFromDate:[NSDate date]] forKey:@"endTime"];
+                [runObject setValue:self->_timerLabel.text forKey:@"duration"];
+                [runObject saveInBackground];
+            } else {
+                NSLog(@"%@", err.localizedDescription);
+            }
+        }];
+        [PFUser.currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+            if (succeeded) {
+                NSLog(@"isRunning = False");
+            } else {
+                NSLog(@"could not save is running");
+            }
+        }];
+        [NSThread sleepForTimeInterval: 1];
+        [_timerLabel setHidden:YES];
+        [_locationButton setHidden:NO];
+        [_statsButton setHidden:NO];
+        
+    } else {
+        [_goButton setImage:[UIImage systemImageNamed:@"point.topleft.down.curvedto.point.filled.bottomright.up"] forState:UIControlStateNormal];
+        _goButton.imageView.image = nil;
+        _goButton.layer.cornerRadius = 15;
+        
+        [_locationField setHidden:NO];
+        [_locationField becomeFirstResponder];
+    }
     
 }
 - (IBAction)didTapGo:(id)sender {
@@ -79,13 +151,21 @@
 - (void) configureMapView {
     _mapView.delegate =  self;
     _mapView.showsUserLocation = YES;
+    timerCount = 0;
     [_mapView setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
+    if (_cloudPolyline) {
+        [self->_trailrunButton setTitle:@"Rendezvous" forState:UIControlStateNormal];
+        [_mapView addOverlay:_cloudPolyline];
+        MKMapRect mapRect = _cloudPolyline.boundingMapRect;
+        [self->_mapView setRegion:MKCoordinateRegionForMapRect(mapRect) animated:YES];
+    }
 }
 
 - (void) configureSubviews {
     _locationButton.layer.cornerRadius = 30;
     _locationButton.clipsToBounds = true;
     
+    [_trailrunButton setImage:[UIImage imageNamed:@"logo_button-removebg"] forState:UIControlStateNormal];
     _trailrunButton.layer.cornerRadius = 40;
     _trailrunButton.clipsToBounds = true;
     
@@ -99,24 +179,34 @@
     _goButton.layer.cornerRadius = 25;
     _goButton.clipsToBounds = true;
     [_goButton setImage:[UIImage systemImageNamed:@"map.fill"] forState:UIControlStateNormal];
-
-
+    
+    _timerLabel.layer.cornerRadius = 30;
+    _timerLabel.clipsToBounds = true;
+    [_timerLabel setHidden:YES];
 }
 
 - (void) configureLocationManager {
-    
     locationManager = [[CLLocationManager alloc] init];
     locationManager.delegate = self;
     locationManager.distanceFilter = kCLDistanceFilterNone;
     [locationManager requestAlwaysAuthorization];
     locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [locationManager startUpdatingLocation];
+    isReadyToStartRun = false;
+    isCurrentlyRunning = false;
 }
+
 #pragma mark:  Delegates
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay {
     MKPolylineRenderer *render = [[MKPolylineRenderer alloc] initWithOverlay:overlay];
-    [render setStrokeColor:UIColor.systemYellowColor];
-    [render setLineWidth:5.0];
+    if (overlay == currentPolyline) {
+        [render setStrokeColor:UIColor.systemYellowColor];
+        [render setLineWidth:5.0];
+
+    } else {
+        [render setStrokeColor:UIColor.systemGreenColor];
+        [render setLineWidth:5.0];
+    }
     return render;
 }
 
@@ -125,6 +215,18 @@
 }
 
 #pragma mark:  Helpers
+- (void) timerCounter {
+    timerCount = timerCount + 1;
+    NSString *timeString = [self secondsToHMS:timerCount];
+    _timerLabel.text = timeString;
+}
+
+- (NSString *) secondsToHMS: (int ) seconds {
+    return [NSString stringWithFormat:@"%02d:%02d:%02d", seconds/3600, (seconds % 3600)/60, (seconds % 3600)%60];
+}
+
+
+
 - (void) centerOnUserLocation {
     [_mapView setCenterCoordinate:_mapView.userLocation.location.coordinate animated:YES];
      MKCoordinateRegion sfRegion = MKCoordinateRegionMake(_mapView.userLocation.location.coordinate,  MKCoordinateSpanMake(0.01, 0.01));
@@ -147,6 +249,8 @@
             self->destinationLocationLatitude = placemarks.firstObject.location.coordinate.latitude;
             self->destinationLocationLongitude = placemarks.firstObject.location.coordinate.longitude;
             [self getDirections];
+            [_trailrunButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+            [self->_trailrunButton setTitle:@"Start" forState:UIControlStateNormal];
         } else {
             NSLog(@"No location found");
         }
@@ -164,21 +268,23 @@
     
     MKPlacemark *destinationPlacemark = [[MKPlacemark alloc] initWithCoordinate:CLLocationCoordinate2DMake(destlatitude, destlongitude)];
 
-    MKMapItem *startItem = [[MKMapItem alloc] initWithPlacemark:startPlacemark];
-    MKMapItem *destinationItem =  [[MKMapItem alloc] initWithPlacemark:destinationPlacemark];
+    startItem = [[MKMapItem alloc] initWithPlacemark:startPlacemark];
+    destinationItem =  [[MKMapItem alloc] initWithPlacemark:destinationPlacemark];
 
     MKDirectionsRequest *pathRequest = [[MKDirectionsRequest alloc] init];
     [pathRequest setSource:startItem];
     [pathRequest setDestination:destinationItem];
-    [pathRequest setTransportType:MKDirectionsTransportTypeAutomobile];
+    [pathRequest setTransportType:MKDirectionsTransportTypeWalking];
     [pathRequest setRequestsAlternateRoutes:YES];
     
     MKDirections *path = [[MKDirections alloc] initWithRequest:pathRequest];
     [path calculateDirectionsWithCompletionHandler:^(MKDirectionsResponse * _Nullable response, NSError * _Nullable error) {
         if (response) {
             MKRoute *route = [response.routes firstObject];
-
-            [self->_mapView addOverlay:route.polyline level:MKOverlayLevelAboveRoads];
+            self->currentRoute = route;
+            self->isReadyToStartRun = true;
+            self->currentPolyline = route.polyline;
+            [self->_mapView addOverlay:self->currentPolyline level:MKOverlayLevelAboveRoads];
             MKMapRect mapRect = route.polyline.boundingMapRect;
             [self->_mapView setRegion:MKCoordinateRegionForMapRect(mapRect) animated:YES];
             

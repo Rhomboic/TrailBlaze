@@ -7,16 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4E3483E5287EB0EE0032C796 /* QueryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3483E4287EB0EE0032C796 /* QueryManager.m */; };
+		4E3483EC287F42430032C796 /* FindMatesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3483EB287F42430032C796 /* FindMatesViewController.m */; };
+		4E560D26287DE9C00048BF37 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4E560D25287DE9C00048BF37 /* GoogleService-Info.plist */; };
+		4E5831F7287F7CB7006D9982 /* FriendRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5831F6287F7CB7006D9982 /* FriendRequest.m */; };
+		4E5831FA287FA565006D9982 /* RunCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5831F9287FA565006D9982 /* RunCell.m */; };
+		4E64D18E287E1151007A87A1 /* Run.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E64D18D287E1151007A87A1 /* Run.m */; };
+		4E64D191287E21F8007A87A1 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E64D190287E21F8007A87A1 /* User.m */; };
 		4E701DF7287606DF00DD375B /* MatesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E701DF6287606DF00DD375B /* MatesViewController.m */; };
 		4E701DFA2876084800DD375B /* MateCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E701DF92876084800DD375B /* MateCell.m */; };
 		4E701DFD28768D0900DD375B /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E701DFC28768D0900DD375B /* MapViewController.m */; };
-		4EAAB54A286E5FA60093B30B /* keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4EAAB549286E5FA60093B30B /* keys.plist */; };
+		4E7363CD2886132D00CE65AE /* MateDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E7363CC2886132D00CE65AE /* MateDetailViewController.m */; };
 		4EAAB54D286E6D960093B30B /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAAB54C286E6D960093B30B /* LoginViewController.m */; };
 		4EAAB550286E6DBB0093B30B /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAAB54F286E6DBB0093B30B /* HomeViewController.m */; };
 		4EAAB553286E6DE00093B30B /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAAB552286E6DE00093B30B /* RegisterViewController.m */; };
 		4EAAB555287001CE0093B30B /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EAAB554287001CE0093B30B /* MapKit.framework */; };
 		4EAAB558287002C60093B30B /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAAB557287002C60093B30B /* ProfileViewController.m */; };
 		4EB1C50E2874F7EB00A61A10 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EB1C50D2874F7EB00A61A10 /* CoreLocation.framework */; };
+		4ECC3773287DDE4200708C8E /* keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4ECC3772287DDE4200708C8E /* keys.plist */; };
 		4EE674C22866D6C800A93C15 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE674C12866D6C800A93C15 /* AppDelegate.m */; };
 		4EE674C52866D6C800A93C15 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE674C42866D6C800A93C15 /* SceneDelegate.m */; };
 		4EE674C82866D6C800A93C15 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE674C72866D6C800A93C15 /* ViewController.m */; };
@@ -53,6 +61,19 @@
 		0EE07284A8FB90611D21CCB8 /* Pods_TrailBlaze_TrailBlazeUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TrailBlaze_TrailBlazeUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B508F8BD64314AE3DE51636 /* Pods-TrailBlazeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrailBlazeTests.debug.xcconfig"; path = "Target Support Files/Pods-TrailBlazeTests/Pods-TrailBlazeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		3E953E4347D732BD1B596D6A /* Pods-TrailBlaze-TrailBlazeUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrailBlaze-TrailBlazeUITests.release.xcconfig"; path = "Target Support Files/Pods-TrailBlaze-TrailBlazeUITests/Pods-TrailBlaze-TrailBlazeUITests.release.xcconfig"; sourceTree = "<group>"; };
+		4E3483E3287EB0EE0032C796 /* QueryManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QueryManager.h; sourceTree = "<group>"; };
+		4E3483E4287EB0EE0032C796 /* QueryManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QueryManager.m; sourceTree = "<group>"; };
+		4E3483EA287F42430032C796 /* FindMatesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FindMatesViewController.h; sourceTree = "<group>"; };
+		4E3483EB287F42430032C796 /* FindMatesViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FindMatesViewController.m; sourceTree = "<group>"; };
+		4E560D25287DE9C00048BF37 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		4E5831F5287F7CB7006D9982 /* FriendRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FriendRequest.h; sourceTree = "<group>"; };
+		4E5831F6287F7CB7006D9982 /* FriendRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FriendRequest.m; sourceTree = "<group>"; };
+		4E5831F8287FA565006D9982 /* RunCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RunCell.h; sourceTree = "<group>"; };
+		4E5831F9287FA565006D9982 /* RunCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RunCell.m; sourceTree = "<group>"; };
+		4E64D18C287E1151007A87A1 /* Run.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Run.h; sourceTree = "<group>"; };
+		4E64D18D287E1151007A87A1 /* Run.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Run.m; sourceTree = "<group>"; };
+		4E64D18F287E21F8007A87A1 /* User.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		4E64D190287E21F8007A87A1 /* User.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		4E6BD31F585E1E0A201FB7F8 /* Pods-TrailBlaze.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrailBlaze.release.xcconfig"; path = "Target Support Files/Pods-TrailBlaze/Pods-TrailBlaze.release.xcconfig"; sourceTree = "<group>"; };
 		4E701DF5287606DF00DD375B /* MatesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MatesViewController.h; sourceTree = "<group>"; };
 		4E701DF6287606DF00DD375B /* MatesViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MatesViewController.m; sourceTree = "<group>"; };
@@ -60,7 +81,8 @@
 		4E701DF92876084800DD375B /* MateCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MateCell.m; sourceTree = "<group>"; };
 		4E701DFB28768D0900DD375B /* MapViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
 		4E701DFC28768D0900DD375B /* MapViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
-		4EAAB549286E5FA60093B30B /* keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = keys.plist; sourceTree = "<group>"; };
+		4E7363CB2886132D00CE65AE /* MateDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MateDetailViewController.h; sourceTree = "<group>"; };
+		4E7363CC2886132D00CE65AE /* MateDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MateDetailViewController.m; sourceTree = "<group>"; };
 		4EAAB54B286E6D960093B30B /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		4EAAB54C286E6D960093B30B /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		4EAAB54E286E6DBB0093B30B /* HomeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
@@ -71,6 +93,7 @@
 		4EAAB556287002C60093B30B /* ProfileViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
 		4EAAB557287002C60093B30B /* ProfileViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
 		4EB1C50D2874F7EB00A61A10 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		4ECC3772287DDE4200708C8E /* keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = keys.plist; sourceTree = "<group>"; };
 		4EE674BD2866D6C800A93C15 /* TrailBlaze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrailBlaze.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EE674C02866D6C800A93C15 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4EE674C12866D6C800A93C15 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -137,11 +160,28 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		4E64D192287E39E3007A87A1 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				4E3483E3287EB0EE0032C796 /* QueryManager.h */,
+				4E3483E4287EB0EE0032C796 /* QueryManager.m */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
 		4EA7BFB82874B9D800D1D797 /* Objects */ = {
 			isa = PBXGroup;
 			children = (
 				4E701DF82876084800DD375B /* MateCell.h */,
 				4E701DF92876084800DD375B /* MateCell.m */,
+				4E64D18C287E1151007A87A1 /* Run.h */,
+				4E64D18D287E1151007A87A1 /* Run.m */,
+				4E64D18F287E21F8007A87A1 /* User.h */,
+				4E64D190287E21F8007A87A1 /* User.m */,
+				4E5831F5287F7CB7006D9982 /* FriendRequest.h */,
+				4E5831F6287F7CB7006D9982 /* FriendRequest.m */,
+				4E5831F8287FA565006D9982 /* RunCell.h */,
+				4E5831F9287FA565006D9982 /* RunCell.m */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -171,6 +211,7 @@
 		4EE674BF2866D6C800A93C15 /* TrailBlaze */ = {
 			isa = PBXGroup;
 			children = (
+				4E64D192287E39E3007A87A1 /* Networking */,
 				4EA7BFB82874B9D800D1D797 /* Objects */,
 				4EE674F52866D6D500A93C15 /* View Controllers */,
 				4EE674C02866D6C800A93C15 /* AppDelegate.h */,
@@ -184,7 +225,8 @@
 				4EE674CE2866D6C900A93C15 /* LaunchScreen.storyboard */,
 				4EE674D22866D6C900A93C15 /* main.m */,
 				4EE674D12866D6C900A93C15 /* Info.plist */,
-				4EAAB549286E5FA60093B30B /* keys.plist */,
+				4ECC3772287DDE4200708C8E /* keys.plist */,
+				4E560D25287DE9C00048BF37 /* GoogleService-Info.plist */,
 			);
 			path = TrailBlaze;
 			sourceTree = "<group>";
@@ -221,6 +263,10 @@
 				4E701DF6287606DF00DD375B /* MatesViewController.m */,
 				4E701DFB28768D0900DD375B /* MapViewController.h */,
 				4E701DFC28768D0900DD375B /* MapViewController.m */,
+				4E3483EA287F42430032C796 /* FindMatesViewController.h */,
+				4E3483EB287F42430032C796 /* FindMatesViewController.m */,
+				4E7363CB2886132D00CE65AE /* MateDetailViewController.h */,
+				4E7363CC2886132D00CE65AE /* MateDetailViewController.m */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -346,8 +392,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4EAAB54A286E5FA60093B30B /* keys.plist in Resources */,
+				4ECC3773287DDE4200708C8E /* keys.plist in Resources */,
 				4EE674D02866D6C900A93C15 /* LaunchScreen.storyboard in Resources */,
+				4E560D26287DE9C00048BF37 /* GoogleService-Info.plist in Resources */,
 				4EE674CD2866D6C900A93C15 /* Assets.xcassets in Resources */,
 				4EE674CB2866D6C800A93C15 /* Main.storyboard in Resources */,
 			);
@@ -477,6 +524,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E64D191287E21F8007A87A1 /* User.m in Sources */,
+				4E3483EC287F42430032C796 /* FindMatesViewController.m in Sources */,
+				4E5831FA287FA565006D9982 /* RunCell.m in Sources */,
 				4E701DF7287606DF00DD375B /* MatesViewController.m in Sources */,
 				4EE674C82866D6C800A93C15 /* ViewController.m in Sources */,
 				4EE674C22866D6C800A93C15 /* AppDelegate.m in Sources */,
@@ -486,6 +536,10 @@
 				4EE674C52866D6C800A93C15 /* SceneDelegate.m in Sources */,
 				4EAAB553286E6DE00093B30B /* RegisterViewController.m in Sources */,
 				4EAAB54D286E6D960093B30B /* LoginViewController.m in Sources */,
+				4E7363CD2886132D00CE65AE /* MateDetailViewController.m in Sources */,
+				4E5831F7287F7CB7006D9982 /* FriendRequest.m in Sources */,
+				4E3483E5287EB0EE0032C796 /* QueryManager.m in Sources */,
+				4E64D18E287E1151007A87A1 /* Run.m in Sources */,
 				4EAAB550286E6DBB0093B30B /* HomeViewController.m in Sources */,
 				4E701DFD28768D0900DD375B /* MapViewController.m in Sources */,
 			);
