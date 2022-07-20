@@ -16,6 +16,7 @@
 @dynamic startTime;
 @dynamic endTime;
 @dynamic polylineCoords;
+@dynamic distance;
 
 
 + (nonnull NSString *)parseClassName {
@@ -44,6 +45,8 @@
     pointsJSON= [pointsJSON stringByAppendingString:[NSString stringWithFormat:@"%@ ] }", [NSString stringWithFormat:@"[%f, %f]", routeCoordinates[pointCount-1].latitude, routeCoordinates[pointCount - 1].longitude]] ];
     free(routeCoordinates);
     newRun.polylineCoords = pointsJSON;
+    newRun.distance =  [NSString stringWithFormat:@"%.2lf", route.distance];
+    NSLog(@"%@", newRun.distance);
 
     [newRun saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
     if (succeeded) {
@@ -90,6 +93,21 @@
           if (runs) {
               PFObject *thisUserRunObject = [runs firstObject];
               completion(thisUserRunObject, nil);
+          } else {
+              NSLog(@"Could not retrieve run");
+          }
+      }];
+}
+
++ (void) retreiveRunObjects : (PFUser *) runner limit: (int) limit completion:(void (^)(NSArray *runObjects, NSError * _Nullable))completion {
+    [runner fetchIfNeeded];
+    PFQuery *query = [PFQuery queryWithClassName:@"Run"];
+    [query whereKey:@"user" equalTo:runner];
+      [query orderByDescending:@"createdAt"];
+      query.limit = limit;
+      [query findObjectsInBackgroundWithBlock:^(NSArray *runs, NSError *error) {
+          if (runs) {
+              completion(runs, nil);
           } else {
               NSLog(@"Could not retrieve run");
           }

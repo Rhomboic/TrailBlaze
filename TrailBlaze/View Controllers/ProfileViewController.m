@@ -12,8 +12,9 @@
 #import "RunCell.h"
 #import "QueryManager.h"
 #import "UIImageView+AFNetworking.h"
+#import "Run.h"
 
-@interface ProfileViewController () <UINavigationControllerDelegate,UIImagePickerControllerDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface ProfileViewController ()  <UINavigationControllerDelegate,UIImagePickerControllerDelegate, UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *logoutButton;
 @property (weak, nonatomic) IBOutlet UIImageView *profileImage;
 @property (weak, nonatomic) IBOutlet UILabel *profileName;
@@ -28,6 +29,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.tableView.dataSource = self;
     [[PFUser currentUser][@"pastRuns"] fetchIfNeeded];
     pastRuns = [PFUser currentUser][@"pastRuns"];
     _profileName.text = PFUser.currentUser.username;
@@ -37,6 +39,16 @@
     
     _profileImage.layer.cornerRadius = 50;
     _profileImage.clipsToBounds = true;
+    
+    [Run retreiveRunObjects:PFUser.currentUser limit:10 completion:^(NSArray * _Nonnull runObjects, NSError * _Nullable err) {
+        if (runObjects) {
+            self->pastRuns = runObjects;
+            [self->_tableView reloadData];
+        } else {
+            NSLog(@"No past runs");
+        }
+    }];
+    
     
 }
 - (IBAction)didTapLogout:(id)sender {
@@ -83,7 +95,11 @@
 }
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    RunCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MateCell" forIndexPath:indexPath];
+    RunCell *cell = [tableView dequeueReusableCellWithIdentifier:@"RunCell" forIndexPath:indexPath];
+    cell.durationLabel.text = [@"Duration: \n" stringByAppendingString:pastRuns[indexPath.row][@"duration"]];
+    cell.distanceLabel.text = [@"Dist: \n" stringByAppendingString:pastRuns[indexPath.row][@"distance"]];
+    cell.startTimeLabel.text = [@"Start Time: \n" stringByAppendingString:pastRuns[indexPath.row][@"startTime"]];
+    cell.endTimeLabel.text = [@"End Time: \n" stringByAppendingString:pastRuns[indexPath.row][@"endTime"]];
     
     cell.layer.cornerRadius = 20;
     [cell.layer setBorderColor:[UIColor systemBackgroundColor].CGColor];

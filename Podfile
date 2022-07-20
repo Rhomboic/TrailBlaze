@@ -9,8 +9,6 @@ target 'TrailBlaze' do
      pod 'Parse'
      pod 'AFNetworking'
      pod 'DateTools' 
-     pod 'Firebase/Core' 
-     pod 'Firebase/Database'
 
   target 'TrailBlazeTests' do
     inherit! :search_paths
