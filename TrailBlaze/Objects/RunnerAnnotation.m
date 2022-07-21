@@ -9,4 +9,6 @@
 
 @implementation RunnerAnnotation
 
+@synthesize coordinate;
+
 @end
