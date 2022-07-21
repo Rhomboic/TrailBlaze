@@ -18,6 +18,7 @@
 		4E701DFA2876084800DD375B /* MateCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E701DF92876084800DD375B /* MateCell.m */; };
 		4E701DFD28768D0900DD375B /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E701DFC28768D0900DD375B /* MapViewController.m */; };
 		4E7363CD2886132D00CE65AE /* MateDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E7363CC2886132D00CE65AE /* MateDetailViewController.m */; };
+		4EA6A7C32889C02D001AB835 /* RunnerAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EA6A7C22889C02D001AB835 /* RunnerAnnotation.m */; };
 		4EAAB54D286E6D960093B30B /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAAB54C286E6D960093B30B /* LoginViewController.m */; };
 		4EAAB550286E6DBB0093B30B /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAAB54F286E6DBB0093B30B /* HomeViewController.m */; };
 		4EAAB553286E6DE00093B30B /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAAB552286E6DE00093B30B /* RegisterViewController.m */; };
@@ -84,6 +85,8 @@
 		4E701DFC28768D0900DD375B /* MapViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		4E7363CB2886132D00CE65AE /* MateDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MateDetailViewController.h; sourceTree = "<group>"; };
 		4E7363CC2886132D00CE65AE /* MateDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MateDetailViewController.m; sourceTree = "<group>"; };
+		4EA6A7C12889C02D001AB835 /* RunnerAnnotation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RunnerAnnotation.h; sourceTree = "<group>"; };
+		4EA6A7C22889C02D001AB835 /* RunnerAnnotation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RunnerAnnotation.m; sourceTree = "<group>"; };
 		4EAAB54B286E6D960093B30B /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		4EAAB54C286E6D960093B30B /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		4EAAB54E286E6DBB0093B30B /* HomeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
@@ -187,6 +190,8 @@
 				4E5831F6287F7CB7006D9982 /* FriendRequest.m */,
 				4E5831F8287FA565006D9982 /* RunCell.h */,
 				4E5831F9287FA565006D9982 /* RunCell.m */,
+				4EA6A7C12889C02D001AB835 /* RunnerAnnotation.h */,
+				4EA6A7C22889C02D001AB835 /* RunnerAnnotation.m */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -535,6 +540,7 @@
 				4E701DF7287606DF00DD375B /* MatesViewController.m in Sources */,
 				4EE674C82866D6C800A93C15 /* ViewController.m in Sources */,
 				4EE674C22866D6C800A93C15 /* AppDelegate.m in Sources */,
+				4EA6A7C32889C02D001AB835 /* RunnerAnnotation.m in Sources */,
 				4EAAB558287002C60093B30B /* ProfileViewController.m in Sources */,
 				4E701DFA2876084800DD375B /* MateCell.m in Sources */,
 				4EE674D32866D6C900A93C15 /* main.m in Sources */,
