@@ -90,6 +90,8 @@
                     NSLog(@"run not sent");
                 }
             }];
+        } else if (_cloudPolyline) {
+            [self getInterceptingDirections];
         }
     } else if (isCurrentlyRunning) {
         isCurrentlyRunning = false;
@@ -169,6 +171,9 @@
     _locationButton.clipsToBounds = true;
     
     [_trailrunButton setImage:[UIImage imageNamed:@"logo_button-removebg"] forState:UIControlStateNormal];
+    if (_cloudUser) {
+        [self->_trailrunButton setTitle:@"Rendezvous" forState:UIControlStateNormal];
+    }
     _trailrunButton.layer.cornerRadius = 40;
     _trailrunButton.clipsToBounds = true;
     
@@ -318,6 +323,32 @@
     }];
     
 }
+
+- (void) getInterceptingDirections {
+        [_mapView addOverlay:_cloudPolyline];
+        MKMapRect mapRect = _cloudPolyline.boundingMapRect;
+        [self->_mapView setRegion:MKCoordinateRegionForMapRect(mapRect) animated:YES];
+
+        __block NSArray *points;
+
+        [Run retreiveRunPoints: _cloudUser completion:^(NSArray * _Nonnull runObjectPoints, NSError * _Nullable err) {
+            if (runObjectPoints) {
+                points = runObjectPoints;
+                PFGeoPoint *geoPoint = self->_cloudUser[@"currentLocation"];
+                self->cloudUserLocation = [[CLLocation alloc] initWithLatitude:geoPoint.latitude longitude:geoPoint.longitude];
+                self->runnerPin = [[MKPointAnnotation alloc] initWithCoordinate:self->cloudUserLocation.coordinate title:self->_cloudUser[@"username"] subtitle:@"Running"];
+                [self->_mapView addAnnotation:self->runnerPin];
+                [Interceptor getBestETAPoint:points interceptorLocation:self->locationManager.location runnerLocation:self->cloudUserLocation completion:^(MKMapItem * _Nonnull bestPoint, NSError * _Nonnull err) {
+                    if (bestPoint) {
+                        NSLog(@"🌗🌗🌗🌗v%@", bestPoint);
+                        [self getDirections:bestPoint.placemark.coordinate.latitude destlongitude:bestPoint.placemark.coordinate.longitude];
+                    } else {
+                        NSLog(@"No Best Point was found, eta difference greater than threshold");
+                    }
+                }];
+            }
+        }];
+    }
 
 
 
