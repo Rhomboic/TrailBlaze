@@ -33,6 +33,11 @@ static NSMutableDictionary *etaPointPairs;
     return [routePoints subarrayWithRange:NSMakeRange(closestIndex, routePoints.count - 1)];
 }
 
-
++ (NSArray *) sortInAscendingOrder: (NSArray *) etaDifferences {
+    NSSortDescriptor *sortDescriptor;
+    sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"doubleValue" ascending:YES];
+    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+    return [etaDifferences sortedArrayUsingDescriptors:sortDescriptors];
+}
 
 @end
