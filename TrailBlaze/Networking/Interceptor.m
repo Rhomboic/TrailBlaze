@@ -40,4 +40,13 @@ static NSMutableDictionary *etaPointPairs;
     return [etaDifferences sortedArrayUsingDescriptors:sortDescriptors];
 }
 
++ (NSArray *) prunePoints: (NSArray *) routePoints numberOfPoints: (int) numberOfPoints{
+    NSMutableArray *prunedPoints = [[NSMutableArray alloc] init];
+    NSUInteger gap = routePoints.count/numberOfPoints;
+    for (int i = (int) gap; i < numberOfPoints; i+=gap) {
+        [prunedPoints addObject:[routePoints objectAtIndex:i]];
+    }
+    return prunedPoints;
+}
+
 @end
