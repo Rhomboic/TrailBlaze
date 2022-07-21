@@ -12,25 +12,25 @@
 @implementation Interceptor {
     
 }
-//static float etaDifferenceThreshold = 2;
-static NSMutableArray *etas;
+static float etaDifferenceThreshold = 692;
+static NSMutableArray *etasDifferences;
 static NSMutableDictionary *etaPointPairs;
 
-+ (NSArray *) getRemainingRoutePoints: (NSArray *) routePoints runnerLocation: (NSArray *)runnerLocation{
++ (NSArray *) getRemainingRoutePoints: (NSArray *) routePoints runnerLocation: (CLLocation *)runnerLocation{
     float shortestDistance = FLT_MAX;
     int index = 0;
     int closestIndex = -1;
-    CLLocation* runnerCLLocation = [[CLLocation alloc] initWithLatitude:[[runnerLocation firstObject] doubleValue] longitude:[[runnerLocation lastObject] doubleValue]];
+//    CLLocation* runnerCLLocation = [[CLLocation alloc] initWithLatitude:[[runnerLocation firstObject] doubleValue] longitude:[[runnerLocation lastObject] doubleValue]];
     for (NSArray* point in routePoints) {
         CLLocation* thisPointCLLocation = [[CLLocation alloc] initWithLatitude:[[point firstObject] doubleValue] longitude:[[point lastObject] doubleValue]];
-        float distanceBetween = [runnerCLLocation distanceFromLocation:thisPointCLLocation];
+        float distanceBetween = [runnerLocation distanceFromLocation:thisPointCLLocation];
         if ( distanceBetween < shortestDistance) {
             shortestDistance = distanceBetween;
             closestIndex = index;
         }
         index += 1;
     }
-    return [routePoints subarrayWithRange:NSMakeRange(closestIndex, routePoints.count - 1)];
+    return [routePoints subarrayWithRange:NSMakeRange(closestIndex, routePoints.count-closestIndex)];
 }
 
 + (NSArray *) sortInAscendingOrder: (NSArray *) etaDifferences {
@@ -51,8 +51,9 @@ static NSMutableDictionary *etaPointPairs;
 
 + (void) getBestETAPoint: (NSArray *) allPoints interceptorLocation: (CLLocation *) interceptorLocation runnerLocation: (CLLocation *) runnerLocation completion:(void (^)(MKMapItem *bestPoint, NSError *))completion {
     
-    NSArray *prunedPoints = [self prunePoints:allPoints numberOfPoints:10];
-    etas = [NSMutableArray array];
+    NSArray *prunedPoints = [self prunePoints:[self getRemainingRoutePoints:allPoints runnerLocation:runnerLocation] numberOfPoints:10];
+    NSLog(@"🌈🌈🌈🌈🌈%@", prunedPoints);
+    etasDifferences = [NSMutableArray array];
     etaPointPairs = [[NSMutableDictionary alloc] init];
     dispatch_queue_t serialQueue = dispatch_queue_create("serialQueue", nil);
     dispatch_group_t group = dispatch_group_create();
@@ -91,7 +92,7 @@ static NSMutableDictionary *etaPointPairs;
             if (interceptorResponse) {
                 [pathRunner calculateETAWithCompletionHandler:^(MKETAResponse * _Nullable runnerResponse, NSError * _Nullable error2) {
                     if (runnerResponse) {
-                        [etas addObject:[NSNumber numberWithDouble:fabs(interceptorResponse.expectedTravelTime - runnerResponse.expectedTravelTime)]];
+                        [etasDifferences addObject:[NSNumber numberWithDouble:fabs(interceptorResponse.expectedTravelTime - runnerResponse.expectedTravelTime)]];
                         [etaPointPairs setValue:runnerResponse.destination forKey:[NSString stringWithFormat:@"%.f", fabs(interceptorResponse.expectedTravelTime - runnerResponse.expectedTravelTime)]];
                     } else {
                         NSLog(@"%@", error2.localizedDescription);
@@ -107,7 +108,16 @@ static NSMutableDictionary *etaPointPairs;
     }
     dispatch_group_notify(group, dispatch_get_main_queue(), ^{
         NSLog(@"everything is done!!");
-        completion([etaPointPairs objectForKey:[NSString stringWithFormat:@"%@", [[self sortInAscendingOrder:etas] firstObject]]], nil);
+        NSLog(@"%@", etasDifferences);
+        NSLog(@"%@", [self sortInAscendingOrder:etasDifferences]);
+//                    NSLog(@"%@",
+        NSLog(@"%@", [NSString stringWithFormat:@"%@", [[self sortInAscendingOrder:etasDifferences] firstObject]]);
+        NSNumber *bestDifference = [[self sortInAscendingOrder:etasDifferences] firstObject];
+        if ([bestDifference floatValue] <= etaDifferenceThreshold) {
+        completion([etaPointPairs objectForKey:[NSString stringWithFormat:@"%@", bestDifference]], nil);
+        } else {
+            completion(nil, nil);
+        }
     });
 }
 
