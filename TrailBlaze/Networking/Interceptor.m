@@ -9,13 +9,7 @@
 #import "CoreLocation/CoreLocation.h"
 #import "MapKit/MapKit.h"
 
-@implementation Interceptor {
-    
-}
-/// etaDifferenceThreshold is the allowable wait time at intercpetion point, will let user input this when requesting intercept, 700 is a placeholder
-static float etaDifferenceThreshold = 700;
-static NSMutableArray *etasDifferences;
-static NSMutableDictionary *etaPointPairs;
+@implementation Interceptor
 
 + (NSArray *) getRemainingRoutePoints: (NSArray *) routePoints runnerLocation: (CLLocation *)runnerLocation{
     float shortestDistance = FLT_MAX;
@@ -34,14 +28,13 @@ static NSMutableDictionary *etaPointPairs;
 }
 
 + (NSArray *) sortInAscendingOrder: (NSArray *) etaDifferences {
-    NSSortDescriptor *sortDescriptor;
-    sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"doubleValue" ascending:YES];
-    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+    NSSortDescriptor *const sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"doubleValue" ascending:YES];
+    NSArray<NSSortDescriptor *> *const sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
     return [etaDifferences sortedArrayUsingDescriptors:sortDescriptors];
 }
 
 + (NSArray *) prunePoints: (NSArray *) routePoints numberOfPoints: (int) numberOfPoints{
-    NSMutableArray *prunedPoints = [[NSMutableArray alloc] init];
+    NSMutableArray *prunedPoints = [NSMutableArray new];
     NSUInteger gap = routePoints.count/numberOfPoints;
     for (int i = (int) gap; i < numberOfPoints; i+=gap) {
         [prunedPoints addObject:[routePoints objectAtIndex:i]];
@@ -49,12 +42,12 @@ static NSMutableDictionary *etaPointPairs;
     return prunedPoints;
 }
 
-+ (void) getBestETAPoint: (NSArray *) allPoints interceptorLocation: (CLLocation *) interceptorLocation runnerLocation: (CLLocation *) runnerLocation completion:(void (^)(MKMapItem *bestPoint, NSError *))completion {
-    
++ (void) getBestETAPoint: (int) maxWaitTime allPoints:(NSArray *) allPoints interceptorLocation: (CLLocation *) interceptorLocation runnerLocation: (CLLocation *) runnerLocation completion:(void (^)(MKMapItem *bestPoint, NSError *))completion {
+    float etaDifferenceThreshold = maxWaitTime*60;
     NSArray *prunedPoints = [self prunePoints:[self getRemainingRoutePoints:allPoints runnerLocation:runnerLocation] numberOfPoints:10];
     NSLog(@"🌈🌈🌈🌈🌈%@", prunedPoints);
-    etasDifferences = [NSMutableArray array];
-    etaPointPairs = [[NSMutableDictionary alloc] init];
+    NSMutableArray *etasDifferences = [NSMutableArray array];
+    NSMutableDictionary *etaPointPairs = [[NSMutableDictionary alloc] init];
     dispatch_queue_t serialQueue = dispatch_queue_create("serialQueue", nil);
     dispatch_group_t group = dispatch_group_create();
     

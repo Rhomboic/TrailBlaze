@@ -204,7 +204,7 @@
     isCurrentlyRunning = false;
     
     //sending user location to Parse 
-    [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
+    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
 
 }
 
@@ -338,7 +338,7 @@
                 self->cloudUserLocation = [[CLLocation alloc] initWithLatitude:geoPoint.latitude longitude:geoPoint.longitude];
                 self->runnerPin = [[MKPointAnnotation alloc] initWithCoordinate:self->cloudUserLocation.coordinate title:self->_cloudUser[@"username"] subtitle:@"Running"];
                 [self->_mapView addAnnotation:self->runnerPin];
-                [Interceptor getBestETAPoint:points interceptorLocation:self->locationManager.location runnerLocation:self->cloudUserLocation completion:^(MKMapItem * _Nonnull bestPoint, NSError * _Nonnull err) {
+                [Interceptor getBestETAPoint: 5 allPoints:points interceptorLocation:self->locationManager.location runnerLocation:self->cloudUserLocation completion:^(MKMapItem * _Nonnull bestPoint, NSError * _Nonnull err) {
                     if (bestPoint) {
                         NSLog(@"🌗🌗🌗🌗v%@", bestPoint);
                         [self getDirections:bestPoint.placemark.coordinate.latitude destlongitude:bestPoint.placemark.coordinate.longitude];
