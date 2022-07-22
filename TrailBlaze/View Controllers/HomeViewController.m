@@ -71,6 +71,9 @@
 
 - (IBAction)didTapTrailRun:(id)sender {
     if (isReadyToStartRun || _cloudPolyline) {
+        [_mapView setUserTrackingMode:MKUserTrackingModeFollowWithHeading animated:YES];
+        [_mapView setRotateEnabled:NO];
+        [_mapView setScrollEnabled:NO];
         self->isCurrentlyRunning = true;
         _timerLabel.text = @"00:00:00";
         [_timerLabel setHidden:NO];
@@ -91,6 +94,7 @@
                 }
             }];
         } else if (_cloudPolyline) {
+            isCurrentlyRunning = true;
             [self getInterceptingDirections];
         }
     } else if (isCurrentlyRunning) {
@@ -163,7 +167,7 @@
     _mapView.showsUserLocation = YES;
     timerCount = 0;
     [_mapView setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
-//    [self getInterceptingDirections];
+
 }
 
 - (void) configureSubviews {
@@ -204,7 +208,7 @@
     isCurrentlyRunning = false;
     
     //sending user location to Parse 
-    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
+    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
 
 }
 
@@ -315,7 +319,6 @@
             [self->_mapView addOverlay:self->currentPolyline level:MKOverlayLevelAboveRoads];
             MKMapRect mapRect = route.polyline.boundingMapRect;
             [self->_mapView setRegion:MKCoordinateRegionForMapRect(mapRect) animated:YES];
-            
         } else {
             NSLog(@"Unable to get route %@", error.description);
         
@@ -341,6 +344,8 @@
                 [Interceptor getBestETAPoint: 5 allPoints:points interceptorLocation:self->locationManager.location runnerLocation:self->cloudUserLocation completion:^(MKMapItem * _Nonnull bestPoint, NSError * _Nonnull err) {
                     if (bestPoint) {
                         NSLog(@"🌗🌗🌗🌗v%@", bestPoint);
+                        MKPointAnnotation *rendezvousPin = [[MKPointAnnotation alloc] initWithCoordinate:bestPoint.placemark.coordinate title:@"Rendezvous" subtitle:@"Meet here"];
+                        [self->_mapView addAnnotation:rendezvousPin];
                         [self getDirections:bestPoint.placemark.coordinate.latitude destlongitude:bestPoint.placemark.coordinate.longitude];
                     } else {
                         NSLog(@"No Best Point was found, eta difference greater than threshold");
