@@ -42,7 +42,7 @@
     return prunedPoints;
 }
 
-+ (void) getBestETAPoint: (int) maxWaitTime allPoints:(NSArray *) allPoints interceptorLocation: (CLLocation *) interceptorLocation runnerLocation: (CLLocation *) runnerLocation completion:(void (^)(MKMapItem *bestPoint, NSError *))completion {
++ (void) getBestETAPoint: (int) maxWaitTime allPoints:(NSArray *) allPoints interceptorLocation: (CLLocation *) interceptorLocation runnerLocation: (CLLocation *) runnerLocation completion:(void (^)(MKMapItem * _Nullable bestPoint, NSError *))completion {
     float etaDifferenceThreshold = maxWaitTime*60;
     NSArray *prunedPoints = [self prunePoints:[self getRemainingRoutePoints:allPoints runnerLocation:runnerLocation] numberOfPoints:10];
     NSLog(@"🌈🌈🌈🌈🌈%@", prunedPoints);
@@ -81,6 +81,8 @@
         
         MKDirections *pathInterceptor = [[MKDirections alloc] initWithRequest:pathInterceptorRequest];
         MKDirections *pathRunner = [[MKDirections alloc] initWithRequest:pathRunnerRequest];
+        
+        dispatch_group_enter(group);
         [pathInterceptor calculateETAWithCompletionHandler:^(MKETAResponse * _Nullable interceptorResponse, NSError * _Nullable error1) {
             if (interceptorResponse) {
                 [pathRunner calculateETAWithCompletionHandler:^(MKETAResponse * _Nullable runnerResponse, NSError * _Nullable error2) {
@@ -97,6 +99,9 @@
             } else {
                 NSLog(@"%@", error1.localizedDescription);
             }
+            dispatch_async(serialQueue, ^{
+                dispatch_group_leave(group);
+            });
         }];
     }
     dispatch_group_notify(group, dispatch_get_main_queue(), ^{
