@@ -99,6 +99,26 @@
       }];
 }
 
++ (void) retreiveRunPoints : (PFUser *) runner completion:(void (^)(NSArray *runObjectPoints, NSError * _Nullable))completion {
+    [runner fetchIfNeeded];
+    PFQuery *query = [PFQuery queryWithClassName:@"Run"];
+    [query whereKey:@"user" equalTo:runner];
+      [query orderByDescending:@"createdAt"];
+      query.limit = 1;
+      [query findObjectsInBackgroundWithBlock:^(NSArray *runs, NSError *error) {
+          if (runs) {
+              PFObject *thisUserRunObject = [runs firstObject];
+              NSLog(@"%@", thisUserRunObject);
+              NSData *data = [thisUserRunObject[@"polylineCoords"] dataUsingEncoding:NSUTF8StringEncoding];
+              NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+              NSArray *pointsPairs = json[@"points"];
+              completion(pointsPairs, nil);
+          } else {
+              NSLog(@"Could not retrieve run");
+          }
+      }];
+}
+
 + (void) retreiveRunObjects : (PFUser *) runner limit: (int) limit completion:(void (^)(NSArray *runObjects, NSError * _Nullable))completion {
     [runner fetchIfNeeded];
     PFQuery *query = [PFQuery queryWithClassName:@"Run"];

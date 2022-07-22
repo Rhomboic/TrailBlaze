@@ -8,6 +8,8 @@
 #import "HomeViewController.h"
 #import "MapKit/MapKit.h"
 #import "Run.h"
+#import "Interceptor.h"
+#import "QueryManager.h"
 
 @interface HomeViewController ()  <MKMapViewDelegate, CLLocationManagerDelegate>
 @property (strong, nonatomic) IBOutlet MKMapView *mapView;
@@ -26,6 +28,8 @@
 
     CLLocation *currentLocation;
     CLLocation *destinationLocation;
+    CLLocation *cloudUserLocation;
+    MKPointAnnotation* runnerPin;
     
     float destinationLocationLatitude;
     float destinationLocationLongitude;
@@ -66,31 +70,37 @@
 }
 
 - (IBAction)didTapTrailRun:(id)sender {
-    if (isReadyToStartRun) {
+    if (isReadyToStartRun || _cloudPolyline) {
         self->isCurrentlyRunning = true;
-        self->isReadyToStartRun = false;
         _timerLabel.text = @"00:00:00";
         [_timerLabel setHidden:NO];
         timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerCounter) userInfo:nil repeats:true];
-        [Run uploadRun:currentRoute withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
-            if (succeeded) {
-                NSLog(@"run sent!");
-            } else {
-                NSLog(@"run not sent");
-            }
-        }];
         [PFUser.currentUser setValue:[NSNumber numberWithBool:YES] forKey:@"isRunning"];
         [PFUser.currentUser saveInBackground];
         [_statsButton setHidden:YES];
         [_locationButton setHidden:YES];
         [_trailrunButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
         [_trailrunButton setTitle:@"END" forState:UIControlStateNormal];
+        if (isReadyToStartRun) {
+            self->isReadyToStartRun = false;
+            [Run uploadRun:currentRoute withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+                if (succeeded) {
+                    NSLog(@"run sent!");
+                } else {
+                    NSLog(@"run not sent");
+                }
+            }];
+        } else if (_cloudPolyline) {
+            [self getInterceptingDirections];
+        }
     } else if (isCurrentlyRunning) {
         isCurrentlyRunning = false;
         timerCount = 0;
         [timer invalidate];
         [_trailrunButton setTitle:@"" forState:UIControlStateNormal];
         [_mapView removeOverlay:currentPolyline];
+        [PFUser.currentUser setValue:[NSNull null] forKey:@"currentLocation"];
+        [PFUser.currentUser saveInBackground];
         
         [_mapView removeAnnotations:_mapView.annotations];
         [PFUser.currentUser setValue: [NSNumber numberWithBool:NO] forKey:@"isRunning"];
@@ -153,12 +163,7 @@
     _mapView.showsUserLocation = YES;
     timerCount = 0;
     [_mapView setUserTrackingMode:MKUserTrackingModeFollow animated:YES];
-    if (_cloudPolyline) {
-        [self->_trailrunButton setTitle:@"Rendezvous" forState:UIControlStateNormal];
-        [_mapView addOverlay:_cloudPolyline];
-        MKMapRect mapRect = _cloudPolyline.boundingMapRect;
-        [self->_mapView setRegion:MKCoordinateRegionForMapRect(mapRect) animated:YES];
-    }
+//    [self getInterceptingDirections];
 }
 
 - (void) configureSubviews {
@@ -166,6 +171,9 @@
     _locationButton.clipsToBounds = true;
     
     [_trailrunButton setImage:[UIImage imageNamed:@"logo_button-removebg"] forState:UIControlStateNormal];
+    if (_cloudUser) {
+        [self->_trailrunButton setTitle:@"Rendezvous" forState:UIControlStateNormal];
+    }
     _trailrunButton.layer.cornerRadius = 40;
     _trailrunButton.clipsToBounds = true;
     
@@ -194,6 +202,10 @@
     [locationManager startUpdatingLocation];
     isReadyToStartRun = false;
     isCurrentlyRunning = false;
+    
+    //sending user location to Parse 
+    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
+
 }
 
 #pragma mark:  Delegates
@@ -225,7 +237,26 @@
     return [NSString stringWithFormat:@"%02d:%02d:%02d", seconds/3600, (seconds % 3600)/60, (seconds % 3600)%60];
 }
 
-
+- (void) onTimer {
+    if (isCurrentlyRunning) {
+        if (!_cloudUser) {
+        PFGeoPoint *userLocationGeoPoint = [[PFGeoPoint alloc] init];
+        userLocationGeoPoint.latitude = locationManager.location.coordinate.latitude;
+        userLocationGeoPoint.longitude = locationManager.location.coordinate.longitude;
+        [PFUser.currentUser setValue:userLocationGeoPoint forKey:@"currentLocation"];
+        [PFUser.currentUser saveInBackground];
+    } else {
+        [[[QueryManager alloc] init] queryLocation:_cloudUser completion:^(PFObject * _Nonnull friendLocation, NSError * _Nonnull err) {
+            if (friendLocation) {
+                PFGeoPoint *newGeoPoint = friendLocation[@"currentLocation"];
+                CLLocation *newFriendLocation = [[CLLocation alloc] initWithLatitude:newGeoPoint.latitude longitude:newGeoPoint.longitude];
+                [UIView animateWithDuration:1 animations:^{[self->runnerPin setCoordinate:newFriendLocation.coordinate];} completion:nil];
+            }
+        }];
+        
+    }
+}
+}
 
 - (void) centerOnUserLocation {
     [_mapView setCenterCoordinate:_mapView.userLocation.location.coordinate animated:YES];
@@ -248,8 +279,8 @@
             [self addPins: self->destinationLocation.coordinate];
             self->destinationLocationLatitude = placemarks.firstObject.location.coordinate.latitude;
             self->destinationLocationLongitude = placemarks.firstObject.location.coordinate.longitude;
-            [self getDirections];
-            [_trailrunButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+            [self getDirections: self->destinationLocationLatitude destlongitude:self->destinationLocationLongitude];
+            [self->_trailrunButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
             [self->_trailrunButton setTitle:@"Start" forState:UIControlStateNormal];
         } else {
             NSLog(@"No location found");
@@ -257,12 +288,9 @@
     }];
 }
 
-- (void) getDirections{
+- (void) getDirections: (float) destlatitude destlongitude: (float) destlongitude{
     float startlatitude = currentLocation.coordinate.latitude;
     float startlongitude = currentLocation.coordinate.longitude;
-    
-    float destlatitude = destinationLocationLatitude;
-    float destlongitude = destinationLocationLongitude;
     
     MKPlacemark *startPlacemark = [[MKPlacemark alloc] initWithCoordinate:CLLocationCoordinate2DMake(startlatitude, startlongitude)];
     
@@ -295,5 +323,33 @@
     }];
     
 }
+
+- (void) getInterceptingDirections {
+        [_mapView addOverlay:_cloudPolyline];
+        MKMapRect mapRect = _cloudPolyline.boundingMapRect;
+        [self->_mapView setRegion:MKCoordinateRegionForMapRect(mapRect) animated:YES];
+
+        __block NSArray *points;
+
+        [Run retreiveRunPoints: _cloudUser completion:^(NSArray * _Nonnull runObjectPoints, NSError * _Nullable err) {
+            if (runObjectPoints) {
+                points = runObjectPoints;
+                PFGeoPoint *geoPoint = self->_cloudUser[@"currentLocation"];
+                self->cloudUserLocation = [[CLLocation alloc] initWithLatitude:geoPoint.latitude longitude:geoPoint.longitude];
+                self->runnerPin = [[MKPointAnnotation alloc] initWithCoordinate:self->cloudUserLocation.coordinate title:self->_cloudUser[@"username"] subtitle:@"Running"];
+                [self->_mapView addAnnotation:self->runnerPin];
+                [Interceptor getBestETAPoint: 5 allPoints:points interceptorLocation:self->locationManager.location runnerLocation:self->cloudUserLocation completion:^(MKMapItem * _Nonnull bestPoint, NSError * _Nonnull err) {
+                    if (bestPoint) {
+                        NSLog(@"🌗🌗🌗🌗v%@", bestPoint);
+                        [self getDirections:bestPoint.placemark.coordinate.latitude destlongitude:bestPoint.placemark.coordinate.longitude];
+                    } else {
+                        NSLog(@"No Best Point was found, eta difference greater than threshold");
+                    }
+                }];
+            }
+        }];
+    }
+
+
 
 @end

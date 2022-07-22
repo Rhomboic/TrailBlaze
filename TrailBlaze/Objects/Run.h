@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void) retreiveRunPolyline : (PFUser *) runner completion:(void (^)(MKPolyline *polyline, NSError * _Nullable))completion ;
 + (void) retreiveRunObject : (PFUser *) runner completion:(void (^)(PFObject *runObject, NSError * _Nullable))completion;
 + (void) retreiveRunObjects : (PFUser *) runner limit: (int) limit completion:(void (^)(NSArray *runObjects, NSError * _Nullable))completion;
++ (void) retreiveRunPoints : (PFUser *) runner completion:(void (^)(NSArray *runObjectPoints, NSError * _Nullable))completion;
 @end
 
 NS_ASSUME_NONNULL_END

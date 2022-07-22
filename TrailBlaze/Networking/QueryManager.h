@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)queryUsers: (NSInteger ) limit completion:(void (^)(NSArray *users, NSError *))completion;
 - (void)queryRequests: (NSInteger ) limit completion:(void (^)(NSArray *friendRequests, NSError *))completion;
 - (void)queryReceives: (NSInteger ) limit completion:(void (^)(NSArray *friendReceives, NSError *))completion;
+- (void)queryLocation: (PFUser *) runner completion:(void (^)(PFObject *friendLocation, NSError *))completion;
 - (void) uploadProfileImage: (PFFileObject * _Nullable)image withCompletion: (PFBooleanResultBlock  _Nullable)completion;
 + (PFFileObject *)getPFFileFromImage: (UIImage * _Nullable)image;
 @end

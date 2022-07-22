@@ -35,6 +35,7 @@
             UINavigationController *navController = tabBarController.viewControllers[1];
             HomeViewController *hvc = navController.childViewControllers[0];
             hvc.cloudPolyline = polyline;
+            hvc.cloudUser = self->_thisUser;
             [tabBarController setSelectedViewController: navController];
             sceneDelegate.window.rootViewController = tabBarController;
             NSLog(@"got run");
