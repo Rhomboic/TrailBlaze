@@ -12,7 +12,8 @@
 @implementation Interceptor {
     
 }
-static float etaDifferenceThreshold = 692;
+/// etaDifferenceThreshold is the allowable wait time at intercpetion point, will let user input this when requesting intercept, 700 is a placeholder
+static float etaDifferenceThreshold = 700;
 static NSMutableArray *etasDifferences;
 static NSMutableDictionary *etaPointPairs;
 
@@ -20,7 +21,6 @@ static NSMutableDictionary *etaPointPairs;
     float shortestDistance = FLT_MAX;
     int index = 0;
     int closestIndex = -1;
-//    CLLocation* runnerCLLocation = [[CLLocation alloc] initWithLatitude:[[runnerLocation firstObject] doubleValue] longitude:[[runnerLocation lastObject] doubleValue]];
     for (NSArray* point in routePoints) {
         CLLocation* thisPointCLLocation = [[CLLocation alloc] initWithLatitude:[[point firstObject] doubleValue] longitude:[[point lastObject] doubleValue]];
         float distanceBetween = [runnerLocation distanceFromLocation:thisPointCLLocation];
@@ -110,7 +110,6 @@ static NSMutableDictionary *etaPointPairs;
         NSLog(@"everything is done!!");
         NSLog(@"%@", etasDifferences);
         NSLog(@"%@", [self sortInAscendingOrder:etasDifferences]);
-//                    NSLog(@"%@",
         NSLog(@"%@", [NSString stringWithFormat:@"%@", [[self sortInAscendingOrder:etasDifferences] firstObject]]);
         NSNumber *bestDifference = [[self sortInAscendingOrder:etasDifferences] firstObject];
         if ([bestDifference floatValue] <= etaDifferenceThreshold) {
