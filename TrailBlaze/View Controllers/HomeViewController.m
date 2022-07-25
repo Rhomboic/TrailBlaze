@@ -52,7 +52,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self centerOnUserLocation];
+    [self centerOnUserLocation: 0.01];
     [self configureMapView];
     [self configureLocationManager];
     [self configureSubviews];
@@ -63,7 +63,7 @@
 #pragma mark:  Button Actions
 
 - (IBAction)didTapCurrentLocation:(id)sender {
-    [self centerOnUserLocation];
+    [self centerOnUserLocation:0.01];
 }
 
 - (IBAction)didTapStats:(id)sender {
@@ -71,9 +71,7 @@
 
 - (IBAction)didTapTrailRun:(id)sender {
     if (isReadyToStartRun || _cloudPolyline) {
-        [_mapView setUserTrackingMode:MKUserTrackingModeFollowWithHeading animated:YES];
-        [_mapView setRotateEnabled:NO];
-        [_mapView setScrollEnabled:NO];
+        [self centerOnUserLocation:0.004];
         self->isCurrentlyRunning = true;
         _timerLabel.text = @"00:00:00";
         [_timerLabel setHidden:NO];
@@ -230,6 +228,16 @@
     currentLocation = [locations lastObject];
 }
 
+- (void)mapView:(MKMapView *)mapView didChangeUserTrackingMode:(MKUserTrackingMode)mode animated:(BOOL)animated {
+    if (_timerLabel.hidden) {
+        [_mapView setUserTrackingMode:MKUserTrackingModeFollowWithHeading animated:YES];
+        MKCoordinateRegion sfRegion = MKCoordinateRegionMake(_mapView.userLocation.location.coordinate,  MKCoordinateSpanMake(0.004, 0.004));
+        [_mapView setRegion:sfRegion];
+        
+
+    }
+}
+
 #pragma mark:  Helpers
 - (void) timerCounter {
     timerCount = timerCount + 1;
@@ -263,19 +271,20 @@
         }];
         
     }
-}
+    }
 }
 
-- (void) centerOnUserLocation {
-    [_mapView setCenterCoordinate:_mapView.userLocation.location.coordinate animated:YES];
-     MKCoordinateRegion sfRegion = MKCoordinateRegionMake(_mapView.userLocation.location.coordinate,  MKCoordinateSpanMake(0.01, 0.01));
-    [_mapView setRegion:sfRegion animated:YES];
+- (void) centerOnUserLocation: (float) span{
+    MKCoordinateRegion sfRegion = MKCoordinateRegionMake(_mapView.userLocation.location.coordinate,  MKCoordinateSpanMake(span, span));
+    [UIView animateWithDuration:2 animations:^{
+        [self->_mapView setCenterCoordinate:self->_mapView.userLocation.location.coordinate animated:YES];
+        [self->_mapView setRegion:sfRegion animated:YES];
+    } completion:nil];
 }
 
 - (void) addPins:(CLLocationCoordinate2D)destinationCoord {
     MKPointAnnotation *startPin = [[MKPointAnnotation alloc] initWithCoordinate:locationManager.location.coordinate title:@"Start" subtitle:@"Me"];
     MKPointAnnotation *endPin = [[MKPointAnnotation alloc] initWithCoordinate:destinationCoord title:@"End" subtitle:@"Future Me"];
-    [_mapView addAnnotation:startPin];
     [_mapView addAnnotation:endPin];
 }
 
