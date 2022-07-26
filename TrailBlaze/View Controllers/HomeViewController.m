@@ -60,6 +60,7 @@
     [self configureMapView];
     [self configureLocationManager];
     [self configureSubviews];
+    [self parseLiveQuerySetUp];
     
     
     
@@ -244,7 +245,38 @@
 
 #pragma mark:  Helpers
 
+- (void) parseLiveQuerySetUp {
+    if (_cloudUser != nil) {
+    NSString *path = [[NSBundle mainBundle] pathForResource: @"keys" ofType: @"plist"];
+    NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: path];
 
+    NSString *appID = [dict objectForKey: @"appID"];
+    NSString *clientKey = [dict objectForKey: @"clientKey"];
+    liveQueryClient = [[PFLiveQueryClient alloc] initWithServer:@"https://trailblaze.b4a.io" applicationId:appID clientKey:clientKey];
+    theirLocationQuery = [PFQuery queryWithClassName:@"_User"];
+    NSLog(@"🌷🌷%@", ((PFUser *)_cloudUser)[@"currentLocation"]);
+    [theirLocationQuery whereKey:@"objectId" equalTo: ((PFUser *)_cloudUser).objectId];
+    liveQuerySubscription = [liveQueryClient subscribeToQuery:theirLocationQuery];
+        __weak typeof(self) weakself = self;
+        [liveQuerySubscription addUpdateHandler:^(PFQuery<PFObject *> * _Nonnull query, PFObject * _Nonnull object) {
+            __strong typeof(self) strongself = weakself;
+        if (object) {
+            NSLog(@"🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸%@",object);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSLog(@"inside dispatch async block main thread from main thread");
+                PFGeoPoint *newGeoPoint = object[@"currentLocation"];
+                if (newGeoPoint.latitude) {
+                CLLocation *newFriendLocation = [[CLLocation alloc] initWithLatitude:newGeoPoint.latitude longitude:newGeoPoint.longitude];
+                    [UIView animateWithDuration:1 animations:^{[strongself->runnerPin setCoordinate:newFriendLocation.coordinate];} completion:nil];
+                }
+            });
+        
+        }
+    }];
+        
+    
+    }
+}
 - (void) timerCounter {
     timerCount = timerCount + 1;
     NSString *timeString = [self secondsToHMS:timerCount];
