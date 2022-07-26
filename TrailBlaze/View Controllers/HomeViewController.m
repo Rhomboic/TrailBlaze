@@ -52,6 +52,8 @@
     PFLiveQuerySubscription *liveQuerySubscription;
     PFQuery *myLocationQuery;
     PFQuery *theirLocationQuery;
+    
+    PFQuery *interceptRequestQuery;
 }
 
 - (void)viewDidLoad {
@@ -253,6 +255,8 @@
     NSString *appID = [dict objectForKey: @"appID"];
     NSString *clientKey = [dict objectForKey: @"clientKey"];
     liveQueryClient = [[PFLiveQueryClient alloc] initWithServer:@"https://tblaze.b4a.io" applicationId:appID clientKey:clientKey];
+        
+        
     theirLocationQuery = [PFQuery queryWithClassName:@"_User"];
     NSLog(@"🌷🌷%@", ((PFUser *)_cloudUser)[@"currentLocation"]);
     [theirLocationQuery whereKey:@"objectId" equalTo: ((PFUser *)_cloudUser).objectId];
@@ -274,9 +278,17 @@
             }
     }];
         
-    
+    interceptRequestQuery = [PFQuery queryWithClassName:@"InterceptRequest"];
+    [interceptRequestQuery whereKey:@"receiver" equalTo: PFUser.currentUser.objectId];
+    liveQuerySubscription = [liveQueryClient subscribeToQuery:interceptRequestQuery];
+    [liveQuerySubscription addCreateHandler:^(PFQuery<PFObject *> * _Nonnull query, PFObject * _Nonnull object) {
+        __strong typeof(self) strongself = weakself;
+        [strongself interceptAlert];
+        
+    }];
     }
 }
+
 - (void) timerCounter {
     timerCount = timerCount + 1;
     NSString *timeString = [self secondsToHMS:timerCount];
@@ -299,6 +311,27 @@
     }
 }
 
+- (void) interceptAlert {
+    UIAlertController * alertvc = [UIAlertController alertControllerWithTitle: @ "Intercept Requested"
+                                 message:@"Someone want's to join your run!" preferredStyle: UIAlertControllerStyleAlert
+                                ];
+    UIAlertAction * declineAction = [UIAlertAction actionWithTitle: @ "Decline"
+                            style: UIAlertActionStyleDefault handler: ^ (UIAlertAction * _Nonnull action) {
+                              NSLog(@ "Decline Tapped");
+      //make approved false
+                            }
+                           ];
+    UIAlertAction * acceptAction = [UIAlertAction actionWithTitle: @ "Accept"
+                              style: UIAlertActionStyleDefault handler: ^ (UIAlertAction * _Nonnull action) {
+                                NSLog(@ "Accept Tapped");
+        //make approved false
+                              }
+                             ];
+    [alertvc addAction: declineAction];
+    [alertvc addAction: acceptAction];
+    [self presentViewController: alertvc animated: true completion: nil];
+}
+    
 - (void) centerOnUserLocation: (float) span{
     MKCoordinateRegion sfRegion = MKCoordinateRegionMake(_mapView.userLocation.location.coordinate,  MKCoordinateSpanMake(span, span));
     [UIView animateWithDuration:2 animations:^{
