@@ -297,21 +297,6 @@
         [PFUser.currentUser saveInBackground];
         }
     }
-//    } else {
-//        [[[QueryManager alloc] init] queryLocation:_cloudUser completion:^(PFObject * _Nonnull friendLocation, NSError * _Nonnull err) {
-//            if (friendLocation) {
-//                PFGeoPoint *newGeoPoint = friendLocation[@"currentLocation"];
-//                if (newGeoPoint.latitude) {
-//                CLLocation *newFriendLocation = [[CLLocation alloc] initWithLatitude:newGeoPoint.latitude longitude:newGeoPoint.longitude];
-//                [UIView animateWithDuration:1 animations:^{[self->runnerPin setCoordinate:newFriendLocation.coordinate];} completion:nil];
-//                } else {
-//                    NSLog(@"Mate Ended their run");
-//                }
-//            }
-//        }];
-//
-//    }
-//    }
 }
 
 - (void) centerOnUserLocation: (float) span{
@@ -325,6 +310,7 @@
 - (void) addPins:(CLLocationCoordinate2D)destinationCoord {
     MKPointAnnotation *startPin = [[MKPointAnnotation alloc] initWithCoordinate:locationManager.location.coordinate title:@"Start" subtitle:@"Me"];
     MKPointAnnotation *endPin = [[MKPointAnnotation alloc] initWithCoordinate:destinationCoord title:@"End" subtitle:@"Future Me"];
+    [_mapView addAnnotation:startPin];
     [_mapView addAnnotation:endPin];
 }
 
