@@ -34,17 +34,21 @@
 }
 
 + (NSArray *) prunePoints: (NSArray *) routePoints numberOfPoints: (int) numberOfPoints{
-    NSMutableArray *prunedPoints = [NSMutableArray new];
+    NSMutableArray *pruned = [NSMutableArray new];
     NSUInteger gap = routePoints.count/numberOfPoints;
+    NSLog(@"🌈🌈🌈🌈🌈%lu", (unsigned long)gap);
     for (int i = (int) gap; i < numberOfPoints; i+=gap) {
-        [prunedPoints addObject:[routePoints objectAtIndex:i]];
+        [pruned addObject:[routePoints objectAtIndex:i]];
+        NSLog(@"🐤🐤🐤%@", pruned);
     }
-    return prunedPoints;
+    return pruned;
 }
 
 + (void) getBestETAPoint: (int) maxWaitTime allPoints:(NSArray *) allPoints interceptorLocation: (CLLocation *) interceptorLocation runnerLocation: (CLLocation *) runnerLocation completion:(void (^)(MKMapItem * _Nullable bestPoint, NSError *))completion {
     float etaDifferenceThreshold = maxWaitTime*60;
     NSArray *prunedPoints = [self prunePoints:[self getRemainingRoutePoints:allPoints runnerLocation:runnerLocation] numberOfPoints:10];
+    NSLog(@"%lu", (unsigned long)allPoints.count);
+    NSLog(@"🧪🧪🧪🧪🧪%lu", (unsigned long)[self getRemainingRoutePoints:allPoints runnerLocation:runnerLocation].count);
     NSLog(@"🌈🌈🌈🌈🌈%@", prunedPoints);
     NSMutableArray *etasDifferences = [NSMutableArray array];
     NSMutableDictionary *etaPointPairs = [[NSMutableDictionary alloc] init];

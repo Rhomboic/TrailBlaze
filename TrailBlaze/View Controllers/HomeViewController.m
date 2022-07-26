@@ -10,6 +10,7 @@
 #import "Run.h"
 #import "Interceptor.h"
 #import "QueryManager.h"
+#import "ParseLiveQuery/ParseLiveQuery-umbrella.h"
 
 @interface HomeViewController ()  <MKMapViewDelegate, CLLocationManagerDelegate>
 @property (strong, nonatomic) IBOutlet MKMapView *mapView;
@@ -47,7 +48,10 @@
     NSTimer *timer;
     int timerCount;
     
-    
+    PFLiveQueryClient *liveQueryClient;
+    PFLiveQuerySubscription *liveQuerySubscription;
+    PFQuery *myLocationQuery;
+    PFQuery *theirLocationQuery;
 }
 
 - (void)viewDidLoad {
@@ -206,7 +210,7 @@
     isCurrentlyRunning = false;
     
     //sending user location to Parse 
-    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
+    [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
 
 }
 
@@ -239,6 +243,8 @@
 }
 
 #pragma mark:  Helpers
+
+
 - (void) timerCounter {
     timerCount = timerCount + 1;
     NSString *timeString = [self secondsToHMS:timerCount];
@@ -257,21 +263,23 @@
         userLocationGeoPoint.longitude = locationManager.location.coordinate.longitude;
         [PFUser.currentUser setValue:userLocationGeoPoint forKey:@"currentLocation"];
         [PFUser.currentUser saveInBackground];
-    } else {
-        [[[QueryManager alloc] init] queryLocation:_cloudUser completion:^(PFObject * _Nonnull friendLocation, NSError * _Nonnull err) {
-            if (friendLocation) {
-                PFGeoPoint *newGeoPoint = friendLocation[@"currentLocation"];
-                if (newGeoPoint.latitude) {
-                CLLocation *newFriendLocation = [[CLLocation alloc] initWithLatitude:newGeoPoint.latitude longitude:newGeoPoint.longitude];
-                [UIView animateWithDuration:1 animations:^{[self->runnerPin setCoordinate:newFriendLocation.coordinate];} completion:nil];
-                } else {
-                    NSLog(@"Mate Ended their run");
-                }
-            }
-        }];
-        
+        }
     }
-    }
+//    } else {
+//        [[[QueryManager alloc] init] queryLocation:_cloudUser completion:^(PFObject * _Nonnull friendLocation, NSError * _Nonnull err) {
+//            if (friendLocation) {
+//                PFGeoPoint *newGeoPoint = friendLocation[@"currentLocation"];
+//                if (newGeoPoint.latitude) {
+//                CLLocation *newFriendLocation = [[CLLocation alloc] initWithLatitude:newGeoPoint.latitude longitude:newGeoPoint.longitude];
+//                [UIView animateWithDuration:1 animations:^{[self->runnerPin setCoordinate:newFriendLocation.coordinate];} completion:nil];
+//                } else {
+//                    NSLog(@"Mate Ended their run");
+//                }
+//            }
+//        }];
+//
+//    }
+//    }
 }
 
 - (void) centerOnUserLocation: (float) span{
@@ -354,7 +362,7 @@
                 self->cloudUserLocation = [[CLLocation alloc] initWithLatitude:geoPoint.latitude longitude:geoPoint.longitude];
                 self->runnerPin = [[MKPointAnnotation alloc] initWithCoordinate:self->cloudUserLocation.coordinate title:self->_cloudUser[@"username"] subtitle:@"Running"];
                 [self->_mapView addAnnotation:self->runnerPin];
-                [Interceptor getBestETAPoint: 5 allPoints:points interceptorLocation:self->locationManager.location runnerLocation:self->cloudUserLocation completion:^(MKMapItem * _Nonnull bestPoint, NSError * _Nonnull err) {
+                [Interceptor getBestETAPoint: 16 allPoints:points interceptorLocation:self->locationManager.location runnerLocation:self->cloudUserLocation completion:^(MKMapItem * _Nonnull bestPoint, NSError * _Nonnull err) {
                     if (bestPoint) {
                         NSLog(@"🌗🌗🌗🌗v%@", bestPoint);
                         MKPointAnnotation *rendezvousPin = [[MKPointAnnotation alloc] initWithCoordinate:bestPoint.placemark.coordinate title:@"Rendezvous" subtitle:@"Meet here"];

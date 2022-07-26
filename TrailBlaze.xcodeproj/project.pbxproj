@@ -223,8 +223,8 @@
 			children = (
 				4E64D192287E39E3007A87A1 /* Networking */,
 				4EA7BFB82874B9D800D1D797 /* Objects */,
-				4EE674F52866D6D500A93C15 /* View Controllers */,
 				4EE674C02866D6C800A93C15 /* AppDelegate.h */,
+				4EE674F52866D6D500A93C15 /* View Controllers */,
 				4EE674C12866D6C800A93C15 /* AppDelegate.m */,
 				4EE674C32866D6C800A93C15 /* SceneDelegate.h */,
 				4EE674C42866D6C800A93C15 /* SceneDelegate.m */,
