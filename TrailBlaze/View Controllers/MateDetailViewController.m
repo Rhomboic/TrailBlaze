@@ -59,6 +59,8 @@
     __weak typeof(self) weakself = self;
     [liveQuerySubscription addUpdateHandler:^(PFQuery<PFObject *> * _Nonnull query, PFObject * _Nonnull object) {
         __strong typeof(self) strongself = weakself;
+        ///delete interceptRequest after approval
+        [object deleteInBackground];
         [Run retreiveRunPolyline:strongself->_thisUser completion:^(MKPolyline * _Nonnull polyline, NSError * _Nullable err) {
            if (polyline) {
                SceneDelegate *sceneDelegate = (SceneDelegate *)UIApplication.sharedApplication.connectedScenes.allObjects.firstObject.delegate;
