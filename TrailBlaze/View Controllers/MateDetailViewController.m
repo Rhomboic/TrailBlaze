@@ -9,6 +9,7 @@
 #import "Run.h"
 #import "SceneDelegate.h"
 #import "HomeViewController.h"
+#import "InterceptRequest.h"
 #import "UIImageView+AFNetworking.h"
 
 @interface MateDetailViewController ()
@@ -27,6 +28,14 @@
 }
 
 - (IBAction)didTapIntercept:(id)sender {
+    [InterceptRequest uploadRequest:PFUser.currentUser.objectId receiverID:_thisUser.objectId withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+        if (succeeded) {
+            NSLog(@"sent intercept request");
+            
+        } else {
+            NSLog(@"failed to send intercept request");
+        }
+    }];
      [Run retreiveRunPolyline:_thisUser completion:^(MKPolyline * _Nonnull polyline, NSError * _Nullable err) {
         if (polyline) {
             SceneDelegate *sceneDelegate = (SceneDelegate *)UIApplication.sharedApplication.connectedScenes.allObjects.firstObject.delegate;
