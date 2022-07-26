@@ -25,7 +25,7 @@
         if (error) {
             NSLog(@"%@", error.localizedDescription);
         } else {
-            NSLog(@"Successfully sent friend request!");
+            NSLog(@"Successfully sent intercept request!");
         }
     }];
 }
