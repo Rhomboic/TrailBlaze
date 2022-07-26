@@ -9,6 +9,7 @@
 #import "MapKit/MapKit.h"
 #import "Run.h"
 #import "Interceptor.h"
+#import "Interception.h"
 #import "QueryManager.h"
 #import "ParseLiveQuery/ParseLiveQuery-umbrella.h"
 
@@ -31,6 +32,7 @@
     CLLocation *destinationLocation;
     CLLocation *cloudUserLocation;
     MKPointAnnotation* runnerPin;
+    MKMapItem *rendezvousPoint;
     
     float destinationLocationLatitude;
     float destinationLocationLongitude;
@@ -399,6 +401,16 @@
             self->currentRoute = route;
             self->isReadyToStartRun = true;
             self->currentPolyline = route.polyline;
+            PFGeoPoint *rendezvousGeoPoint = [[PFGeoPoint alloc] init];
+            rendezvousGeoPoint.latitude = self->rendezvousPoint.placemark.coordinate.latitude;
+            rendezvousGeoPoint.longitude = self->rendezvousPoint.placemark.coordinate.longitude;
+            [Interception uploadRequest:rendezvousGeoPoint polyline:self->currentPolyline withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+                if (succeeded) {
+                    NSLog(@"uploaded inteception data");
+                } else {
+                    NSLog(@"failed to upload inteception data");
+                }
+            }];
             [self->_mapView addOverlay:self->currentPolyline level:MKOverlayLevelAboveRoads];
             MKMapRect mapRect = route.polyline.boundingMapRect;
             [self->_mapView setRegion:MKCoordinateRegionForMapRect(mapRect) animated:YES];
@@ -426,6 +438,7 @@
                 [self->_mapView addAnnotation:self->runnerPin];
                 [Interceptor getBestETAPoint: 16 allPoints:points interceptorLocation:self->locationManager.location runnerLocation:self->cloudUserLocation completion:^(MKMapItem * _Nonnull bestPoint, NSError * _Nonnull err) {
                     if (bestPoint) {
+                        self->rendezvousPoint = bestPoint;
                         NSLog(@"🌗🌗🌗🌗v%@", bestPoint);
                         MKPointAnnotation *rendezvousPin = [[MKPointAnnotation alloc] initWithCoordinate:bestPoint.placemark.coordinate title:@"Rendezvous" subtitle:@"Meet here"];
                         [self->_mapView addAnnotation:rendezvousPin];
