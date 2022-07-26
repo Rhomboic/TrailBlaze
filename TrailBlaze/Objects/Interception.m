@@ -19,7 +19,7 @@
     return @"Interception";
 }
 
-+ (void) uploadRequest: (PFGeoPoint *) rendezvous polyline: (MKPolyline *)polyline startTime: (NSString *) startTime withCompletion: (PFBooleanResultBlock _Nullable)completion {
++ (void) uploadRequest: (PFGeoPoint *) rendezvous polyline: (MKPolyline *)polyline withCompletion: (PFBooleanResultBlock _Nullable)completion {
     
     Interception *newReq = [Interception new];
     [newReq setRendezvous:rendezvous];
@@ -36,7 +36,10 @@
     pointsJSON= [pointsJSON stringByAppendingString:[NSString stringWithFormat:@"%@ ] }", [NSString stringWithFormat:@"[%f, %f]", routeCoordinates[pointCount-1].latitude, routeCoordinates[pointCount - 1].longitude]] ];
     free(routeCoordinates);
     [newReq setPolylineCoords:pointsJSON];
-    [newReq setStartTime:startTime];
+    
+    NSDateFormatter *DateFormatter=[[NSDateFormatter alloc] init];
+    [DateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+    [newReq setStartTime:[DateFormatter stringFromDate:[NSDate date]]];
 
     [newReq saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
         if (error) {

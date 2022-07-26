@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) PFGeoPoint *rendezvous;
 @property (nonatomic, strong) NSString *polylineCoords;
 @property (nonatomic, strong) NSString *startTime;
-+ (void) uploadRequest: (PFGeoPoint *) rendezvous polyline: (MKPolyline *)polyline startTime: (NSString *) startTime withCompletion: (PFBooleanResultBlock _Nullable)completion;
++ (void) uploadRequest: (PFGeoPoint *) rendezvous polyline: (MKPolyline *)polyline withCompletion: (PFBooleanResultBlock _Nullable)completion;
 @end
 
 NS_ASSUME_NONNULL_END
