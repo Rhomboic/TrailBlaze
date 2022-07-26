@@ -27,7 +27,7 @@
 
         configuration.applicationId = appID;
         configuration.clientKey = clientKey;
-        configuration.server = @"https://trailblaze.b4a.io";
+        configuration.server = @"https://tblaze.b4a.io/";
     }];
 
     [Parse initializeWithConfiguration:config];

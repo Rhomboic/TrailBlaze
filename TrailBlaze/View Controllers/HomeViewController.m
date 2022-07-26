@@ -211,7 +211,7 @@
     isCurrentlyRunning = false;
     
     //sending user location to Parse 
-    [NSTimer scheduledTimerWithTimeInterval:5 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
+    [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
 
 }
 
@@ -252,14 +252,14 @@
 
     NSString *appID = [dict objectForKey: @"appID"];
     NSString *clientKey = [dict objectForKey: @"clientKey"];
-    liveQueryClient = [[PFLiveQueryClient alloc] initWithServer:@"https://trailblaze.b4a.io" applicationId:appID clientKey:clientKey];
+    liveQueryClient = [[PFLiveQueryClient alloc] initWithServer:@"https://tblaze.b4a.io" applicationId:appID clientKey:clientKey];
     theirLocationQuery = [PFQuery queryWithClassName:@"_User"];
     NSLog(@"🌷🌷%@", ((PFUser *)_cloudUser)[@"currentLocation"]);
     [theirLocationQuery whereKey:@"objectId" equalTo: ((PFUser *)_cloudUser).objectId];
     liveQuerySubscription = [liveQueryClient subscribeToQuery:theirLocationQuery];
-        __weak typeof(self) weakself = self;
-        [liveQuerySubscription addUpdateHandler:^(PFQuery<PFObject *> * _Nonnull query, PFObject * _Nonnull object) {
-            __strong typeof(self) strongself = weakself;
+    __weak typeof(self) weakself = self;
+    [liveQuerySubscription addUpdateHandler:^(PFQuery<PFObject *> * _Nonnull query, PFObject * _Nonnull object) {
+        __strong typeof(self) strongself = weakself;
         if (object) {
             NSLog(@"🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸%@",object);
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -271,7 +271,7 @@
                 }
             });
         
-        }
+            }
     }];
         
     
