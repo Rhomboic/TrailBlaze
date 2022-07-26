@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *requester;
 @property (nonatomic, strong) NSString *receiver;
 @property BOOL *approved;
++ (void) uploadRequest: (NSString*)requesterID receiverID: (NSString *)receiverID withCompletion: (PFBooleanResultBlock _Nullable)completion;
 
 @end
 
