@@ -105,17 +105,18 @@
 
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     RunCell *cell = [tableView dequeueReusableCellWithIdentifier:@"RunCell" forIndexPath:indexPath];
-    cell.durationLabel.text = [@"Duration: \n" stringByAppendingString:pastRuns[indexPath.row][@"duration"]];
-    cell.distanceLabel.text = [@"Dist: \n" stringByAppendingString:pastRuns[indexPath.row][@"distance"]];
-    cell.startTimeLabel.text = [@"Start Time: \n" stringByAppendingString:pastRuns[indexPath.row][@"startTime"]];
-    cell.endTimeLabel.text = [@"End Time: \n" stringByAppendingString:pastRuns[indexPath.row][@"endTime"]];
-    
-    cell.layer.cornerRadius = 20;
-    [cell.layer setBorderColor:[UIColor systemBackgroundColor].CGColor];
-    [cell.layer setBorderWidth:5.0f];
-    cell.clipsToBounds = true;
-    cell.contentView.backgroundColor = UIColor.secondarySystemBackgroundColor;
-    
+    if (pastRuns) {
+        cell.durationLabel.text = [@"Duration: \n" stringByAppendingString:pastRuns[indexPath.row][@"duration"]];
+        cell.distanceLabel.text = [@"Dist: \n" stringByAppendingString:pastRuns[indexPath.row][@"distance"]];
+        cell.startTimeLabel.text = [@"Start Time: \n" stringByAppendingString:pastRuns[indexPath.row][@"startTime"]];
+        cell.endTimeLabel.text = [@"End Time: \n" stringByAppendingString:pastRuns[indexPath.row][@"endTime"]];
+        
+        cell.layer.cornerRadius = 20;
+        [cell.layer setBorderColor:[UIColor systemBackgroundColor].CGColor];
+        [cell.layer setBorderWidth:5.0f];
+        cell.clipsToBounds = true;
+        cell.contentView.backgroundColor = UIColor.secondarySystemBackgroundColor;
+    }
     return cell;
 }
 

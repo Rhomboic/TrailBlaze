@@ -27,7 +27,7 @@
 
         configuration.applicationId = appID;
         configuration.clientKey = clientKey;
-        configuration.server = @"https://parseapi.back4app.com";
+        configuration.server = @"https://tblaze.b4a.io/";
     }];
 
     [Parse initializeWithConfiguration:config];

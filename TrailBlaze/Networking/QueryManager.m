@@ -81,6 +81,21 @@
     }];
 }
 
+- (void)queryLocation: (PFUser *) runner completion:(void (^)(PFObject *friendLocation, NSError *))completion {
+    PFQuery *query = [PFQuery queryWithClassName:@"_User"];
+    [query orderByDescending:@"createdAt"];
+    [[PFUser currentUser] fetchIfNeeded];
+    [query whereKey:@"objectId" equalTo:runner.objectId];
+    query.limit = 1;
+    [query findObjectsInBackgroundWithBlock:^(NSArray *friendLocations, NSError *error) {
+        if (friendLocations) {
+            completion([friendLocations firstObject] , nil);
+        } else {
+            NSLog(@"%@", error.localizedDescription);
+        }
+    }];
+}
+
 - (void) uploadProfileImage:  ( PFFileObject * _Nullable )image withCompletion: (PFBooleanResultBlock  _Nullable)completion {
     [[PFUser currentUser] setObject:image forKey:@"profileImage"];
     [[PFUser currentUser] saveInBackground];

@@ -7,6 +7,7 @@ target 'TrailBlaze' do
 
   # Pods for TrailBlaze
      pod 'Parse'
+     pod 'ParseLiveQuery'
      pod 'AFNetworking'
      pod 'DateTools' 
 
