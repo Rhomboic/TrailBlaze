@@ -34,7 +34,7 @@
 }
 
 - (void) interceptDeclinedAlert {
-    UIAlertController * alertvc = [UIAlertController alertControllerWithTitle: @ "Intercept Declines"
+    UIAlertController * alertvc = [UIAlertController alertControllerWithTitle: @ "Intercept Declined"
                                  message:@"They declines your request to intercept" preferredStyle: UIAlertControllerStyleAlert
                                 ];
     UIAlertAction * okAction = [UIAlertAction actionWithTitle: @ "OK"
@@ -48,6 +48,7 @@
 }
 
 - (IBAction)didTapIntercept:(id)sender {
+    //start activity indicator animation
     [InterceptRequest uploadRequest:PFUser.currentUser.objectId receiverID:_thisUser.objectId withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
         if (succeeded) {
             NSLog(@"sent intercept request");
@@ -95,7 +96,9 @@
            }];
         } else if ([object[@"approved"] boolValue] == NO){
             //stop activity indicator animation
+            dispatch_async(dispatch_get_main_queue(), ^{
             [strongself interceptDeclinedAlert];
+            });
         }
     
     }];
