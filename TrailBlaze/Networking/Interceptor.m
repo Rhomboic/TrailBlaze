@@ -91,8 +91,10 @@
             if (interceptorResponse) {
                 [pathRunner calculateETAWithCompletionHandler:^(MKETAResponse * _Nullable runnerResponse, NSError * _Nullable error2) {
                     if (runnerResponse) {
-                        [etasDifferences addObject:[NSNumber numberWithDouble:fabs(interceptorResponse.expectedTravelTime - runnerResponse.expectedTravelTime)]];
-                        [etaPointPairs setValue:runnerResponse.destination forKey:[NSString stringWithFormat:@"%.f", fabs(interceptorResponse.expectedTravelTime - runnerResponse.expectedTravelTime)]];
+                        dispatch_async(serialQueue, ^{
+                            [etasDifferences addObject:[NSNumber numberWithDouble:fabs(interceptorResponse.expectedTravelTime - runnerResponse.expectedTravelTime)]];
+                            [etaPointPairs setValue:runnerResponse.destination forKey:[NSString stringWithFormat:@"%.f", fabs(interceptorResponse.expectedTravelTime - runnerResponse.expectedTravelTime)]];
+                        });
                     } else {
                         NSLog(@"%@", error2.localizedDescription);
                     }
