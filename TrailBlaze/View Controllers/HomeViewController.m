@@ -265,7 +265,7 @@
             NSLog(@"🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸%@",object);
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSLog(@"inside dispatch async block main thread from main thread");
-                [strongself interceptAlert];
+                [strongself interceptAlert: object];
             });
         }
     }];
@@ -320,20 +320,22 @@
     }
 }
 
-- (void) interceptAlert {
+- (void) interceptAlert: (PFObject *) request {
     UIAlertController * alertvc = [UIAlertController alertControllerWithTitle: @ "Intercept Requested"
                                  message:@"Someone want's to join your run!" preferredStyle: UIAlertControllerStyleAlert
                                 ];
     UIAlertAction * declineAction = [UIAlertAction actionWithTitle: @ "Decline"
                             style: UIAlertActionStyleDefault handler: ^ (UIAlertAction * _Nonnull action) {
                               NSLog(@ "Decline Tapped");
-      //make approved false
+        [request setValue:[NSNumber numberWithBool:NO] forKey:@"approved"];
+        [request save];
                             }
                            ];
     UIAlertAction * acceptAction = [UIAlertAction actionWithTitle: @ "Accept"
                               style: UIAlertActionStyleDefault handler: ^ (UIAlertAction * _Nonnull action) {
                                 NSLog(@ "Accept Tapped");
-        //make approved false
+        [request setValue:[NSNumber numberWithBool:YES] forKey:@"approved"];
+        [request save];
                               }
                              ];
     [alertvc addAction: declineAction];
