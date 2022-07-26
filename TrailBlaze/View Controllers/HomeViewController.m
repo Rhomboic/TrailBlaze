@@ -248,20 +248,37 @@
 #pragma mark:  Helpers
 
 - (void) parseLiveQuerySetUp {
-    if (_cloudUser != nil) {
+    __weak typeof(self) weakself = self;
     NSString *path = [[NSBundle mainBundle] pathForResource: @"keys" ofType: @"plist"];
     NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: path];
 
     NSString *appID = [dict objectForKey: @"appID"];
     NSString *clientKey = [dict objectForKey: @"clientKey"];
     liveQueryClient = [[PFLiveQueryClient alloc] initWithServer:@"https://tblaze.b4a.io" applicationId:appID clientKey:clientKey];
+    
+    interceptRequestQuery = [PFQuery queryWithClassName:@"InterceptRequest"];
+    [interceptRequestQuery whereKey:@"receiver" equalTo: PFUser.currentUser.objectId];
+    liveQuerySubscription = [liveQueryClient subscribeToQuery:interceptRequestQuery];
+    [liveQuerySubscription addCreateHandler:^(PFQuery<PFObject *> * _Nonnull query, PFObject * _Nonnull object) {
+        __strong typeof(self) strongself = weakself;
+        if (object) {
+            NSLog(@"🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸%@",object);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSLog(@"inside dispatch async block main thread from main thread");
+                [strongself interceptAlert];
+            });
+        }
+    }];
+    
+    if (_cloudUser != nil) {
+    
         
         
     theirLocationQuery = [PFQuery queryWithClassName:@"_User"];
     NSLog(@"🌷🌷%@", ((PFUser *)_cloudUser)[@"currentLocation"]);
     [theirLocationQuery whereKey:@"objectId" equalTo: ((PFUser *)_cloudUser).objectId];
     liveQuerySubscription = [liveQueryClient subscribeToQuery:theirLocationQuery];
-    __weak typeof(self) weakself = self;
+    
     [liveQuerySubscription addUpdateHandler:^(PFQuery<PFObject *> * _Nonnull query, PFObject * _Nonnull object) {
         __strong typeof(self) strongself = weakself;
         if (object) {
@@ -277,15 +294,7 @@
         
             }
     }];
-        
-    interceptRequestQuery = [PFQuery queryWithClassName:@"InterceptRequest"];
-    [interceptRequestQuery whereKey:@"receiver" equalTo: PFUser.currentUser.objectId];
-    liveQuerySubscription = [liveQueryClient subscribeToQuery:interceptRequestQuery];
-    [liveQuerySubscription addCreateHandler:^(PFQuery<PFObject *> * _Nonnull query, PFObject * _Nonnull object) {
-        __strong typeof(self) strongself = weakself;
-        [strongself interceptAlert];
-        
-    }];
+    
     }
 }
 
