@@ -119,7 +119,8 @@
         if ([bestDifference floatValue] <= etaDifferenceThreshold) {
         completion([etaPointPairs objectForKey:[NSString stringWithFormat:@"%@", bestDifference]], nil);
         } else {
-            completion(nil, nil);
+            NSError *err;
+            completion(nil, err);
         }
     });
 }
