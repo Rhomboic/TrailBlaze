@@ -52,10 +52,13 @@
     
     PFLiveQueryClient *liveQueryClient;
     PFLiveQuerySubscription *liveQuerySubscription;
+    PFLiveQuerySubscription *liveQuerySubscription2;
+    
     PFQuery *myLocationQuery;
     PFQuery *theirLocationQuery;
     
     PFQuery *interceptRequestQuery;
+    PFQuery *interceptionPathQuery;
 }
 
 - (void)viewDidLoad {
