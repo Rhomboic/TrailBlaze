@@ -84,7 +84,7 @@
 - (IBAction)didTapTrailRun:(id)sender {
     if (isReadyToStartRun || (_cloudPolyline && !isCurrentlyRunning)) {
         [self centerOnUserLocation:0.004];
-        self->isReadyToStartRun = false;
+        
         self->isCurrentlyRunning = true;
         _timerLabel.text = @"00:00:00";
         [_timerLabel setHidden:NO];
@@ -96,7 +96,7 @@
         [_trailrunButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
         [_trailrunButton setTitle:@"END" forState:UIControlStateNormal];
         if (isReadyToStartRun) {
-            
+            self->isReadyToStartRun = false;
             [Run uploadRun:currentRoute withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
                 if (succeeded) {
                     NSLog(@"run sent!");
