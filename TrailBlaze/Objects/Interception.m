@@ -14,12 +14,13 @@
 @dynamic rendezvous;
 @dynamic polylineCoords;
 @dynamic startTime;
+@dynamic receiver;
 
 + (nonnull NSString *)parseClassName {
     return @"Interception";
 }
 
-+ (void) uploadRequest: (PFGeoPoint *) rendezvous polyline: (MKPolyline *)polyline withCompletion: (PFBooleanResultBlock _Nullable)completion {
++ (void) uploadRequest: (PFGeoPoint *) rendezvous polyline: (MKPolyline *)polyline receiver: (PFUser *) receiver withCompletion: (PFBooleanResultBlock _Nullable)completion {
     
     Interception *newReq = [Interception new];
     [newReq setRendezvous:rendezvous];
@@ -40,6 +41,7 @@
     NSDateFormatter *DateFormatter=[[NSDateFormatter alloc] init];
     [DateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
     [newReq setStartTime:[DateFormatter stringFromDate:[NSDate date]]];
+    [newReq setReceiver: receiver.objectId];
 
     [newReq saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
         if (error) {

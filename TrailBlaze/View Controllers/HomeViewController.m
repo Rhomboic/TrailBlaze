@@ -56,6 +56,7 @@
     PFQuery *theirLocationQuery;
     
     PFQuery *interceptRequestQuery;
+    PFQuery * interceptionPathQuery;
 }
 
 - (void)viewDidLoad {
@@ -404,7 +405,7 @@
             PFGeoPoint *rendezvousGeoPoint = [[PFGeoPoint alloc] init];
             rendezvousGeoPoint.latitude = self->rendezvousPoint.placemark.coordinate.latitude;
             rendezvousGeoPoint.longitude = self->rendezvousPoint.placemark.coordinate.longitude;
-            [Interception uploadRequest:rendezvousGeoPoint polyline:self->currentPolyline withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+            [Interception uploadRequest:rendezvousGeoPoint polyline:self->currentPolyline receiver:self->_cloudUser withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
                 if (succeeded) {
                     NSLog(@"uploaded inteception data");
                 } else {
