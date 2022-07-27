@@ -279,8 +279,57 @@
         }
     }];
     
+    
+    interceptionPathQuery = [PFQuery queryWithClassName:@"Interception"];
+    liveQuerySubscription2 = [liveQueryClient subscribeToQuery:interceptionPathQuery];
+    [interceptionPathQuery whereKey:@"receiver" equalTo: PFUser.currentUser.objectId];
+    [liveQuerySubscription2 addCreateHandler:^(PFQuery<PFObject *> * _Nonnull query, PFObject * _Nonnull object) {
+        __strong typeof(self) strongself = weakself;
+        if (object) {
+            NSLog(@"🐤🐤🐤🐤🐤🐤%@",object);
+            NSError *err;
+            NSData *data = [object[@"polylineCoords"] dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&err];
+            NSArray *pointsPairs = json[@"points"];
+            CLLocationCoordinate2D *CLLocations = malloc(pointsPairs.count * sizeof(CLLocationCoordinate2D));
+            NSLog(@"%@", pointsPairs);
+            for (int i = 0; i < pointsPairs.count; i++) {
+                CLLocations[i] = CLLocationCoordinate2DMake([pointsPairs[i][0] doubleValue] , [pointsPairs[i][1] doubleValue]);
+            }
+              MKPolyline *interceptRoutePolyline = [MKPolyline polylineWithCoordinates:CLLocations count:pointsPairs.count];
+            PFGeoPoint *rendezvousGeoPoint = object[@"currentLocation"];
+            CLLocation *rendezvousLocation = [[CLLocation alloc] initWithLatitude:rendezvousGeoPoint.latitude longitude:rendezvousGeoPoint.longitude];
+            MKPointAnnotation *rendezvousPoint = [[MKPointAnnotation alloc] initWithCoordinate:rendezvousLocation.coordinate title:@"Rendezvous" subtitle:@""];
+            [strongself->_mapView addAnnotation:rendezvousPoint];
+            [strongself->_mapView addOverlay:interceptRoutePolyline level:MKOverlayLevelAboveRoads];
+
+        }
+    }];
+    
+    
    
+    
     if (_cloudUser != nil) {
+        theirLocationQuery = [PFQuery queryWithClassName:@"_User"];
+        NSLog(@"🌷🌷%@", ((PFUser *)_cloudUser)[@"currentLocation"]);
+        [theirLocationQuery whereKey:@"objectId" equalTo: ((PFUser *)_cloudUser).objectId];
+        liveQuerySubscription = [liveQueryClient subscribeToQuery:theirLocationQuery];
+        
+        [liveQuerySubscription addUpdateHandler:^(PFQuery<PFObject *> * _Nonnull query, PFObject * _Nonnull object) {
+            __strong typeof(self) strongself = weakself;
+            if (object) {
+                NSLog(@"🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸%@",object);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSLog(@"inside dispatch async block main thread from main thread");
+                    PFGeoPoint *newGeoPoint = object[@"currentLocation"];
+                    if (newGeoPoint.latitude) {
+                    CLLocation *newFriendLocation = [[CLLocation alloc] initWithLatitude:newGeoPoint.latitude longitude:newGeoPoint.longitude];
+                        [UIView animateWithDuration:1 animations:^{[strongself->runnerPin setCoordinate:newFriendLocation.coordinate];} completion:nil];
+                    }
+                });
+            
+                }
+        }];
     
     }
 }
