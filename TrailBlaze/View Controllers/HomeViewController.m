@@ -82,8 +82,9 @@
 }
 
 - (IBAction)didTapTrailRun:(id)sender {
-    if (isReadyToStartRun || _cloudPolyline) {
+    if (isReadyToStartRun || (_cloudPolyline && !isCurrentlyRunning)) {
         [self centerOnUserLocation:0.004];
+        self->isReadyToStartRun = false;
         self->isCurrentlyRunning = true;
         _timerLabel.text = @"00:00:00";
         [_timerLabel setHidden:NO];
@@ -95,7 +96,7 @@
         [_trailrunButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
         [_trailrunButton setTitle:@"END" forState:UIControlStateNormal];
         if (isReadyToStartRun) {
-            self->isReadyToStartRun = false;
+            
             [Run uploadRun:currentRoute withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
                 if (succeeded) {
                     NSLog(@"run sent!");
@@ -107,12 +108,17 @@
             isCurrentlyRunning = true;
             [self getInterceptingDirections];
         }
-    } else if (isCurrentlyRunning) {
+    } else if (isCurrentlyRunning || (_cloudUser && isCurrentlyRunning)) {
         isCurrentlyRunning = false;
         timerCount = 0;
         [timer invalidate];
         [_trailrunButton setTitle:@"" forState:UIControlStateNormal];
-        [_mapView removeOverlay:currentPolyline];
+        for (MKPolyline *pline in _mapView.overlays) {
+            [_mapView removeOverlay:pline];
+        }
+        for (MKPointAnnotation *annot in _mapView.annotations) {
+            [_mapView removeAnnotation:annot];
+        }
         PFGeoPoint *nullPoint = [[PFGeoPoint alloc] init];
         nullPoint.latitude = 0;
         nullPoint.longitude = 0;
@@ -297,7 +303,7 @@
                 CLLocations[i] = CLLocationCoordinate2DMake([pointsPairs[i][0] doubleValue] , [pointsPairs[i][1] doubleValue]);
             }
               MKPolyline *interceptRoutePolyline = [MKPolyline polylineWithCoordinates:CLLocations count:pointsPairs.count];
-            PFGeoPoint *rendezvousGeoPoint = object[@"currentLocation"];
+            PFGeoPoint *rendezvousGeoPoint = object[@"rendezvous"];
             CLLocation *rendezvousLocation = [[CLLocation alloc] initWithLatitude:rendezvousGeoPoint.latitude longitude:rendezvousGeoPoint.longitude];
             MKPointAnnotation *rendezvousPoint = [[MKPointAnnotation alloc] initWithCoordinate:rendezvousLocation.coordinate title:@"Rendezvous" subtitle:@""];
             [strongself->_mapView addAnnotation:rendezvousPoint];
@@ -439,6 +445,7 @@
             rendezvousGeoPoint.latitude = self->rendezvousPoint.placemark.coordinate.latitude;
             rendezvousGeoPoint.longitude = self->rendezvousPoint.placemark.coordinate.longitude;
             if (self->_cloudUser) {
+                self->isReadyToStartRun = false;
                 [Interception uploadRequest:rendezvousGeoPoint polyline:self->currentPolyline receiver:self->_cloudUser withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
                     if (succeeded) {
                         NSLog(@"uploaded inteception data");
