@@ -12,6 +12,7 @@
 #import "Interception.h"
 #import "QueryManager.h"
 #import "ParseLiveQuery/ParseLiveQuery-umbrella.h"
+#import "Utils.h"
 
 @interface HomeViewController ()  <MKMapViewDelegate, CLLocationManagerDelegate>
 @property (strong, nonatomic) IBOutlet MKMapView *mapView;
@@ -129,9 +130,7 @@
         [PFUser.currentUser setValue: [NSNumber numberWithBool:NO] forKey:@"isRunning"];
         [Run retreiveRunObject:PFUser.currentUser completion:^(PFObject * _Nonnull runObject, NSError * _Nullable err) {
             if (runObject) {
-                NSDateFormatter *DateFormatter=[[NSDateFormatter alloc] init];
-                [DateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
-                [runObject setValue:[DateFormatter stringFromDate:[NSDate date]] forKey:@"endTime"];
+                [runObject setValue:[Utils currentDateTime] forKey:@"endTime"];
                 [runObject setValue:self->_timerLabel.text forKey:@"duration"];
                 [runObject saveInBackground];
             } else {
