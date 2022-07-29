@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4E0BB91928909A900037CC01 /* InterceptRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E0BB91828909A900037CC01 /* InterceptRequest.m */; };
+		4E0BB91F2891F4FC0037CC01 /* Interception.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E0BB91E2891F4FC0037CC01 /* Interception.m */; };
 		4E3483E5287EB0EE0032C796 /* QueryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3483E4287EB0EE0032C796 /* QueryManager.m */; };
 		4E3483EC287F42430032C796 /* FindMatesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3483EB287F42430032C796 /* FindMatesViewController.m */; };
 		4E560D26287DE9C00048BF37 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4E560D25287DE9C00048BF37 /* GoogleService-Info.plist */; };
@@ -66,6 +67,8 @@
 		3E953E4347D732BD1B596D6A /* Pods-TrailBlaze-TrailBlazeUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrailBlaze-TrailBlazeUITests.release.xcconfig"; path = "Target Support Files/Pods-TrailBlaze-TrailBlazeUITests/Pods-TrailBlaze-TrailBlazeUITests.release.xcconfig"; sourceTree = "<group>"; };
 		4E0BB91728909A900037CC01 /* InterceptRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InterceptRequest.h; sourceTree = "<group>"; };
 		4E0BB91828909A900037CC01 /* InterceptRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InterceptRequest.m; sourceTree = "<group>"; };
+		4E0BB91D2891F4FC0037CC01 /* Interception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Interception.h; sourceTree = "<group>"; };
+		4E0BB91E2891F4FC0037CC01 /* Interception.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Interception.m; sourceTree = "<group>"; };
 		4E3483E3287EB0EE0032C796 /* QueryManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QueryManager.h; sourceTree = "<group>"; };
 		4E3483E4287EB0EE0032C796 /* QueryManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QueryManager.m; sourceTree = "<group>"; };
 		4E3483EA287F42430032C796 /* FindMatesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FindMatesViewController.h; sourceTree = "<group>"; };
@@ -197,6 +200,8 @@
 				4E5831F9287FA565006D9982 /* RunCell.m */,
 				4EA6A7C12889C02D001AB835 /* RunnerAnnotation.h */,
 				4EA6A7C22889C02D001AB835 /* RunnerAnnotation.m */,
+				4E0BB91D2891F4FC0037CC01 /* Interception.h */,
+				4E0BB91E2891F4FC0037CC01 /* Interception.m */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -228,9 +233,9 @@
 			children = (
 				4E64D192287E39E3007A87A1 /* Networking */,
 				4EA7BFB82874B9D800D1D797 /* Objects */,
-				4EE674C02866D6C800A93C15 /* AppDelegate.h */,
 				4EE674F52866D6D500A93C15 /* View Controllers */,
 				4EE674C12866D6C800A93C15 /* AppDelegate.m */,
+				4EE674C02866D6C800A93C15 /* AppDelegate.h */,
 				4EE674C32866D6C800A93C15 /* SceneDelegate.h */,
 				4EE674C42866D6C800A93C15 /* SceneDelegate.m */,
 				4EE674C62866D6C800A93C15 /* ViewController.h */,
@@ -542,6 +547,7 @@
 				4E64D191287E21F8007A87A1 /* User.m in Sources */,
 				4E0BB91928909A900037CC01 /* InterceptRequest.m in Sources */,
 				4E3483EC287F42430032C796 /* FindMatesViewController.m in Sources */,
+				4E0BB91F2891F4FC0037CC01 /* Interception.m in Sources */,
 				4E5831FA287FA565006D9982 /* RunCell.m in Sources */,
 				4E701DF7287606DF00DD375B /* MatesViewController.m in Sources */,
 				4EE674C82866D6C800A93C15 /* ViewController.m in Sources */,

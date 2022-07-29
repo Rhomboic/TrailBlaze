@@ -228,7 +228,7 @@
     
     
     //sending user location to Parse 
-    [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
+    [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
 
 }
 
@@ -280,7 +280,23 @@
             NSLog(@"🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸%@",object);
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSLog(@"inside dispatch async block main thread from main thread");
-                [strongself interceptAlert: object];
+                PFQuery *query = [PFQuery queryWithClassName:@"_User"];
+                [query orderByDescending:@"createdAt"];
+                [query whereKey:@"objectId" equalTo:object[@"requester"]];
+
+                    query.limit = 1;
+                [query findObjectsInBackgroundWithBlock:^(NSArray *friends, NSError *error) {
+                    if (friends) {
+                        strongself.cloudUser = [friends firstObject];
+                        [strongself getInterceptorLocation];
+                        [strongself interceptAlert: object];
+                    } else {
+                        NSLog(@"%@", error.localizedDescription);
+                    }
+                }];
+                
+                
+                
             });
         }
     }];
@@ -311,33 +327,6 @@
 
         }
     }];
-    
-    
-   
-    
-    if (_cloudUser != nil) {
-        theirLocationQuery = [PFQuery queryWithClassName:@"_User"];
-        NSLog(@"🌷🌷%@", ((PFUser *)_cloudUser)[@"currentLocation"]);
-        [theirLocationQuery whereKey:@"objectId" equalTo: ((PFUser *)_cloudUser).objectId];
-        liveQuerySubscription = [liveQueryClient subscribeToQuery:theirLocationQuery];
-        
-        [liveQuerySubscription addUpdateHandler:^(PFQuery<PFObject *> * _Nonnull query, PFObject * _Nonnull object) {
-            __strong typeof(self) strongself = weakself;
-            if (object) {
-                NSLog(@"🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸%@",object);
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    NSLog(@"inside dispatch async block main thread from main thread");
-                    PFGeoPoint *newGeoPoint = object[@"currentLocation"];
-                    if (newGeoPoint.latitude) {
-                    CLLocation *newFriendLocation = [[CLLocation alloc] initWithLatitude:newGeoPoint.latitude longitude:newGeoPoint.longitude];
-                        [UIView animateWithDuration:1 animations:^{[strongself->runnerPin setCoordinate:newFriendLocation.coordinate];} completion:nil];
-                    }
-                });
-            
-                }
-        }];
-    
-    }
 }
 
 - (void) timerCounter {
@@ -350,15 +339,46 @@
     return [NSString stringWithFormat:@"%02d:%02d:%02d", seconds/3600, (seconds % 3600)/60, (seconds % 3600)%60];
 }
 
+- (void) getInterceptorLocation {
+        theirLocationQuery = [PFQuery queryWithClassName:@"_User"];
+        NSLog(@"🌷🌷%@", ((PFUser *)_cloudUser)[@"currentLocation"]);
+        NSLog(@"🌷🌷%@", _cloudUser);
+
+        [theirLocationQuery whereKey:@"objectId" equalTo: ((PFUser *)_cloudUser).objectId];
+        liveQuerySubscription = [liveQueryClient subscribeToQuery:theirLocationQuery];
+    __weak typeof(self) weakself = self;
+        [liveQuerySubscription addUpdateHandler:^(PFQuery<PFObject *> * _Nonnull query, PFObject * _Nonnull object) {
+            __strong typeof(self) strongself = weakself;
+            if (object) {
+                NSLog(@"🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸%@",object);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSLog(@"inside dispatch async block main thread from main thread");
+                    PFGeoPoint *newGeoPoint = object[@"currentLocation"];
+                    PFGeoPoint *geoPoint = strongself->_cloudUser[@"currentLocation"];
+                    self->cloudUserLocation = [[CLLocation alloc] initWithLatitude:geoPoint.latitude longitude:geoPoint.longitude];
+                    self->runnerPin = [[MKPointAnnotation alloc] initWithCoordinate:self->cloudUserLocation.coordinate title:self->_cloudUser[@"username"] subtitle:@"Running"];
+                    [strongself->_mapView addAnnotation:strongself->runnerPin];
+                   
+//                    CLLocation *newFriendLocation = [[CLLocation alloc] initWithLatitude:newGeoPoint.latitude longitude:newGeoPoint.longitude];
+                    [UIView animateWithDuration:1 animations:^{[strongself->runnerPin setCoordinate:self->cloudUserLocation.coordinate];} completion:nil];
+                    
+                });
+            
+                }
+        }];
+    
+    
+}
+
 - (void) onTimer {
     if (isCurrentlyRunning) {
-        if (!_cloudUser) {
+        
         PFGeoPoint *userLocationGeoPoint = [[PFGeoPoint alloc] init];
         userLocationGeoPoint.latitude = locationManager.location.coordinate.latitude;
         userLocationGeoPoint.longitude = locationManager.location.coordinate.longitude;
         [PFUser.currentUser setValue:userLocationGeoPoint forKey:@"currentLocation"];
         [PFUser.currentUser saveInBackground];
-        }
+        
     }
 }
 
