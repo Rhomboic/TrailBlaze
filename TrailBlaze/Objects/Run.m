@@ -8,6 +8,7 @@
 #import "Run.h"
 @import Parse;
 @import MapKit;
+#import "Utils.h"
 
 
 @implementation Run
@@ -27,11 +28,8 @@
     
     Run *newRun = [Run new];
     
-    NSDateFormatter *DateFormatter=[[NSDateFormatter alloc] init];
-    [DateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
-    
     newRun.user = [PFUser currentUser];
-    newRun.startTime = [DateFormatter stringFromDate:[NSDate date]];
+    newRun.startTime = [Utils currentDateTime];
     
     NSUInteger pointCount = route.polyline.pointCount;
     CLLocationCoordinate2D *routeCoordinates = malloc(pointCount * sizeof(CLLocationCoordinate2D));
