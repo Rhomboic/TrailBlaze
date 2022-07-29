@@ -9,8 +9,10 @@
 #import "MapKit/MapKit.h"
 #import "Run.h"
 #import "Interceptor.h"
+#import "Interception.h"
 #import "QueryManager.h"
 #import "ParseLiveQuery/ParseLiveQuery-umbrella.h"
+#import "Utils.h"
 
 @interface HomeViewController ()  <MKMapViewDelegate, CLLocationManagerDelegate>
 @property (strong, nonatomic) IBOutlet MKMapView *mapView;
@@ -31,6 +33,7 @@
     CLLocation *destinationLocation;
     CLLocation *cloudUserLocation;
     MKPointAnnotation* runnerPin;
+    MKMapItem *rendezvousPoint;
     
     float destinationLocationLatitude;
     float destinationLocationLongitude;
@@ -50,8 +53,13 @@
     
     PFLiveQueryClient *liveQueryClient;
     PFLiveQuerySubscription *liveQuerySubscription;
+    PFLiveQuerySubscription *liveQuerySubscription2;
+    
     PFQuery *myLocationQuery;
     PFQuery *theirLocationQuery;
+    
+    PFQuery *interceptRequestQuery;
+    PFQuery *interceptionPathQuery;
 }
 
 - (void)viewDidLoad {
@@ -75,8 +83,9 @@
 }
 
 - (IBAction)didTapTrailRun:(id)sender {
-    if (isReadyToStartRun || _cloudPolyline) {
+    if (isReadyToStartRun || (_cloudPolyline && !isCurrentlyRunning)) {
         [self centerOnUserLocation:0.004];
+        
         self->isCurrentlyRunning = true;
         _timerLabel.text = @"00:00:00";
         [_timerLabel setHidden:NO];
@@ -100,22 +109,28 @@
             isCurrentlyRunning = true;
             [self getInterceptingDirections];
         }
-    } else if (isCurrentlyRunning) {
+    } else if (isCurrentlyRunning || (_cloudUser && isCurrentlyRunning)) {
         isCurrentlyRunning = false;
         timerCount = 0;
         [timer invalidate];
         [_trailrunButton setTitle:@"" forState:UIControlStateNormal];
-        [_mapView removeOverlay:currentPolyline];
-        [PFUser.currentUser setValue:[NSNull null] forKey:@"currentLocation"];
+        for (MKPolyline *pline in _mapView.overlays) {
+            [_mapView removeOverlay:pline];
+        }
+        for (MKPointAnnotation *annot in _mapView.annotations) {
+            [_mapView removeAnnotation:annot];
+        }
+        PFGeoPoint *nullPoint = [[PFGeoPoint alloc] init];
+        nullPoint.latitude = 0;
+        nullPoint.longitude = 0;
+        [PFUser.currentUser setValue:nullPoint forKey:@"currentLocation"];
         [PFUser.currentUser saveInBackground];
         
         [_mapView removeAnnotations:_mapView.annotations];
         [PFUser.currentUser setValue: [NSNumber numberWithBool:NO] forKey:@"isRunning"];
         [Run retreiveRunObject:PFUser.currentUser completion:^(PFObject * _Nonnull runObject, NSError * _Nullable err) {
             if (runObject) {
-                NSDateFormatter *DateFormatter=[[NSDateFormatter alloc] init];
-                [DateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
-                [runObject setValue:[DateFormatter stringFromDate:[NSDate date]] forKey:@"endTime"];
+                [runObject setValue:[Utils currentDateTime] forKey:@"endTime"];
                 [runObject setValue:self->_timerLabel.text forKey:@"duration"];
                 [runObject saveInBackground];
             } else {
@@ -210,8 +225,9 @@
     isReadyToStartRun = false;
     isCurrentlyRunning = false;
     
+    
     //sending user location to Parse 
-    [NSTimer scheduledTimerWithTimeInterval:10 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
+    [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
 
 }
 
@@ -246,37 +262,73 @@
 #pragma mark:  Helpers
 
 - (void) parseLiveQuerySetUp {
-    if (_cloudUser != nil) {
     NSString *path = [[NSBundle mainBundle] pathForResource: @"keys" ofType: @"plist"];
     NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: path];
 
     NSString *appID = [dict objectForKey: @"appID"];
     NSString *clientKey = [dict objectForKey: @"clientKey"];
     liveQueryClient = [[PFLiveQueryClient alloc] initWithServer:@"https://tblaze.b4a.io" applicationId:appID clientKey:clientKey];
-    theirLocationQuery = [PFQuery queryWithClassName:@"_User"];
-    NSLog(@"🌷🌷%@", ((PFUser *)_cloudUser)[@"currentLocation"]);
-    [theirLocationQuery whereKey:@"objectId" equalTo: ((PFUser *)_cloudUser).objectId];
-    liveQuerySubscription = [liveQueryClient subscribeToQuery:theirLocationQuery];
+    
+    interceptRequestQuery = [PFQuery queryWithClassName:@"InterceptRequest"];
+    [interceptRequestQuery whereKey:@"receiver" equalTo: PFUser.currentUser.objectId];
+    liveQuerySubscription = [liveQueryClient subscribeToQuery:interceptRequestQuery];
+    
     __weak typeof(self) weakself = self;
-    [liveQuerySubscription addUpdateHandler:^(PFQuery<PFObject *> * _Nonnull query, PFObject * _Nonnull object) {
+    [liveQuerySubscription addCreateHandler:^(PFQuery<PFObject *> * _Nonnull query, PFObject * _Nonnull object) {
         __strong typeof(self) strongself = weakself;
         if (object) {
             NSLog(@"🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸%@",object);
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSLog(@"inside dispatch async block main thread from main thread");
-                PFGeoPoint *newGeoPoint = object[@"currentLocation"];
-                if (newGeoPoint.latitude) {
-                CLLocation *newFriendLocation = [[CLLocation alloc] initWithLatitude:newGeoPoint.latitude longitude:newGeoPoint.longitude];
-                    [UIView animateWithDuration:1 animations:^{[strongself->runnerPin setCoordinate:newFriendLocation.coordinate];} completion:nil];
-                }
+                PFQuery *query = [PFQuery queryWithClassName:@"_User"];
+                [query orderByDescending:@"createdAt"];
+                [query whereKey:@"objectId" equalTo:object[@"requester"]];
+
+                    query.limit = 1;
+                [query findObjectsInBackgroundWithBlock:^(NSArray *friends, NSError *error) {
+                    if (friends) {
+                        strongself.cloudUser = [friends firstObject];
+                        [strongself getInterceptorLocation];
+                        [strongself interceptAlert: object];
+                    } else {
+                        NSLog(@"%@", error.localizedDescription);
+                    }
+                }];
+                
+                
+                
             });
-        
-            }
+        }
     }];
-        
     
-    }
+    
+    interceptionPathQuery = [PFQuery queryWithClassName:@"Interception"];
+    liveQuerySubscription2 = [liveQueryClient subscribeToQuery:interceptionPathQuery];
+    [interceptionPathQuery whereKey:@"receiver" equalTo: PFUser.currentUser.objectId];
+    [liveQuerySubscription2 addCreateHandler:^(PFQuery<PFObject *> * _Nonnull query, PFObject * _Nonnull object) {
+        __strong typeof(self) strongself = weakself;
+        if (object) {
+            NSLog(@"🐤🐤🐤🐤🐤🐤%@",object);
+            NSError *err;
+            NSData *data = [object[@"polylineCoords"] dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&err];
+            NSArray *pointsPairs = json[@"points"];
+            CLLocationCoordinate2D *CLLocations = malloc(pointsPairs.count * sizeof(CLLocationCoordinate2D));
+            NSLog(@"%@", pointsPairs);
+            for (int i = 0; i < pointsPairs.count; i++) {
+                CLLocations[i] = CLLocationCoordinate2DMake([pointsPairs[i][0] doubleValue] , [pointsPairs[i][1] doubleValue]);
+            }
+              MKPolyline *interceptRoutePolyline = [MKPolyline polylineWithCoordinates:CLLocations count:pointsPairs.count];
+            PFGeoPoint *rendezvousGeoPoint = object[@"rendezvous"];
+            CLLocation *rendezvousLocation = [[CLLocation alloc] initWithLatitude:rendezvousGeoPoint.latitude longitude:rendezvousGeoPoint.longitude];
+            MKPointAnnotation *rendezvousPoint = [[MKPointAnnotation alloc] initWithCoordinate:rendezvousLocation.coordinate title:@"Rendezvous" subtitle:@""];
+            [strongself->_mapView addAnnotation:rendezvousPoint];
+            [strongself->_mapView addOverlay:interceptRoutePolyline level:MKOverlayLevelAboveRoads];
+
+        }
+    }];
 }
+
 - (void) timerCounter {
     timerCount = timerCount + 1;
     NSString *timeString = [self secondsToHMS:timerCount];
@@ -287,33 +339,72 @@
     return [NSString stringWithFormat:@"%02d:%02d:%02d", seconds/3600, (seconds % 3600)/60, (seconds % 3600)%60];
 }
 
+- (void) getInterceptorLocation {
+        theirLocationQuery = [PFQuery queryWithClassName:@"_User"];
+        NSLog(@"🌷🌷%@", ((PFUser *)_cloudUser)[@"currentLocation"]);
+        NSLog(@"🌷🌷%@", _cloudUser);
+
+        [theirLocationQuery whereKey:@"objectId" equalTo: ((PFUser *)_cloudUser).objectId];
+        liveQuerySubscription = [liveQueryClient subscribeToQuery:theirLocationQuery];
+    __weak typeof(self) weakself = self;
+        [liveQuerySubscription addUpdateHandler:^(PFQuery<PFObject *> * _Nonnull query, PFObject * _Nonnull object) {
+            __strong typeof(self) strongself = weakself;
+            if (object) {
+                NSLog(@"🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸%@",object);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSLog(@"inside dispatch async block main thread from main thread");
+                    PFGeoPoint *newGeoPoint = object[@"currentLocation"];
+                    PFGeoPoint *geoPoint = strongself->_cloudUser[@"currentLocation"];
+                    self->cloudUserLocation = [[CLLocation alloc] initWithLatitude:geoPoint.latitude longitude:geoPoint.longitude];
+                    self->runnerPin = [[MKPointAnnotation alloc] initWithCoordinate:self->cloudUserLocation.coordinate title:self->_cloudUser[@"username"] subtitle:@"Running"];
+                    [strongself->_mapView addAnnotation:strongself->runnerPin];
+                   
+//                    CLLocation *newFriendLocation = [[CLLocation alloc] initWithLatitude:newGeoPoint.latitude longitude:newGeoPoint.longitude];
+                    [UIView animateWithDuration:1 animations:^{[strongself->runnerPin setCoordinate:self->cloudUserLocation.coordinate];} completion:nil];
+                    
+                });
+            
+                }
+        }];
+    
+    
+}
+
 - (void) onTimer {
     if (isCurrentlyRunning) {
-        if (!_cloudUser) {
+        
         PFGeoPoint *userLocationGeoPoint = [[PFGeoPoint alloc] init];
         userLocationGeoPoint.latitude = locationManager.location.coordinate.latitude;
         userLocationGeoPoint.longitude = locationManager.location.coordinate.longitude;
         [PFUser.currentUser setValue:userLocationGeoPoint forKey:@"currentLocation"];
         [PFUser.currentUser saveInBackground];
-        }
+        
     }
-//    } else {
-//        [[[QueryManager alloc] init] queryLocation:_cloudUser completion:^(PFObject * _Nonnull friendLocation, NSError * _Nonnull err) {
-//            if (friendLocation) {
-//                PFGeoPoint *newGeoPoint = friendLocation[@"currentLocation"];
-//                if (newGeoPoint.latitude) {
-//                CLLocation *newFriendLocation = [[CLLocation alloc] initWithLatitude:newGeoPoint.latitude longitude:newGeoPoint.longitude];
-//                [UIView animateWithDuration:1 animations:^{[self->runnerPin setCoordinate:newFriendLocation.coordinate];} completion:nil];
-//                } else {
-//                    NSLog(@"Mate Ended their run");
-//                }
-//            }
-//        }];
-//
-//    }
-//    }
 }
 
+- (void) interceptAlert: (PFObject *) request {
+    UIAlertController * alertvc = [UIAlertController alertControllerWithTitle: @ "Intercept Requested"
+                                 message:@"Someone want's to join your run!" preferredStyle: UIAlertControllerStyleAlert
+                                ];
+    UIAlertAction * declineAction = [UIAlertAction actionWithTitle: @ "Decline"
+                            style: UIAlertActionStyleDefault handler: ^ (UIAlertAction * _Nonnull action) {
+                              NSLog(@ "Decline Tapped");
+        [request setValue:[NSNumber numberWithBool:NO] forKey:@"approved"];
+        [request save];
+                            }
+                           ];
+    UIAlertAction * acceptAction = [UIAlertAction actionWithTitle: @ "Accept"
+                              style: UIAlertActionStyleDefault handler: ^ (UIAlertAction * _Nonnull action) {
+                                NSLog(@ "Accept Tapped");
+        [request setValue:[NSNumber numberWithBool:YES] forKey:@"approved"];
+        [request save];
+                              }
+                             ];
+    [alertvc addAction: declineAction];
+    [alertvc addAction: acceptAction];
+    [self presentViewController: alertvc animated: true completion: nil];
+}
+    
 - (void) centerOnUserLocation: (float) span{
     MKCoordinateRegion sfRegion = MKCoordinateRegionMake(_mapView.userLocation.location.coordinate,  MKCoordinateSpanMake(span, span));
     [UIView animateWithDuration:2 animations:^{
@@ -325,6 +416,7 @@
 - (void) addPins:(CLLocationCoordinate2D)destinationCoord {
     MKPointAnnotation *startPin = [[MKPointAnnotation alloc] initWithCoordinate:locationManager.location.coordinate title:@"Start" subtitle:@"Me"];
     MKPointAnnotation *endPin = [[MKPointAnnotation alloc] initWithCoordinate:destinationCoord title:@"End" subtitle:@"Future Me"];
+    [_mapView addAnnotation:startPin];
     [_mapView addAnnotation:endPin];
 }
 
@@ -369,6 +461,19 @@
             self->currentRoute = route;
             self->isReadyToStartRun = true;
             self->currentPolyline = route.polyline;
+            PFGeoPoint *rendezvousGeoPoint = [[PFGeoPoint alloc] init];
+            rendezvousGeoPoint.latitude = self->rendezvousPoint.placemark.coordinate.latitude;
+            rendezvousGeoPoint.longitude = self->rendezvousPoint.placemark.coordinate.longitude;
+            if (self->_cloudUser) {
+                self->isReadyToStartRun = false;
+                [Interception uploadRequest:rendezvousGeoPoint polyline:self->currentPolyline receiver:self->_cloudUser withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+                    if (succeeded) {
+                        NSLog(@"uploaded inteception data");
+                    } else {
+                        NSLog(@"failed to upload inteception data");
+                    }
+                }];
+            }
             [self->_mapView addOverlay:self->currentPolyline level:MKOverlayLevelAboveRoads];
             MKMapRect mapRect = route.polyline.boundingMapRect;
             [self->_mapView setRegion:MKCoordinateRegionForMapRect(mapRect) animated:YES];
@@ -396,6 +501,7 @@
                 [self->_mapView addAnnotation:self->runnerPin];
                 [Interceptor getBestETAPoint: 16 allPoints:points interceptorLocation:self->locationManager.location runnerLocation:self->cloudUserLocation completion:^(MKMapItem * _Nonnull bestPoint, NSError * _Nonnull err) {
                     if (bestPoint) {
+                        self->rendezvousPoint = bestPoint;
                         NSLog(@"🌗🌗🌗🌗v%@", bestPoint);
                         MKPointAnnotation *rendezvousPin = [[MKPointAnnotation alloc] initWithCoordinate:bestPoint.placemark.coordinate title:@"Rendezvous" subtitle:@"Meet here"];
                         [self->_mapView addAnnotation:rendezvousPin];
