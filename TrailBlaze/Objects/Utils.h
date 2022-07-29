@@ -11,6 +11,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface Utils : NSObject
 
++ (NSString *) currentDateTime;
+
 @end
 
 NS_ASSUME_NONNULL_END
