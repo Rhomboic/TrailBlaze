@@ -6,12 +6,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MapKit/MapKit.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface Utils : NSObject
 
 + (NSString *) currentDateTime;
++ (NSString *) arrayToJSONString: (MKPolyline *) route;
 
 @end
 
