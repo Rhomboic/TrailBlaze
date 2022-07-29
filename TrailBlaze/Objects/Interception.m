@@ -8,6 +8,7 @@
 #import "Interception.h"
 #import "MapKit/Mapkit.h"
 @import Parse;
+#import "Utils.h"
 
 
 @implementation Interception
@@ -38,9 +39,8 @@
     free(routeCoordinates);
     [newReq setPolylineCoords:pointsJSON];
     
-    NSDateFormatter *DateFormatter=[[NSDateFormatter alloc] init];
-    [DateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
-    [newReq setStartTime:[DateFormatter stringFromDate:[NSDate date]]];
+    
+    [newReq setStartTime:[Utils currentDateTime]];
     [newReq setReceiver: receiver.objectId];
 
     [newReq saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
