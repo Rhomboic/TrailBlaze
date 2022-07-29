@@ -262,7 +262,6 @@
 #pragma mark:  Helpers
 
 - (void) parseLiveQuerySetUp {
-    __weak typeof(self) weakself = self;
     NSString *path = [[NSBundle mainBundle] pathForResource: @"keys" ofType: @"plist"];
     NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: path];
 
@@ -273,6 +272,8 @@
     interceptRequestQuery = [PFQuery queryWithClassName:@"InterceptRequest"];
     [interceptRequestQuery whereKey:@"receiver" equalTo: PFUser.currentUser.objectId];
     liveQuerySubscription = [liveQueryClient subscribeToQuery:interceptRequestQuery];
+    
+    __weak typeof(self) weakself = self;
     [liveQuerySubscription addCreateHandler:^(PFQuery<PFObject *> * _Nonnull query, PFObject * _Nonnull object) {
         __strong typeof(self) strongself = weakself;
         if (object) {
