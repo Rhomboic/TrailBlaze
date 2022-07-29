@@ -26,18 +26,8 @@
     Interception *newReq = [Interception new];
     [newReq setRendezvous:rendezvous];
     
-    NSUInteger pointCount = polyline.pointCount;
-    CLLocationCoordinate2D *routeCoordinates = malloc(pointCount * sizeof(CLLocationCoordinate2D));
-    [polyline getCoordinates:routeCoordinates range:NSMakeRange(0, pointCount)];
-    NSString *pointsJSON = @"{\"points\" : [";
-    for (int c=0; c < pointCount-1; c++) {
-        NSString *this = [NSString stringWithFormat:@"[%f, %f],", routeCoordinates[c].latitude, routeCoordinates[c].longitude];
-        pointsJSON = [pointsJSON stringByAppendingString:this];
-    }
-      
-    pointsJSON= [pointsJSON stringByAppendingString:[NSString stringWithFormat:@"%@ ] }", [NSString stringWithFormat:@"[%f, %f]", routeCoordinates[pointCount-1].latitude, routeCoordinates[pointCount - 1].longitude]] ];
-    free(routeCoordinates);
-    [newReq setPolylineCoords:pointsJSON];
+    
+    [newReq setPolylineCoords:[Utils arrayToJSONString:polyline]];
     
     
     [newReq setStartTime:[Utils currentDateTime]];
