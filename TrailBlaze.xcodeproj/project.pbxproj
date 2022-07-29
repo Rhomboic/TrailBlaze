@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4E0BB91928909A900037CC01 /* InterceptRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E0BB91828909A900037CC01 /* InterceptRequest.m */; };
 		4E0BB91F2891F4FC0037CC01 /* Interception.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E0BB91E2891F4FC0037CC01 /* Interception.m */; };
+		4E0BB925289462650037CC01 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E0BB924289462650037CC01 /* Utils.m */; };
 		4E3483E5287EB0EE0032C796 /* QueryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3483E4287EB0EE0032C796 /* QueryManager.m */; };
 		4E3483EC287F42430032C796 /* FindMatesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3483EB287F42430032C796 /* FindMatesViewController.m */; };
 		4E560D26287DE9C00048BF37 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4E560D25287DE9C00048BF37 /* GoogleService-Info.plist */; };
@@ -69,6 +70,8 @@
 		4E0BB91828909A900037CC01 /* InterceptRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InterceptRequest.m; sourceTree = "<group>"; };
 		4E0BB91D2891F4FC0037CC01 /* Interception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Interception.h; sourceTree = "<group>"; };
 		4E0BB91E2891F4FC0037CC01 /* Interception.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Interception.m; sourceTree = "<group>"; };
+		4E0BB923289462650037CC01 /* Utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
+		4E0BB924289462650037CC01 /* Utils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		4E3483E3287EB0EE0032C796 /* QueryManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QueryManager.h; sourceTree = "<group>"; };
 		4E3483E4287EB0EE0032C796 /* QueryManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QueryManager.m; sourceTree = "<group>"; };
 		4E3483EA287F42430032C796 /* FindMatesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FindMatesViewController.h; sourceTree = "<group>"; };
@@ -202,6 +205,8 @@
 				4EA6A7C22889C02D001AB835 /* RunnerAnnotation.m */,
 				4E0BB91D2891F4FC0037CC01 /* Interception.h */,
 				4E0BB91E2891F4FC0037CC01 /* Interception.m */,
+				4E0BB923289462650037CC01 /* Utils.h */,
+				4E0BB924289462650037CC01 /* Utils.m */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -565,6 +570,7 @@
 				4E64D18E287E1151007A87A1 /* Run.m in Sources */,
 				4EAAB550286E6DBB0093B30B /* HomeViewController.m in Sources */,
 				4EE182E72888AED9001A60DD /* Interceptor.m in Sources */,
+				4E0BB925289462650037CC01 /* Utils.m in Sources */,
 				4E701DFD28768D0900DD375B /* MapViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

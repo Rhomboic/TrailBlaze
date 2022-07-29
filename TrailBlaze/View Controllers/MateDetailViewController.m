@@ -76,7 +76,8 @@
         __strong typeof(self) strongself = weakself;
         ///delete interceptRequest after approval
         [object deleteInBackground];
-        if ([object[@"approved"] boolValue] == YES) {
+        BOOL approved = [object[@"approved"] boolValue];
+        if ( approved ) {
             [Run retreiveRunPolyline:strongself->_thisUser completion:^(MKPolyline * _Nonnull polyline, NSError * _Nullable err) {
                if (polyline) {
                    SceneDelegate *sceneDelegate = (SceneDelegate *)UIApplication.sharedApplication.connectedScenes.allObjects.firstObject.delegate;
@@ -94,7 +95,7 @@
                    NSLog(@"did not get run");
                }
            }];
-        } else if ([object[@"approved"] boolValue] == NO){
+        } else {
             //stop activity indicator animation
             dispatch_async(dispatch_get_main_queue(), ^{
             [strongself interceptDeclinedAlert];
