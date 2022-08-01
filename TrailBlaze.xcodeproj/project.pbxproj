@@ -40,6 +40,7 @@
 		4EE674DD2866D6C900A93C15 /* TrailBlazeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE674DC2866D6C900A93C15 /* TrailBlazeTests.m */; };
 		4EE674E72866D6C900A93C15 /* TrailBlazeUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE674E62866D6C900A93C15 /* TrailBlazeUITests.m */; };
 		4EE674E92866D6C900A93C15 /* TrailBlazeUITestsLaunchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE674E82866D6C900A93C15 /* TrailBlazeUITestsLaunchTests.m */; };
+		4EFE7BC1289858E400DBBA56 /* PaceImprovementTracking.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EFE7BC0289858E400DBBA56 /* PaceImprovementTracking.m */; };
 		5E011F33F268B8F1F923A46F /* Pods_TrailBlazeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF8A80D6274FD869813BF164 /* Pods_TrailBlazeTests.framework */; };
 		AC0D7A2EC36B47816651B6E2 /* Pods_TrailBlaze.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFA2DD5153D29C4ED300B44B /* Pods_TrailBlaze.framework */; };
 		C60E25437CC0DC977E79CDB0 /* Pods_TrailBlaze_TrailBlazeUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EE07284A8FB90611D21CCB8 /* Pods_TrailBlaze_TrailBlazeUITests.framework */; };
@@ -126,6 +127,8 @@
 		4EE674E22866D6C900A93C15 /* TrailBlazeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrailBlazeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EE674E62866D6C900A93C15 /* TrailBlazeUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TrailBlazeUITests.m; sourceTree = "<group>"; };
 		4EE674E82866D6C900A93C15 /* TrailBlazeUITestsLaunchTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TrailBlazeUITestsLaunchTests.m; sourceTree = "<group>"; };
+		4EFE7BBF289858E400DBBA56 /* PaceImprovementTracking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaceImprovementTracking.h; sourceTree = "<group>"; };
+		4EFE7BC0289858E400DBBA56 /* PaceImprovementTracking.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PaceImprovementTracking.m; sourceTree = "<group>"; };
 		84B248656AB5E195DB12CDE3 /* Pods-TrailBlaze.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrailBlaze.debug.xcconfig"; path = "Target Support Files/Pods-TrailBlaze/Pods-TrailBlaze.debug.xcconfig"; sourceTree = "<group>"; };
 		AD049837B680A13AF32C04D3 /* Pods-TrailBlazeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TrailBlazeTests.release.xcconfig"; path = "Target Support Files/Pods-TrailBlazeTests/Pods-TrailBlazeTests.release.xcconfig"; sourceTree = "<group>"; };
 		BFA2DD5153D29C4ED300B44B /* Pods_TrailBlaze.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TrailBlaze.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -182,6 +185,8 @@
 				4E3483E4287EB0EE0032C796 /* QueryManager.m */,
 				4EE182E52888AED9001A60DD /* Interceptor.h */,
 				4EE182E62888AED9001A60DD /* Interceptor.m */,
+				4EFE7BBF289858E400DBBA56 /* PaceImprovementTracking.h */,
+				4EFE7BC0289858E400DBBA56 /* PaceImprovementTracking.m */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -563,6 +568,7 @@
 				4EE674D32866D6C900A93C15 /* main.m in Sources */,
 				4EE674C52866D6C800A93C15 /* SceneDelegate.m in Sources */,
 				4EAAB553286E6DE00093B30B /* RegisterViewController.m in Sources */,
+				4EFE7BC1289858E400DBBA56 /* PaceImprovementTracking.m in Sources */,
 				4EAAB54D286E6D960093B30B /* LoginViewController.m in Sources */,
 				4E7363CD2886132D00CE65AE /* MateDetailViewController.m in Sources */,
 				4E5831F7287F7CB7006D9982 /* FriendRequest.m in Sources */,
