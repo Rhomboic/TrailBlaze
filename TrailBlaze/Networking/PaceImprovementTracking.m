@@ -14,11 +14,20 @@
     CLLocation *firstPointLocation = [[CLLocation alloc] initWithLatitude:[firstPolylinePoint[0] doubleValue] longitude:[firstPolylinePoint[1] doubleValue]];
     if ([firstPointLocation distanceFromLocation:userLocation] < 10) {
         return true;
-    } else {
-        return false;
     }
+    return false;
 }
 
-
++ (BOOL) passedPoint: (NSArray *) nextTwoPoints currentLocation: (CLLocation *) currentLocation {
+    CLLocation *firstPointLocation = [[CLLocation alloc] initWithLatitude:[nextTwoPoints[0][0] doubleValue] longitude:[nextTwoPoints[0][1] doubleValue]];
+    CLLocation *secondPointLocation = [[CLLocation alloc] initWithLatitude:[nextTwoPoints[1][0] doubleValue] longitude:[nextTwoPoints[1][1] doubleValue]];
+    double distanceToFirst = [firstPointLocation distanceFromLocation:currentLocation];
+    double distanceToSecond = [secondPointLocation distanceFromLocation:currentLocation];
+    double distanceBewteen = [firstPointLocation distanceFromLocation:secondPointLocation];
+    if (((distanceToFirst + distanceToSecond) - distanceBewteen) <= 2 ) {
+        return true;
+    }
+    return false;
+}
 
 @end
