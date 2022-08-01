@@ -758,6 +758,7 @@
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "We need access to your location to set a run start point";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need access to your location to set a run start point";
+				INFOPLIST_KEY_NSMotionUsageDescription = "This app requires access to your Motion Data";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -792,6 +793,7 @@
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "We need access to your location to set a run start point";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need access to your location to set a run start point";
+				INFOPLIST_KEY_NSMotionUsageDescription = "This app requires access to your Motion Data";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
