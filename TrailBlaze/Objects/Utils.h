@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MapKit/MapKit.h"
+@import Parse;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -14,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSString *) currentDateTime;
 + (NSString *) arrayToJSONString: (MKPolyline *) route;
++ (NSArray *) jsonStringToArray: (PFObject *) object;
 
 @end
 
