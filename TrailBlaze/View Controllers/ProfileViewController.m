@@ -106,10 +106,15 @@
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     RunCell *cell = [tableView dequeueReusableCellWithIdentifier:@"RunCell" forIndexPath:indexPath];
     if (pastRuns) {
+        @try {
         cell.durationLabel.text = [@"Duration: \n" stringByAppendingString:pastRuns[indexPath.row][@"duration"]];
         cell.distanceLabel.text = [@"Dist: \n" stringByAppendingString:pastRuns[indexPath.row][@"distance"]];
         cell.startTimeLabel.text = [@"Start Time: \n" stringByAppendingString:pastRuns[indexPath.row][@"startTime"]];
         cell.endTimeLabel.text = [@"End Time: \n" stringByAppendingString:pastRuns[indexPath.row][@"endTime"]];
+        }
+        @catch (NSException * e) {
+            
+        }
         
         cell.layer.cornerRadius = 20;
         [cell.layer setBorderColor:[UIColor systemBackgroundColor].CGColor];
