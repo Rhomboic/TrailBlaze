@@ -72,7 +72,7 @@
     [approvalQuery whereKey:@"requester" equalTo: PFUser.currentUser.objectId];
     liveQuerySubscription = [liveQueryClient subscribeToQuery:approvalQuery];
     __weak typeof(self) weakself = self;
-    [liveQuerySubscription addUpdateHandler:^(PFQuery<PFObject *> * _Nonnull query, PFObject * _Nonnull object) {
+    (void)[liveQuerySubscription addUpdateHandler:^(PFQuery<PFObject *> * _Nonnull query, PFObject * _Nonnull object) {
         __strong typeof(self) strongself = weakself;
         ///delete interceptRequest after approval
         [object deleteInBackground];

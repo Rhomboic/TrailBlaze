@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface HomeViewController : UIViewController 
 @property (strong, nonatomic) MKPolyline *cloudPolyline;
 @property (strong, nonatomic) PFUser *cloudUser;
+@property BOOL isRerun;
 @end
 
 NS_ASSUME_NONNULL_END

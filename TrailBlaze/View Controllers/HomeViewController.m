@@ -13,6 +13,7 @@
 #import "QueryManager.h"
 #import "ParseLiveQuery/ParseLiveQuery-umbrella.h"
 #import "Utils.h"
+#import "PaceImprovementTracker.h"
 
 @interface HomeViewController ()  <MKMapViewDelegate, CLLocationManagerDelegate>
 @property (strong, nonatomic) IBOutlet MKMapView *mapView;
@@ -85,77 +86,28 @@
 - (IBAction)didTapTrailRun:(id)sender {
     if (isReadyToStartRun || (_cloudPolyline && !isCurrentlyRunning)) {
         [self centerOnUserLocation:0.004];
-        
-        self->isCurrentlyRunning = true;
-        _timerLabel.text = @"00:00:00";
-        [_timerLabel setHidden:NO];
-        timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerCounter) userInfo:nil repeats:true];
-        [PFUser.currentUser setValue:[NSNumber numberWithBool:YES] forKey:@"isRunning"];
-        [PFUser.currentUser saveInBackground];
-        [_statsButton setHidden:YES];
-        [_locationButton setHidden:YES];
-        [_trailrunButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
-        [_trailrunButton setTitle:@"END" forState:UIControlStateNormal];
+        [self setUpHomeViewForRunStart];
         if (isReadyToStartRun) {
             self->isReadyToStartRun = false;
-            [Run uploadRun:currentRoute withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
-                if (succeeded) {
-                    NSLog(@"run sent!");
-                } else {
-                    NSLog(@"run not sent");
-                }
-            }];
+            if (_isRerun) {
+                [self setUpHomeViewForRerunStart];
+            } else {
+                [Run uploadRun:currentRoute withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+                    if (succeeded) {
+                        NSLog(@"run sent!");
+                    } else {
+                        NSLog(@"run not sent");
+                    }
+                }];
+            }
         } else if (_cloudPolyline) {
             isCurrentlyRunning = true;
             [self getInterceptingDirections];
         }
     } else if (isCurrentlyRunning || (_cloudUser && isCurrentlyRunning)) {
-        isCurrentlyRunning = false;
-        timerCount = 0;
-        [timer invalidate];
-        [_trailrunButton setTitle:@"" forState:UIControlStateNormal];
-        for (MKPolyline *pline in _mapView.overlays) {
-            [_mapView removeOverlay:pline];
-        }
-        for (MKPointAnnotation *annot in _mapView.annotations) {
-            [_mapView removeAnnotation:annot];
-        }
-        PFGeoPoint *nullPoint = [[PFGeoPoint alloc] init];
-        nullPoint.latitude = 0;
-        nullPoint.longitude = 0;
-        [PFUser.currentUser setValue:nullPoint forKey:@"currentLocation"];
-        [PFUser.currentUser saveInBackground];
-        
-        [_mapView removeAnnotations:_mapView.annotations];
-        [PFUser.currentUser setValue: [NSNumber numberWithBool:NO] forKey:@"isRunning"];
-        [Run retreiveRunObject:PFUser.currentUser completion:^(PFObject * _Nonnull runObject, NSError * _Nullable err) {
-            if (runObject) {
-                [runObject setValue:[Utils currentDateTime] forKey:@"endTime"];
-                [runObject setValue:self->_timerLabel.text forKey:@"duration"];
-                [runObject saveInBackground];
-            } else {
-                NSLog(@"%@", err.localizedDescription);
-            }
-        }];
-        [PFUser.currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-            if (succeeded) {
-                NSLog(@"isRunning = False");
-            } else {
-                NSLog(@"could not save is running");
-            }
-        }];
-        [NSThread sleepForTimeInterval: 1];
-        [_timerLabel setHidden:YES];
-        [_locationButton setHidden:NO];
-        [_statsButton setHidden:NO];
-        
+        [self setUpHomeViewForInterceptRun];
     } else {
-        [_goButton setImage:[UIImage systemImageNamed:@"point.topleft.down.curvedto.point.filled.bottomright.up"] forState:UIControlStateNormal];
-        _goButton.imageView.image = nil;
-        _goButton.layer.cornerRadius = 15;
-        
-        [_locationField setHidden:NO];
-        [_locationField becomeFirstResponder];
+        [self setUpHomeViewToSearchForDestination];
     }
     
 }
@@ -195,6 +147,9 @@
     [_trailrunButton setImage:[UIImage imageNamed:@"logo_button-removebg"] forState:UIControlStateNormal];
     if (_cloudUser) {
         [self->_trailrunButton setTitle:@"Rendezvous" forState:UIControlStateNormal];
+    }
+    if (_isRerun) {
+        [self->_trailrunButton setTitle:@"Rerun" forState:UIControlStateNormal];
     }
     _trailrunButton.layer.cornerRadius = 40;
     _trailrunButton.clipsToBounds = true;
@@ -257,6 +212,91 @@
         
 
     }
+}
+#pragma mark: State Helpers
+- (void) setUpHomeViewForRunStart {
+    self->isCurrentlyRunning = true;
+    _timerLabel.text = @"00:00:00";
+    [UIView transitionWithView:self.view duration:2 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        [self.timerLabel setHidden:NO];
+        self.timerLabel.frame = CGRectMake(self.timerLabel.frame.origin.x, self.timerLabel.frame.origin.y + 600, self.timerLabel.frame.size.width, self.timerLabel.frame.size.height);
+    } completion:nil];
+    
+    timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerCounter) userInfo:nil repeats:true];
+    [PFUser.currentUser setValue:[NSNumber numberWithBool:YES] forKey:@"isRunning"];
+    [PFUser.currentUser saveInBackground];
+    [_statsButton setHidden:YES];
+    [_locationButton setHidden:YES];
+    [_trailrunButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+    [_trailrunButton setTitle:@"END" forState:UIControlStateNormal];
+}
+
+- (void) setUpHomeViewForRerunStart {
+    //placeholder run id
+    [Run retreiveSpecificRunObject:@"dsfadkg" completion:^(PFObject * _Nonnull runObject, NSError * _Nullable err) {
+        if (runObject) {
+            PaceImprovementTracker *pacer = [[PaceImprovementTracker alloc] initWithRunID:@"dfsadfsg"];
+            pacer.bestPacesDictionary = runObject[@"pacesDictionary"];
+            pacer.polylinePoints = [Utils jsonStringToArray:runObject[@"polylineCoords"]];
+            if ([PaceImprovementTracker isAtStartPosition:self->currentLocation firstPoint:pacer.polylinePoints[0]]) {
+                [pacer paceTracker:pacer.polylinePoints userLocation:self->currentLocation bestPaces:pacer.bestPacesDictionary];
+            }
+        } else {
+            //alert here
+        }
+    }];
+}
+
+- (void) setUpHomeViewForInterceptRun {
+    isCurrentlyRunning = false;
+    timerCount = 0;
+    [timer invalidate];
+    [_trailrunButton setTitle:@"" forState:UIControlStateNormal];
+    for (MKPolyline *pline in _mapView.overlays) {
+        [_mapView removeOverlay:pline];
+    }
+    for (MKPointAnnotation *annot in _mapView.annotations) {
+        [_mapView removeAnnotation:annot];
+    }
+    PFGeoPoint *nullPoint = [[PFGeoPoint alloc] init];
+    nullPoint.latitude = 0;
+    nullPoint.longitude = 0;
+    [PFUser.currentUser setValue:nullPoint forKey:@"currentLocation"];
+    [PFUser.currentUser saveInBackground];
+    
+    [_mapView removeAnnotations:_mapView.annotations];
+    [PFUser.currentUser setValue: [NSNumber numberWithBool:NO] forKey:@"isRunning"];
+    [Run retreiveRunObject:PFUser.currentUser completion:^(PFObject * _Nonnull runObject, NSError * _Nullable err) {
+        if (runObject) {
+            [runObject setValue:[Utils currentDateTime] forKey:@"endTime"];
+            [runObject setValue:self->_timerLabel.text forKey:@"duration"];
+            [runObject saveInBackground];
+        } else {
+            NSLog(@"%@", err.localizedDescription);
+        }
+    }];
+    [PFUser.currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+        if (succeeded) {
+            NSLog(@"isRunning = False");
+        } else {
+            NSLog(@"could not save is running");
+        }
+    }];
+    [UIView transitionWithView:self.view duration:1 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        [self.timerLabel setHidden:YES];
+    } completion:nil];
+    
+    [_locationButton setHidden:NO];
+    [_statsButton setHidden:NO];
+}
+
+-(void) setUpHomeViewToSearchForDestination {
+    [_goButton setImage:[UIImage systemImageNamed:@"point.topleft.down.curvedto.point.filled.bottomright.up"] forState:UIControlStateNormal];
+    _goButton.imageView.image = nil;
+    _goButton.layer.cornerRadius = 15;
+    
+    [_locationField setHidden:NO];
+    [_locationField becomeFirstResponder];
 }
 
 #pragma mark:  Helpers
