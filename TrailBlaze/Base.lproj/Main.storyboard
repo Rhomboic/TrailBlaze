@@ -251,7 +251,7 @@
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="100" id="55q-HU-fIs"/>
-                                    <constraint firstAttribute="width" constant="250" id="izh-xz-l3f"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="250" id="izh-xz-l3f"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Futura-CondensedExtraBold" family="Futura" pointSize="50"/>
                                 <nil key="textColor"/>
@@ -352,8 +352,8 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9lC-Vn-vcz">
-                                <rect key="frame" x="145" y="135" width="100" height="100"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9lC-Vn-vcz">
+                                <rect key="frame" x="145" y="133" width="100" height="100"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title=""/>
                                 <connections>
@@ -382,7 +382,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W9c-fi-qzn">
-                                                    <rect key="frame" x="63.666666666666657" y="20" width="276.33333333333337" height="50"/>
+                                                    <rect key="frame" x="240" y="20" width="100" height="50"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="50" id="LUi-lg-mcc"/>
                                                     </constraints>
@@ -400,7 +400,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vUQ-B5-Z6a">
-                                                    <rect key="frame" x="63.666666666666657" y="130" width="276.33333333333337" height="61"/>
+                                                    <rect key="frame" x="240" y="130" width="100" height="61"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="100" id="6Tg-5D-az4"/>
                                                     </constraints>
@@ -416,7 +416,6 @@
                                                 <constraint firstItem="Vge-NX-4KR" firstAttribute="leading" secondItem="4yz-fe-rY0" secondAttribute="leading" id="L37-Y5-LIM"/>
                                                 <constraint firstItem="4yz-fe-rY0" firstAttribute="top" secondItem="W9c-fi-qzn" secondAttribute="top" id="P4E-rS-eUu"/>
                                                 <constraint firstItem="vUQ-B5-Z6a" firstAttribute="leading" secondItem="W9c-fi-qzn" secondAttribute="leading" id="Zfq-yc-4zz"/>
-                                                <constraint firstItem="vUQ-B5-Z6a" firstAttribute="leading" secondItem="Vge-NX-4KR" secondAttribute="trailing" constant="10" id="eX5-xg-SWD"/>
                                                 <constraint firstItem="4yz-fe-rY0" firstAttribute="leading" secondItem="uAT-gt-gID" secondAttribute="leading" constant="10" id="iAj-MI-f37"/>
                                                 <constraint firstItem="Vge-NX-4KR" firstAttribute="top" secondItem="4yz-fe-rY0" secondAttribute="bottom" constant="30" id="k6d-FQ-z7l"/>
                                                 <constraint firstItem="W9c-fi-qzn" firstAttribute="top" secondItem="uAT-gt-gID" secondAttribute="top" constant="20" id="l81-Xh-d85"/>
