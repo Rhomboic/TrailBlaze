@@ -55,9 +55,8 @@
           if (runs) {
             NSDictionary *thisUserRun = [runs firstObject];
             NSLog(@"%@", thisUserRun);
-            NSData *data = [thisUserRun[@"polylineCoords"] dataUsingEncoding:NSUTF8StringEncoding];
-            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
-            NSArray *pointsPairs = json[@"points"];
+              
+            NSArray *pointsPairs = [Utils jsonStringToArray:(PFObject *)thisUserRun];
             CLLocationCoordinate2D *CLLocations = malloc(pointsPairs.count * sizeof(CLLocationCoordinate2D));
             NSLog(@"%@", pointsPairs);
             for (int i = 0; i < pointsPairs.count; i++) {
@@ -75,6 +74,22 @@
     [runner fetchIfNeeded];
     PFQuery *query = [PFQuery queryWithClassName:@"Run"];
     [query whereKey:@"user" equalTo:runner];
+      [query orderByDescending:@"createdAt"];
+      query.limit = 1;
+      [query findObjectsInBackgroundWithBlock:^(NSArray *runs, NSError *error) {
+          if (runs) {
+              PFObject *thisUserRunObject = [runs firstObject];
+              completion(thisUserRunObject, nil);
+          } else {
+              NSLog(@"Could not retrieve run");
+          }
+      }];
+}
+
++ (void) retreiveSpecificRunObject :(NSString *) objectId completion:(void (^)(PFObject *runObject, NSError * _Nullable))completion {
+    PFQuery *query = [PFQuery queryWithClassName:@"Run"];
+    
+    [query whereKey:@"objectId" equalTo:objectId];
       [query orderByDescending:@"createdAt"];
       query.limit = 1;
       [query findObjectsInBackgroundWithBlock:^(NSArray *runs, NSError *error) {
