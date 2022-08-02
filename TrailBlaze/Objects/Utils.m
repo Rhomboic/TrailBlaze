@@ -8,6 +8,7 @@
 #import "Utils.h"
 #import "CoreLocation/CoreLocation.h"
 #import "MapKit/MapKit.h"
+@import Parse;
 
 @implementation Utils
 + (NSString *) currentDateTime {
@@ -28,5 +29,12 @@
     free(routeCoordinates);
     pointsJSON= [pointsJSON stringByAppendingString:[NSString stringWithFormat:@"%@ ] }", [NSString stringWithFormat:@"[%f, %f]", routeCoordinates[pointCount-1].latitude, routeCoordinates[pointCount - 1].longitude]] ];
     return pointsJSON;
+}
+
++ (NSArray *) jsonStringToArray: (PFObject *) object {
+    NSData *data = [object[@"polylineCoords"] dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *err;
+    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&err];
+    return json[@"points"];
 }
 @end
