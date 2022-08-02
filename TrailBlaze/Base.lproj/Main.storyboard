@@ -177,6 +177,10 @@
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" showsScale="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T9Y-EL-DwS">
                                 <rect key="frame" x="0.0" y="0.0" width="390" height="761"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="FSs-gW-jW2" appends="YES" id="Sm9-uF-jgZ"/>
+                                </connections>
                             </mapView>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search..." textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ftg-OI-953">
                                 <rect key="frame" x="20" y="88" width="295" height="50"/>
@@ -291,6 +295,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0US-Hz-y89" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="FSs-gW-jW2"/>
             </objects>
             <point key="canvasLocation" x="184.61538461538461" y="2255.6872037914691"/>
         </scene>
