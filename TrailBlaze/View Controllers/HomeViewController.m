@@ -89,7 +89,11 @@
         
         self->isCurrentlyRunning = true;
         _timerLabel.text = @"00:00:00";
-        [_timerLabel setHidden:NO];
+        [UIView transitionWithView:self.view duration:2 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+            [self.timerLabel setHidden:NO];
+            self.timerLabel.frame = CGRectMake(self.timerLabel.frame.origin.x, self.timerLabel.frame.origin.y + 600, self.timerLabel.frame.size.width, self.timerLabel.frame.size.height);
+        } completion:nil];
+        
         timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerCounter) userInfo:nil repeats:true];
         [PFUser.currentUser setValue:[NSNumber numberWithBool:YES] forKey:@"isRunning"];
         [PFUser.currentUser saveInBackground];
@@ -106,14 +110,13 @@
                         PaceImprovementTracker *pacer = [[PaceImprovementTracker alloc] initWithRunID:@"dfsadfsg"];
                         pacer.bestPacesDictionary = runObject[@"pacesDictionary"];
                         pacer.polylinePoints = [Utils jsonStringToArray:runObject[@"polylineCoords"]];
-                        if ([PaceImprovementTracker isAtStartPosition:currentLocation firstPoint:pacer.polylinePoints[0]]) {
-                            [pacer paceTracker:pacer.polylinePoints userLocation:currentLocation bestPaces:pacer.bestPacesDictionary];
+                        if ([PaceImprovementTracker isAtStartPosition:self->currentLocation firstPoint:pacer.polylinePoints[0]]) {
+                            [pacer paceTracker:pacer.polylinePoints userLocation:self->currentLocation bestPaces:pacer.bestPacesDictionary];
                         }
+                    } else {
+                        //alert here
                     }
                 }];
-                
-                
-                //alert here
             } else {
                 [Run uploadRun:currentRoute withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
                     if (succeeded) {
@@ -162,8 +165,14 @@
                 NSLog(@"could not save is running");
             }
         }];
-        [NSThread sleepForTimeInterval: 1];
-        [_timerLabel setHidden:YES];
+        [UIView transitionWithView:self.view duration:2 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+            self.timerLabel.hidden = YES;
+        } completion:^(BOOL finished) {
+            if (finished) {
+//                [self.timerLabel setHidden:YES];
+            }
+        }];
+        
         [_locationButton setHidden:NO];
         [_statsButton setHidden:NO];
         
