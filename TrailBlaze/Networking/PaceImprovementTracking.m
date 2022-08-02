@@ -55,5 +55,18 @@ static double interpointDistanceWiggleValue = 2;
     return false;
 }
 
+- (NSArray *) paceCompare: (NSNumber *) previousIntervalPace currentIntervalPace: (NSNumber *)currentIntervalPace pointsForInterval: (NSArray *) pointsForInterval {
+    CLLocationCoordinate2D *endPoints = malloc(2 * sizeof(CLLocationCoordinate2D));
+    
+    for (int i = 0; i < 2; i++) {
+        endPoints[i] = CLLocationCoordinate2DMake([pointsForInterval[i][0] doubleValue] , [pointsForInterval[i][1] doubleValue]);
+    }
+      MKPolyline *overlapPolyline = [MKPolyline polylineWithCoordinates:endPoints count:2];
+    if (currentIntervalPace >= previousIntervalPace) {
+        return @[UIColor.systemGreenColor, overlapPolyline];
+    }
+    return @[UIColor.systemRedColor, overlapPolyline];
+}
+
 
 @end
