@@ -274,7 +274,7 @@
     liveQuerySubscription = [liveQueryClient subscribeToQuery:interceptRequestQuery];
     
     __weak typeof(self) weakself = self;
-    [liveQuerySubscription addCreateHandler:^(PFQuery<PFObject *> * _Nonnull query, PFObject * _Nonnull object) {
+    (void)[liveQuerySubscription addCreateHandler:^(PFQuery<PFObject *> * _Nonnull query, PFObject * _Nonnull object) {
         __strong typeof(self) strongself = weakself;
         if (object) {
             NSLog(@"🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸%@",object);
@@ -305,7 +305,7 @@
     interceptionPathQuery = [PFQuery queryWithClassName:@"Interception"];
     liveQuerySubscription2 = [liveQueryClient subscribeToQuery:interceptionPathQuery];
     [interceptionPathQuery whereKey:@"receiver" equalTo: PFUser.currentUser.objectId];
-    [liveQuerySubscription2 addCreateHandler:^(PFQuery<PFObject *> * _Nonnull query, PFObject * _Nonnull object) {
+    (void)[liveQuerySubscription2 addCreateHandler:^(PFQuery<PFObject *> * _Nonnull query, PFObject * _Nonnull object) {
         __strong typeof(self) strongself = weakself;
         if (object) {
             NSLog(@"🐤🐤🐤🐤🐤🐤%@",object);
@@ -347,20 +347,19 @@
         [theirLocationQuery whereKey:@"objectId" equalTo: ((PFUser *)_cloudUser).objectId];
         liveQuerySubscription = [liveQueryClient subscribeToQuery:theirLocationQuery];
     __weak typeof(self) weakself = self;
-        [liveQuerySubscription addUpdateHandler:^(PFQuery<PFObject *> * _Nonnull query, PFObject * _Nonnull object) {
+        (void)[liveQuerySubscription addUpdateHandler:^(PFQuery<PFObject *> * _Nonnull query, PFObject * _Nonnull object) {
             __strong typeof(self) strongself = weakself;
             if (object) {
                 NSLog(@"🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸%@",object);
                 dispatch_async(dispatch_get_main_queue(), ^{
                     NSLog(@"inside dispatch async block main thread from main thread");
-                    PFGeoPoint *newGeoPoint = object[@"currentLocation"];
+                    
                     PFGeoPoint *geoPoint = strongself->_cloudUser[@"currentLocation"];
                     self->cloudUserLocation = [[CLLocation alloc] initWithLatitude:geoPoint.latitude longitude:geoPoint.longitude];
                     self->runnerPin = [[MKPointAnnotation alloc] initWithCoordinate:self->cloudUserLocation.coordinate title:self->_cloudUser[@"username"] subtitle:@"Running"];
                     [strongself->_mapView addAnnotation:strongself->runnerPin];
                    
-//                    CLLocation *newFriendLocation = [[CLLocation alloc] initWithLatitude:newGeoPoint.latitude longitude:newGeoPoint.longitude];
-                    [UIView animateWithDuration:1 animations:^{[strongself->runnerPin setCoordinate:self->cloudUserLocation.coordinate];} completion:nil];
+                    [UIView animateWithDuration:1 animations:^{[strongself->runnerPin setCoordinate:strongself->cloudUserLocation.coordinate];} completion:nil];
                     
                 });
             

@@ -62,7 +62,9 @@
     MKMapItem *startInterceptorItem = [[MKMapItem alloc] initWithPlacemark:startInterceptorPlacemark];
     
     MKMapItem *startRunnerItem = [[MKMapItem alloc] initWithPlacemark:startRunnerPlacemark];
-
+    
+    __block NSError *err;
+    
     for (int i=0; i < prunedPoints.count; i++) {
         NSLog(@"starting operation %@..", @(i));
         
@@ -86,6 +88,8 @@
         MKDirections *pathInterceptor = [[MKDirections alloc] initWithRequest:pathInterceptorRequest];
         MKDirections *pathRunner = [[MKDirections alloc] initWithRequest:pathRunnerRequest];
         
+        
+        
         dispatch_group_enter(group);
         [pathInterceptor calculateETAWithCompletionHandler:^(MKETAResponse * _Nullable interceptorResponse, NSError * _Nullable error1) {
             if (interceptorResponse) {
@@ -96,6 +100,7 @@
                             [etaPointPairs setValue:runnerResponse.destination forKey:[NSString stringWithFormat:@"%.f", fabs(interceptorResponse.expectedTravelTime - runnerResponse.expectedTravelTime)]];
                         });
                     } else {
+                        err = error2;
                         NSLog(@"%@", error2.localizedDescription);
                     }
                     dispatch_async(serialQueue, ^{
@@ -103,6 +108,7 @@
                     });
                 }];
             } else {
+                err = error1;
                 NSLog(@"%@", error1.localizedDescription);
             }
             dispatch_async(serialQueue, ^{
@@ -119,7 +125,7 @@
         if ([bestDifference floatValue] <= etaDifferenceThreshold) {
         completion([etaPointPairs objectForKey:[NSString stringWithFormat:@"%@", bestDifference]], nil);
         } else {
-            NSError *err;
+            
             completion(nil, err);
         }
     });
