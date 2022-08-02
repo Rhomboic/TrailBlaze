@@ -5,14 +5,14 @@
 //  Created by Adam Issah on 8/1/22.
 //
 
-#import "PaceImprovementTracking.h"
+#import "PaceImprovementTracker.h"
 #import "CoreLocation/CoreLocation.h"
 #import "MapKit/MapKit.h"
 #import "CoreMotion/CoreMotion.h"
 #import "Run.h"
 #import "Utils.h"
 
-@implementation PaceImprovementTracking
+@implementation PaceImprovementTracker
 /// this wiggle value is to account for the fact that the user it not always going to be running directly on the polyline (see triangle analogy in PIT implementation plan)
 static double interpointDistanceWiggleValue = 2;
 

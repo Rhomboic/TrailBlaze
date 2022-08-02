@@ -13,7 +13,7 @@
 #import "QueryManager.h"
 #import "ParseLiveQuery/ParseLiveQuery-umbrella.h"
 #import "Utils.h"
-#import "PaceImprovementTracking.h"
+#import "PaceImprovementTracker.h"
 
 @interface HomeViewController ()  <MKMapViewDelegate, CLLocationManagerDelegate>
 @property (strong, nonatomic) IBOutlet MKMapView *mapView;
@@ -100,10 +100,20 @@
         if (isReadyToStartRun) {
             self->isReadyToStartRun = false;
             if (_isRerun) {
-                PaceImprovementTracking *pacer = [[PaceImprovementTracking alloc] initWithRunID:@"dfsadfsg"];
-                if ([PaceImprovementTracking isAtStartPosition:currentLocation firstPoint:pacer.polylinePoints[0]]) {
-                    [pacer paceTracker:pacer.polylinePoints userLocation:currentLocation];
-                }
+                //placeholder run id
+                [Run retreiveSpecificRunObject:@"dsfadkg" completion:^(PFObject * _Nonnull runObject, NSError * _Nullable err) {
+                    if (runObject) {
+                        PaceImprovementTracker *pacer = [[PaceImprovementTracker alloc] initWithRunID:@"dfsadfsg"];
+                        pacer.bestPacesDictionary = runObject[@"pacesDictionary"];
+                        pacer.polylinePoints = [Utils jsonStringToArray:runObject[@"polylineCoords"]];
+                        if ([PaceImprovementTracker isAtStartPosition:currentLocation firstPoint:pacer.polylinePoints[0]]) {
+                            [pacer paceTracker:pacer.polylinePoints userLocation:currentLocation bestPaces:pacer.bestPacesDictionary];
+                        }
+                    }
+                }];
+                
+                
+                //alert here
             } else {
                 [Run uploadRun:currentRoute withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
                     if (succeeded) {
