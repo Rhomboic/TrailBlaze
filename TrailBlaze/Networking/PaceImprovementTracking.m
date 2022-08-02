@@ -68,5 +68,27 @@ static double interpointDistanceWiggleValue = 2;
     return @[UIColor.systemRedColor, overlapPolyline];
 }
 
-
+ - (void) paceTracker: (NSArray *) polylinePoints userLocation: (CLLocation *) userLocation bestPaces: (NSDictionary *) bestPaces{
+    [self.pedometer startPedometerEventUpdatesWithHandler:^(CMPedometerEvent * _Nullable pedometerEvent, NSError * _Nullable error) {
+        
+    }];
+    __block int i = 1;
+    __block NSArray *nextPoints = [polylinePoints subarrayWithRange:NSMakeRange(i, 2)];
+    __block NSDate *startDate = [NSDate date];
+    
+    while (![nextPoints[1] isEqual:polylinePoints[-1]]) {
+        if ([self passedPoint:nextPoints currentLocation:userLocation]) {
+            NSNumber *previousPace = bestPaces[nextPoints[0]] ;
+            __block NSNumber *currentPace;
+            NSDate *endDate = [NSDate date];
+            [self.pedometer queryPedometerDataFromDate:startDate toDate:endDate withHandler:^(CMPedometerData * _Nullable pedometerData, NSError * _Nullable error) {
+                currentPace = pedometerData.averageActivePace;
+                [self paceCompare:previousPace currentIntervalPace:currentPace pointsForInterval:@[polylinePoints[i-1], polylinePoints[i]] ];
+                i += 1;
+                nextPoints = [polylinePoints subarrayWithRange:NSMakeRange(i, 2)];
+                startDate = endDate;
+            }];
+        } 
+    }
+}
 @end
