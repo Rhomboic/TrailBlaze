@@ -26,7 +26,7 @@ static double interpointDistanceWiggleValue = 2;
 
 - (instancetype)initWithRunID: (NSString *) objectId {
     self.pedometer = [[CMPedometer alloc] init];
-    self.currentPacesArray = [NSMutableArray new];
+    self.currentPacesArray = [NSMutableDictionary new];
     return self;
 }
 

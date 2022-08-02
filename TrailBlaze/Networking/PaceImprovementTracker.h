@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PaceImprovementTracker : NSObject
 @property (strong, nonatomic) CMPedometer  *pedometer;
-@property (strong, nonatomic) NSMutableArray *currentPacesArray;
+@property (strong, nonatomic) NSMutableDictionary *currentPacesArray;
 @property (strong, nonatomic) NSDictionary *bestPacesDictionary;
 @property (strong, nonatomic) NSArray *polylinePoints;
 
