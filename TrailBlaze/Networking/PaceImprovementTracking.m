@@ -24,6 +24,25 @@ static double interpointDistanceWiggleValue = 2;
     return false;
 }
 
+- (instancetype)initWithRunID: (NSString *) objectId {
+    self.pedometer = [[CMPedometer alloc] init];
+    self.currentPacesArray = [NSMutableArray new];
+    
+    [Run retreiveSpecificRunObject:objectId completion:^(PFObject * _Nonnull runObject, NSError * _Nullable err) {
+        if (runObject) {
+            self.bestPacesArray = runObject[@"pacesArray"];
+            self.polylinePoints = [Utils jsonStringToArray:runObject[@"polylineCoords"]];
+            
+        }
+    }];
+    //find a way to return self in completion block
+        return self;
+}
+
+
+
+
+
 - (BOOL) passedPoint: (NSArray *) nextTwoPoints currentLocation: (CLLocation *) currentLocation {
     CLLocation *firstPointLocation = [[CLLocation alloc] initWithLatitude:[nextTwoPoints[0][0] doubleValue] longitude:[nextTwoPoints[0][1] doubleValue]];
     CLLocation *secondPointLocation = [[CLLocation alloc] initWithLatitude:[nextTwoPoints[1][0] doubleValue] longitude:[nextTwoPoints[1][1] doubleValue]];
