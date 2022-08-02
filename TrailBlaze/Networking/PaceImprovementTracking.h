@@ -7,22 +7,26 @@
 
 #import <Foundation/Foundation.h>
 #import "CoreLocation/CoreLocation.h"
+#import "CoreMotion/CoreMotion.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
+
 @interface PaceImprovementTracking : NSObject
+@property (strong, nonatomic) CMPedometer  *pedometer;
+@property (strong, nonatomic) NSMutableArray *currentPacesArray;
+@property (strong, nonatomic) NSArray *bestPacesArray;
+@property (strong, nonatomic) NSArray *polylinePoints;
+
+- (instancetype)initWithRunID: (NSString *) objectId;
 + (BOOL) isAtStartPosition: (CLLocation *) userLocation firstPoint: (NSArray *) firstPolylinePoint;
-+ (BOOL) passedPoint: (NSArray *) nextTwoPoints currentLocation: (CLLocation *) currentLocation;
+- (BOOL) passedPoint: (NSArray *) nextTwoPoints currentLocation: (CLLocation *) currentLocation;
+- (NSArray *) paceCompare: (NSNumber *) previousIntervalPace currentIntervalPace: (NSNumber *)currentIntervalPace pointsForInterval: (NSArray *) pointsForInterval;
+- (void) paceTracker: (NSArray *) polylinePoints userLocation: (CLLocation *) userLocation bestPaces: (NSDictionary *) bestPaces;
 
 @end
 
 NS_ASSUME_NONNULL_END
 
-//
-//  PIT.m
-//  TrailBlaze
-//
-//  Created by Adam Issah on 7/29/22.
-//
 
 
