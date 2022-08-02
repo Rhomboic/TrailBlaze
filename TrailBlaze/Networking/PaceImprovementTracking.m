@@ -27,16 +27,7 @@ static double interpointDistanceWiggleValue = 2;
 - (instancetype)initWithRunID: (NSString *) objectId {
     self.pedometer = [[CMPedometer alloc] init];
     self.currentPacesArray = [NSMutableArray new];
-    
-    [Run retreiveSpecificRunObject:objectId completion:^(PFObject * _Nonnull runObject, NSError * _Nullable err) {
-        if (runObject) {
-            self.bestPacesArray = runObject[@"pacesArray"];
-            self.polylinePoints = [Utils jsonStringToArray:runObject[@"polylineCoords"]];
-            
-        }
-    }];
-    //find a way to return self in completion block
-        return self;
+    return self;
 }
 
 
@@ -83,6 +74,8 @@ static double interpointDistanceWiggleValue = 2;
             NSDate *endDate = [NSDate date];
             [self.pedometer queryPedometerDataFromDate:startDate toDate:endDate withHandler:^(CMPedometerData * _Nullable pedometerData, NSError * _Nullable error) {
                 currentPace = pedometerData.averageActivePace;
+                
+                // make delegate to handle
                 [self paceCompare:previousPace currentIntervalPace:currentPace pointsForInterval:@[polylinePoints[i-1], polylinePoints[i]] ];
                 i += 1;
                 nextPoints = [polylinePoints subarrayWithRange:NSMakeRange(i, 2)];
