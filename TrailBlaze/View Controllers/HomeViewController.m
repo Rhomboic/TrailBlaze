@@ -13,6 +13,7 @@
 #import "QueryManager.h"
 #import "ParseLiveQuery/ParseLiveQuery-umbrella.h"
 #import "Utils.h"
+#import "PaceImprovementTracking.h"
 
 @interface HomeViewController ()  <MKMapViewDelegate, CLLocationManagerDelegate>
 @property (strong, nonatomic) IBOutlet MKMapView *mapView;
@@ -98,13 +99,20 @@
         [_trailrunButton setTitle:@"END" forState:UIControlStateNormal];
         if (isReadyToStartRun) {
             self->isReadyToStartRun = false;
-            [Run uploadRun:currentRoute withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
-                if (succeeded) {
-                    NSLog(@"run sent!");
-                } else {
-                    NSLog(@"run not sent");
+            if (_isRerun) {
+                PaceImprovementTracking *pacer = [[PaceImprovementTracking alloc] initWithRunID:@"dfsadfsg"];
+                if ([PaceImprovementTracking isAtStartPosition:currentLocation firstPoint:pacer.polylinePoints[0]]) {
+                    [pacer paceTracker:pacer.polylinePoints userLocation:currentLocation];
                 }
-            }];
+            } else {
+                [Run uploadRun:currentRoute withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
+                    if (succeeded) {
+                        NSLog(@"run sent!");
+                    } else {
+                        NSLog(@"run not sent");
+                    }
+                }];
+            }
         } else if (_cloudPolyline) {
             isCurrentlyRunning = true;
             [self getInterceptingDirections];
@@ -195,6 +203,9 @@
     [_trailrunButton setImage:[UIImage imageNamed:@"logo_button-removebg"] forState:UIControlStateNormal];
     if (_cloudUser) {
         [self->_trailrunButton setTitle:@"Rendezvous" forState:UIControlStateNormal];
+    }
+    if (_isRerun) {
+        [self->_trailrunButton setTitle:@"Rerun" forState:UIControlStateNormal];
     }
     _trailrunButton.layer.cornerRadius = 40;
     _trailrunButton.clipsToBounds = true;
