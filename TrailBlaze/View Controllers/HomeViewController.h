@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) MKPolyline *cloudPolyline;
 @property (strong, nonatomic) PFUser *cloudUser;
 @property BOOL isRerun;
+@property (strong, nonatomic) NSString *runID;
 @end
 
 NS_ASSUME_NONNULL_END
