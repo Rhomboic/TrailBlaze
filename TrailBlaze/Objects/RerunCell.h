@@ -10,6 +10,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface RerunCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UILabel *startLocationAddress;
+@property (weak, nonatomic) IBOutlet UILabel *endLocationAddress;
+@property (weak, nonatomic) IBOutlet UILabel *averagePace;
 
 @end
 
