@@ -55,7 +55,8 @@
         @try {
         cell.startLocationAddress.text = pastRuns[indexPath.row][@"startLocationAddress"];
         cell.endLocationAddress.text = pastRuns[indexPath.row][@"endLocationAddress"];
-        cell.averagePace.text = pastRuns[indexPath.row][@"overallAveragePace"];
+//        cell.averagePace.text = pastRuns[indexPath.row][@"overallAveragePace"];
+            cell.averagePace.text = @"9'32";
         }
         @catch (NSException * e) {
             
