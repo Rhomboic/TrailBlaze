@@ -29,6 +29,7 @@
 @implementation HomeViewController {
     BOOL firstCenteredOnUserLocation;
     CLLocationManager *locationManager;
+    CLGeocoder *geocoder;
 
     CLLocation *currentLocation;
     CLLocation *destinationLocation;
@@ -36,6 +37,7 @@
     MKPointAnnotation* runnerPin;
     MKMapItem *rendezvousPoint;
     
+    CLLocation *startLocation;
     float destinationLocationLatitude;
     float destinationLocationLongitude;
     
@@ -91,6 +93,7 @@
     if (isReadyToStartRun || (_cloudPolyline && !isCurrentlyRunning)) {
         [self centerOnUserLocation:0.004];
         [self setUpHomeViewForRunStart];
+        startLocation = currentLocation;
         if (isReadyToStartRun) {
             self->isReadyToStartRun = false;
             if (_isRerun) {
@@ -183,6 +186,8 @@
     [locationManager startUpdatingLocation];
     isReadyToStartRun = false;
     isCurrentlyRunning = false;
+    
+    geocoder = [[CLGeocoder alloc] init];
     
     
     //sending user location to Parse 
@@ -284,7 +289,46 @@
         if (runObject) {
             [runObject setValue:[Utils currentDateTime] forKey:@"endTime"];
             [runObject setValue:self->_timerLabel.text forKey:@"duration"];
-            [runObject saveInBackground];
+            
+            [self->geocoder reverseGeocodeLocation:self->startLocation completionHandler:^(NSArray *placemarks, NSError *error) {
+                    if (error){
+                        NSLog(@"Geocode failed with error: %@", error);
+                    } else {
+
+                    MKPlacemark *placemark1 = [placemarks lastObject];
+
+                    if(placemark1) {
+
+                        NSString *startAddress = [[placemark1.subThoroughfare stringByAppendingString:@" "] stringByAppendingString:placemark1.thoroughfare] ;
+                        
+                        [self->geocoder reverseGeocodeLocation:[[CLLocation alloc] initWithLatitude:self->destinationLocationLatitude longitude:self->destinationLocationLongitude] completionHandler:^(NSArray *placemarks, NSError *error) {
+                                if (error){
+                                    NSLog(@"Geocode failed with error: %@", error);
+                                } else {
+
+                                MKPlacemark *placemark2 = [placemarks lastObject];
+
+                                if(placemark2) {
+                                    NSString *endAddress;
+                                    if (placemark2.subThoroughfare) {
+                                        endAddress = [[placemark2.subThoroughfare stringByAppendingString:@" "] stringByAppendingString:placemark2.thoroughfare] ;
+                                    } else {
+                                        endAddress = placemark2.thoroughfare;
+                                    }
+                                    [runObject setValue:startAddress forKey:@"startLocationAddress"];
+                                    [runObject setValue:endAddress forKey:@"endLocationAddress"];
+                                    [runObject save];
+                                    
+                                } else {
+                                    NSLog(@"Geocode 1 failed");
+                                }
+                                }
+                        }];
+                    } else {
+                        NSLog(@"Geocode 2 failed");
+                    }
+                    }
+            }];
         } else {
             NSLog(@"%@", err.localizedDescription);
         }
@@ -476,7 +520,6 @@
 }
 
 - (void) getLocation {
-    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
     [geocoder geocodeAddressString:_locationField.text completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
         if (placemarks) {
             self->destinationLocation = placemarks.firstObject.location;
