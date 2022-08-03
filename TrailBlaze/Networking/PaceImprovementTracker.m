@@ -26,7 +26,7 @@ static double interpointDistanceWiggleValue = 2;
 
 - (instancetype)initWithRunID: (NSString *) objectId {
     self.pedometer = [[CMPedometer alloc] init];
-    self.currentPacesArray = [NSMutableDictionary new];
+    self.currentPacesDictionary = [NSMutableDictionary new];
     self.i = 1;
     self.nextPoints = [[NSArray alloc] init];
     self.startDate = [NSDate date];
@@ -75,7 +75,7 @@ static double interpointDistanceWiggleValue = 2;
             NSDate *endDate = [NSDate date];
             [self.pedometer queryPedometerDataFromDate:self.startDate toDate:endDate withHandler:^(CMPedometerData * _Nullable pedometerData, NSError * _Nullable error) {
                 currentPace = pedometerData.averageActivePace;
-                self.currentPacesArray[polylinePoints[self.i-1]] = currentPace;
+                self.currentPacesDictionary[polylinePoints[self.i-1]] = currentPace;
                 
                 // make delegate to handle
                 [self paceCompare:previousPace currentIntervalPace:currentPace pointsForInterval:@[polylinePoints[self.i-1], polylinePoints[self.i]] ];
@@ -85,5 +85,25 @@ static double interpointDistanceWiggleValue = 2;
             }];
         } 
     }
+}
+
+- (void) saveImprovedPaceDictionary: (PFObject *) runObject{
+    NSArray *currentPacesArray = [self.currentPacesDictionary allValues];
+    NSArray *bestPacesArray = [self.bestPacesDictionary allValues];
+    double currentPaceTotalToAverage = 0;
+    double bestPaceTotalToAverage = 0;
+    
+    for (int i = 0; i<bestPacesArray.count; i++) {
+        currentPaceTotalToAverage += [currentPacesArray[i] doubleValue];
+        bestPaceTotalToAverage += [bestPacesArray[i] doubleValue];
+    }
+    currentPaceTotalToAverage/=bestPacesArray.count;
+    bestPaceTotalToAverage/=bestPacesArray.count;
+    
+    if (currentPaceTotalToAverage >= bestPaceTotalToAverage) {
+        [runObject setValue:_currentPacesDictionary forKey:@"pacesDict"];
+        [runObject save];
+    }
+    
 }
 @end
