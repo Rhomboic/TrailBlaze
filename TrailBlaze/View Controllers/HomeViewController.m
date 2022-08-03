@@ -61,6 +61,9 @@
     
     PFQuery *interceptRequestQuery;
     PFQuery *interceptionPathQuery;
+    
+    PaceImprovementTracker *pacer;
+    BOOL rerunStartApproved;
 }
 
 - (void)viewDidLoad {
@@ -70,6 +73,7 @@
     [self configureLocationManager];
     [self configureSubviews];
     [self parseLiveQuerySetUp];
+    [self configurePaceTracker: self.runID];
     
     
     
@@ -186,6 +190,15 @@
 
 }
 
+- (void) configurePaceTracker: (NSString *) runID {
+    if (_isRerun) {
+        rerunStartApproved = [PaceImprovementTracker isAtStartPosition:self->currentLocation firstPoint:self->pacer.polylinePoints[0]];
+        if (rerunStartApproved) {
+            pacer = [[PaceImprovementTracker alloc] initWithRunID:runID];
+        }
+    }
+}
+
 #pragma mark:  Delegates
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay {
     MKPolylineRenderer *render = [[MKPolylineRenderer alloc] initWithOverlay:overlay];
@@ -236,11 +249,10 @@
     //placeholder run id
     [Run retreiveSpecificRunObject:@"dsfadkg" completion:^(PFObject * _Nonnull runObject, NSError * _Nullable err) {
         if (runObject) {
-            PaceImprovementTracker *pacer = [[PaceImprovementTracker alloc] initWithRunID:@"dfsadfsg"];
-            pacer.bestPacesDictionary = runObject[@"pacesDictionary"];
-            pacer.polylinePoints = [Utils jsonStringToArray:runObject[@"polylineCoords"]];
-            if ([PaceImprovementTracker isAtStartPosition:self->currentLocation firstPoint:pacer.polylinePoints[0]]) {
-                [pacer paceTracker:pacer.polylinePoints userLocation:self->currentLocation bestPaces:pacer.bestPacesDictionary];
+            self->pacer.bestPacesDictionary = runObject[@"pacesDictionary"];
+            self->pacer.polylinePoints = [Utils jsonStringToArray:runObject[@"polylineCoords"]];
+            if (self->rerunStartApproved) {
+                [self->pacer paceTracker:self->pacer.polylinePoints userLocation:self->currentLocation bestPaces:self->pacer.bestPacesDictionary];
             }
         } else {
             //alert here
