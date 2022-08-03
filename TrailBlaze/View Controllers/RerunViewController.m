@@ -8,6 +8,8 @@
 #import "RerunViewController.h"
 #import "Run.h"
 #import "RerunCell.h"
+#import "SceneDelegate.h"
+#import "HomeViewController.h"
 
 @interface RerunViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -30,6 +32,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.tableView.dataSource = self;
+    self.tableView.delegate = self;
     [[PFUser currentUser][@"pastRuns"] fetchIfNeeded];
     pastRuns = [PFUser currentUser][@"pastRuns"];
     
@@ -73,5 +76,17 @@
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return pastRuns.count;
+}
+
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    SceneDelegate *sceneDelegate = (SceneDelegate *)UIApplication.sharedApplication.connectedScenes.allObjects.firstObject.delegate;
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UITabBarController *tabBarController = [storyboard instantiateViewControllerWithIdentifier:@"TabBarController"];
+    UINavigationController *navController = tabBarController.viewControllers[1];
+    HomeViewController *hvc = navController.childViewControllers[0];
+    hvc.isRerun = true;
+    hvc.runObject = (PFObject *)(pastRuns[indexPath.row]);
+    [tabBarController setSelectedViewController: navController];
+    sceneDelegate.window.rootViewController = tabBarController;
 }
 @end
