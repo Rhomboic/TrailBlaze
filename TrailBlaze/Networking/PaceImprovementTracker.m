@@ -104,6 +104,7 @@ static double interpointDistanceWiggleValue = 2;
     
     if (currentPaceTotalToAverage >= bestPaceTotalToAverage) {
         [runObject setValue:_currentPacesDictionary forKey:@"pacesDict"];
+        [runObject setValue:[NSString stringWithFormat:@"%f", currentPaceTotalToAverage] forKey:@"overallAveragePace"];
         [runObject save];
     }
     
