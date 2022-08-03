@@ -27,6 +27,9 @@ static double interpointDistanceWiggleValue = 2;
 - (instancetype)initWithRunID: (NSString *) objectId {
     self.pedometer = [[CMPedometer alloc] init];
     self.currentPacesArray = [NSMutableDictionary new];
+    self.i = 1;
+    self.nextPoints = [[NSArray alloc] init];
+    self.startDate = [NSDate date];
     return self;
 }
 
@@ -63,23 +66,22 @@ static double interpointDistanceWiggleValue = 2;
     [self.pedometer startPedometerEventUpdatesWithHandler:^(CMPedometerEvent * _Nullable pedometerEvent, NSError * _Nullable error) {
         
     }];
-    __block int i = 1;
-    __block NSArray *nextPoints = [polylinePoints subarrayWithRange:NSMakeRange(i, 2)];
-    __block NSDate *startDate = [NSDate date];
+     self.nextPoints = [polylinePoints subarrayWithRange:NSMakeRange(self.i, 2)];
     
-    while (![nextPoints[1] isEqual:polylinePoints[-1]]) {
-        if ([self passedPoint:nextPoints currentLocation:userLocation]) {
-            NSNumber *previousPace = bestPaces[nextPoints[0]] ;
+    if (![self.nextPoints[1] isEqual:polylinePoints[-1]]) {
+        if ([self passedPoint:self.nextPoints currentLocation:userLocation]) {
+            NSNumber *previousPace = bestPaces[self.nextPoints[0]] ;
             __block NSNumber *currentPace;
             NSDate *endDate = [NSDate date];
-            [self.pedometer queryPedometerDataFromDate:startDate toDate:endDate withHandler:^(CMPedometerData * _Nullable pedometerData, NSError * _Nullable error) {
+            [self.pedometer queryPedometerDataFromDate:self.startDate toDate:endDate withHandler:^(CMPedometerData * _Nullable pedometerData, NSError * _Nullable error) {
                 currentPace = pedometerData.averageActivePace;
+                self.currentPacesArray[polylinePoints[self.i-1]] = currentPace;
                 
                 // make delegate to handle
-                [self paceCompare:previousPace currentIntervalPace:currentPace pointsForInterval:@[polylinePoints[i-1], polylinePoints[i]] ];
-                i += 1;
-                nextPoints = [polylinePoints subarrayWithRange:NSMakeRange(i, 2)];
-                startDate = endDate;
+                [self paceCompare:previousPace currentIntervalPace:currentPace pointsForInterval:@[polylinePoints[self.i-1], polylinePoints[self.i]] ];
+                self.i += 1;
+                self.nextPoints = [polylinePoints subarrayWithRange:NSMakeRange(self.i, 2)];
+                self.startDate = endDate;
             }];
         } 
     }
