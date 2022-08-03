@@ -251,6 +251,7 @@
         if (runObject) {
             self->pacer.bestPacesDictionary = runObject[@"pacesDictionary"];
             self->pacer.polylinePoints = [Utils jsonStringToArray:runObject[@"polylineCoords"]];
+            self->pacer.runObject = runObject;
             if (self->rerunStartApproved) {
                 [self->pacer paceTracker:self->pacer.polylinePoints userLocation:self->currentLocation bestPaces:self->pacer.bestPacesDictionary];
             }
