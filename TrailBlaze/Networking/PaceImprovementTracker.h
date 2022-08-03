@@ -8,13 +8,14 @@
 #import <Foundation/Foundation.h>
 #import "CoreLocation/CoreLocation.h"
 #import "CoreMotion/CoreMotion.h"
+@import Parse;
 
 NS_ASSUME_NONNULL_BEGIN
 
 
 @interface PaceImprovementTracker : NSObject
 @property (strong, nonatomic) CMPedometer  *pedometer;
-@property (strong, nonatomic) NSMutableDictionary *currentPacesArray;
+@property (strong, nonatomic) NSMutableDictionary *currentPacesDictionary;
 @property (strong, nonatomic) NSDictionary *bestPacesDictionary;
 @property (strong, nonatomic) NSArray *polylinePoints;
 @property (strong, nonatomic) NSArray *nextPoints;
@@ -26,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL) passedPoint: (NSArray *) nextTwoPoints currentLocation: (CLLocation *) currentLocation;
 - (NSArray *) paceCompare: (NSNumber *) previousIntervalPace currentIntervalPace: (NSNumber *)currentIntervalPace pointsForInterval: (NSArray *) pointsForInterval;
 - (void) paceTracker: (NSArray *) polylinePoints userLocation: (CLLocation *) userLocation bestPaces: (NSDictionary *) bestPaces;
+- (void) saveImprovedPaceDictionary: (PFObject *) runObject;
 
 @end
 
