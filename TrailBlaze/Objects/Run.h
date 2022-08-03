@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSString *endTime;
 @property (nonatomic, strong) NSString *polylineCoords;
 @property (nonatomic, strong) NSString *distance;
+@property (nonatomic, strong) NSString *startLocationAddress;
+@property (nonatomic, strong) NSString *endLocationAddress;
 
 + (void) uploadRun: (MKRoute *) route withCompletion: (PFBooleanResultBlock _Nullable)completion;
 + (void) retreiveRunPolyline : (PFUser *) runner completion:(void (^)(MKPolyline *polyline, NSError * _Nullable))completion ;

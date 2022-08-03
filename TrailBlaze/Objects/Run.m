@@ -18,6 +18,8 @@
 @dynamic endTime;
 @dynamic polylineCoords;
 @dynamic distance;
+@dynamic startLocationAddress;
+@dynamic endLocationAddress;
 
 
 + (nonnull NSString *)parseClassName {
@@ -33,7 +35,7 @@
     
     
     newRun.polylineCoords = [Utils arrayToJSONString:route.polyline];
-    newRun.distance =  [NSString stringWithFormat:@"%.2lf", route.distance];
+    newRun.distance =  [NSString stringWithFormat:@"%.2f", route.distance];
     NSLog(@"%@", newRun.distance);
 
     [newRun saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
