@@ -202,6 +202,7 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     currentLocation = [locations lastObject];
+    [pacer paceTracker:pacer.polylinePoints userLocation:self->currentLocation bestPaces:pacer.bestPacesDictionary];
 }
 
 - (void)mapView:(MKMapView *)mapView didChangeUserTrackingMode:(MKUserTrackingMode)mode animated:(BOOL)animated {
@@ -362,8 +363,10 @@
             PFGeoPoint *rendezvousGeoPoint = object[@"rendezvous"];
             CLLocation *rendezvousLocation = [[CLLocation alloc] initWithLatitude:rendezvousGeoPoint.latitude longitude:rendezvousGeoPoint.longitude];
             MKPointAnnotation *rendezvousPoint = [[MKPointAnnotation alloc] initWithCoordinate:rendezvousLocation.coordinate title:@"Rendezvous" subtitle:@""];
+            dispatch_async(dispatch_get_main_queue(), ^{
             [strongself->_mapView addAnnotation:rendezvousPoint];
             [strongself->_mapView addOverlay:interceptRoutePolyline level:MKOverlayLevelAboveRoads];
+            });
 
         }
     }];
