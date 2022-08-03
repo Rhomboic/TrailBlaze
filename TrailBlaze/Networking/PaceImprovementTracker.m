@@ -84,6 +84,8 @@ static double interpointDistanceWiggleValue = 2;
                 self.startDate = endDate;
             }];
         } 
+    } else {
+        [self saveImprovedPaceDictionary:self.runObject];
     }
 }
 

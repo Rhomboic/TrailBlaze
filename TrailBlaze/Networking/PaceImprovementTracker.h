@@ -21,6 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong, nonatomic) NSArray *nextPoints;
 @property int i;
 @property (strong, nonatomic) NSDate *startDate;
+@property (strong, nonatomic) PFObject *runObject;
 
 - (instancetype)initWithRunID: (NSString *) objectId;
 + (BOOL) isAtStartPosition: (CLLocation *) userLocation firstPoint: (NSArray *) firstPolylinePoint;
