@@ -75,7 +75,7 @@
     [self configureLocationManager];
     [self configureSubviews];
     [self parseLiveQuerySetUp];
-    [self configurePaceTracker: self.runID];
+    [self configurePaceTracker: self.runObject.objectId];
     
     
     
@@ -199,6 +199,15 @@
     if (_isRerun) {
         rerunStartApproved = [PaceImprovementTracker isAtStartPosition:self->currentLocation firstPoint:self->pacer.polylinePoints[0]];
         if (rerunStartApproved) {
+            NSArray *rerunPolylinePoints = [Utils jsonStringToArray:self.runObject];
+            CLLocationCoordinate2D *polylinePoints = malloc(rerunPolylinePoints.count * sizeof(CLLocationCoordinate2D));
+            
+            
+            for (int i = 0; i < rerunPolylinePoints.count; i++) {
+                polylinePoints[i] = CLLocationCoordinate2DMake([rerunPolylinePoints[i][0] doubleValue] , [rerunPolylinePoints[i][1] doubleValue]);
+            }
+              MKPolyline *rerunPolyline = [MKPolyline polylineWithCoordinates:polylinePoints count:rerunPolylinePoints.count];
+            [_mapView addOverlay:rerunPolyline];
             pacer = [[PaceImprovementTracker alloc] initWithRunID:runID];
         }
     }
