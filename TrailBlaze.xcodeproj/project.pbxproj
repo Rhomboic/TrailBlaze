@@ -80,7 +80,6 @@
 		4E3483EA287F42430032C796 /* FindMatesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FindMatesViewController.h; sourceTree = "<group>"; };
 		4E3483EB287F42430032C796 /* FindMatesViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FindMatesViewController.m; sourceTree = "<group>"; };
 		4E560D25287DE9C00048BF37 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		4E57762E289C74F200F0BDD6 /* TrailBlaze-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TrailBlaze-Bridging-Header.h"; sourceTree = "<group>"; };
 		4E5831F5287F7CB7006D9982 /* FriendRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FriendRequest.h; sourceTree = "<group>"; };
 		4E5831F6287F7CB7006D9982 /* FriendRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FriendRequest.m; sourceTree = "<group>"; };
 		4E5831F8287FA565006D9982 /* RunCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RunCell.h; sourceTree = "<group>"; };
@@ -221,7 +220,6 @@
 				4E0BB924289462650037CC01 /* Utils.m */,
 				4ED63CB2289B1E2B0010FE9D /* RerunCell.h */,
 				4ED63CB3289B1E2B0010FE9D /* RerunCell.m */,
-				4E57762E289C74F200F0BDD6 /* TrailBlaze-Bridging-Header.h */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
