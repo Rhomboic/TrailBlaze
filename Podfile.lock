@@ -17,6 +17,9 @@ PODS:
   - Bolts-Swift (1.5.0)
   - Bolts/Tasks (1.9.1)
   - DateTools (2.0.0)
+  - NVActivityIndicatorView (5.1.1):
+    - NVActivityIndicatorView/Base (= 5.1.1)
+  - NVActivityIndicatorView/Base (5.1.1)
   - Parse (1.19.3):
     - Parse/Core (= 1.19.3)
   - Parse/Core (1.19.3):
@@ -30,6 +33,7 @@ PODS:
 DEPENDENCIES:
   - AFNetworking
   - DateTools
+  - NVActivityIndicatorView
   - Parse
   - ParseLiveQuery
 
@@ -39,6 +43,7 @@ SPEC REPOS:
     - Bolts
     - Bolts-Swift
     - DateTools
+    - NVActivityIndicatorView
     - Parse
     - ParseLiveQuery
     - Starscream
@@ -48,10 +53,11 @@ SPEC CHECKSUMS:
   Bolts: 8c1e8aab2f603387b8b9924f57d1d64f43d3ffdc
   Bolts-Swift: afbbaf8c8186e7f769be4afa656949c14087ba44
   DateTools: 933ac9c490f21f92127cf690ccd8c397e0126caf
+  NVActivityIndicatorView: 1f6c5687f1171810aa27a3296814dc2d7dec3667
   Parse: 0abb63a0ff6fa34a3f64b81d595a294e2ece143a
   ParseLiveQuery: 7bc437c3b986880ffe5f241a9921e37f45df0677
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
 
-PODFILE CHECKSUM: 57096d68421118f45005f11d1c9938b6ac63add0
+PODFILE CHECKSUM: ee7956a288d987094a1dbc691a71cf42a3540a62
 
 COCOAPODS: 1.11.3
