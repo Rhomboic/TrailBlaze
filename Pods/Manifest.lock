@@ -17,7 +17,6 @@ PODS:
   - Bolts-Swift (1.5.0)
   - Bolts/Tasks (1.9.1)
   - DateTools (2.0.0)
-  - FlowCommoniOS (1.13.0)
   - Parse (1.19.3):
     - Parse/Core (= 1.19.3)
   - Parse/Core (1.19.3):
@@ -31,7 +30,6 @@ PODS:
 DEPENDENCIES:
   - AFNetworking
   - DateTools
-  - FlowCommoniOS
   - Parse
   - ParseLiveQuery
 
@@ -41,7 +39,6 @@ SPEC REPOS:
     - Bolts
     - Bolts-Swift
     - DateTools
-    - FlowCommoniOS
     - Parse
     - ParseLiveQuery
     - Starscream
@@ -51,11 +48,10 @@ SPEC CHECKSUMS:
   Bolts: 8c1e8aab2f603387b8b9924f57d1d64f43d3ffdc
   Bolts-Swift: afbbaf8c8186e7f769be4afa656949c14087ba44
   DateTools: 933ac9c490f21f92127cf690ccd8c397e0126caf
-  FlowCommoniOS: 402e6add9eaaa5d4c62560869d32da06d9ae4802
   Parse: 0abb63a0ff6fa34a3f64b81d595a294e2ece143a
   ParseLiveQuery: 7bc437c3b986880ffe5f241a9921e37f45df0677
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
 
-PODFILE CHECKSUM: 91208a749ff0f40d3c26fa188b4ca479ecf612fd
+PODFILE CHECKSUM: 57096d68421118f45005f11d1c9938b6ac63add0
 
 COCOAPODS: 1.11.3
