@@ -139,4 +139,10 @@
       }];
 }
 
++ (void) savePaceData: (PFObject *) runObject dataDict: (NSMutableDictionary *) currentPacesDictionary dataAverage: (double) currentPaceTotalToAverage {
+    [runObject setValue:currentPacesDictionary forKey:@"pacesDict"];
+    [runObject setValue:[NSString stringWithFormat:@"%f", currentPaceTotalToAverage] forKey:@"overallAveragePace"];
+    [runObject save];
+}
+
 @end
