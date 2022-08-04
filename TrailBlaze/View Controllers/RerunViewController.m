@@ -10,11 +10,12 @@
 #import "RerunCell.h"
 #import "SceneDelegate.h"
 #import "HomeViewController.h"
-#import "TrailBlaze-Swift.h"
+#import "DGActivityIndicatorView/DGActivityIndicatorView.h"
 
 @interface RerunViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) CompassActivityIndicatorView *activityIndicator;
+@property (strong, nonatomic) DGActivityIndicatorView *activityIndicator;
+
 
 
 @end
@@ -26,7 +27,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     [self configureActivityIndicator];
     
     self.tableView.dataSource = self;
@@ -38,14 +38,13 @@
     NSLog(@"%@",image.url);
     
     [Run retreiveRunObjects:PFUser.currentUser limit:20 completion:^(NSArray * _Nonnull runObjects, NSError * _Nullable err) {
+        [self.activityIndicator stopAnimating];
+        [self.activityIndicator setHidden:true];
         if (runObjects) {
             self->pastRuns = runObjects;
-            [self->_tableView reloadData];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.activityIndicator stopAnimating];
-                [self.activityIndicator setHidden:true];
-            });
             
+            [self->_tableView reloadData];
+                
         } else {
             NSLog(@"No past runs");
         }
@@ -93,12 +92,10 @@
 }
 
 - (void) configureActivityIndicator {
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        CGRect frame = CGRectMake(self.view.center.x-25, self.view.center.y-25, 37, 37);
-        self.activityIndicator = [[CompassActivityIndicatorView alloc] initWithFrame:frame];
-        [self.view addSubview: self.activityIndicator];
-        [self.activityIndicator startAnimating];
-    });
+    _activityIndicator = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeBallScaleMultiple tintColor:[UIColor yellowColor] size:50.0f];
+    _activityIndicator.frame = CGRectMake(self.view.center.x-25, self.view.center.y-25, 50.0f, 50.0f);
+    [self.view addSubview:_activityIndicator];
+    [_activityIndicator startAnimating];
 }
+
 @end

@@ -211,15 +211,6 @@
             [_mapView addOverlay:rerunPolyline];
             pacer = [[PaceImprovementTracker alloc] initWithRunID:runID];
         }
-    } else {
-        
-        [Run retreiveRunObject:PFUser.currentUser completion:^(PFObject * _Nonnull runObject, NSError * _Nullable err) {
-            if (runObject) {
-                self->pacer = [[PaceImprovementTracker alloc] initWithRunID:runObject.objectId];
-                [self->pacer recordPacesOnRegularRun:runObject userLocation:self->currentLocation];
-            }
-        }];
-        
     }
 }
 
@@ -253,6 +244,13 @@
 }
 #pragma mark: State Helpers
 - (void) setUpHomeViewForRunStart {
+    [Run retreiveRunObject:PFUser.currentUser completion:^(PFObject * _Nonnull runObject, NSError * _Nullable err) {
+        if (runObject) {
+            self->pacer = [[PaceImprovementTracker alloc] initWithRunID:runObject.objectId];
+            [self->pacer recordPacesOnRegularRun:runObject userLocation:self->currentLocation];
+        }
+    }];
+    
     self->isCurrentlyRunning = true;
     _timerLabel.text = @"00:00:00";
     [UIView transitionWithView:self.view duration:2 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{

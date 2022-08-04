@@ -10,7 +10,7 @@ target 'TrailBlaze' do
      pod 'ParseLiveQuery'
      pod 'AFNetworking'
      pod 'DateTools' 
-     pod 'NVActivityIndicatorView'
+     pod 'DGActivityIndicatorView'
 
   target 'TrailBlazeTests' do
     inherit! :search_paths
