@@ -10,14 +10,18 @@
 #import "RerunCell.h"
 #import "SceneDelegate.h"
 #import "HomeViewController.h"
+#import "TrailBlaze-Swift.h"
 
 @interface RerunViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) CompassActivityIndicatorView *activityIndicator;
+
 
 @end
 
 @implementation RerunViewController {
     NSArray *pastRuns;
+    
 }
 - (void) viewWillAppear:(BOOL)animated {
     [Run retreiveRunObjects:PFUser.currentUser limit:10 completion:^(NSArray * _Nonnull runObjects, NSError * _Nullable err) {
@@ -28,9 +32,13 @@
             NSLog(@"No past runs");
         }
     }];
+    
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self configureActivityIndicator];
+    
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [[PFUser currentUser][@"pastRuns"] fetchIfNeeded];
@@ -43,6 +51,11 @@
         if (runObjects) {
             self->pastRuns = runObjects;
             [self->_tableView reloadData];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.activityIndicator stopAnimating];
+                [self.activityIndicator setHidden:true];
+            });
+            
         } else {
             NSLog(@"No past runs");
         }
@@ -88,5 +101,15 @@
     hvc.runObject = pastRuns[indexPath.row];
     [tabBarController setSelectedViewController: navController];
     sceneDelegate.window.rootViewController = tabBarController;
+}
+
+- (void) configureActivityIndicator {
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        CGRect frame = CGRectMake(self.view.center.x-25, self.view.center.y-25, 50, 50);
+        self.activityIndicator = [[CompassActivityIndicatorView alloc] initWithFrame:frame];
+        [self.view addSubview: self.activityIndicator];
+        [self.activityIndicator startAnimating];
+    });
 }
 @end

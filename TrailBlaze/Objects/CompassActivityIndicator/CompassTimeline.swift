@@ -4,6 +4,7 @@
 //
 
 import UIKit
+import FlowCommoniOS
 
 public class CompassTimeline: Timeline {
     public convenience init(view: CompassView, duration: TimeInterval, autoreverses: Bool = false, repeatCount: Float = 0) {

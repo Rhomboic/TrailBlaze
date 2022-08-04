@@ -7,6 +7,7 @@
 //
 import Foundation
 import UIKit
+import FlowCommoniOS
 
 class ActivityIndicatorView: UIActivityIndicatorView {
   public private(set) var view: UIView!
