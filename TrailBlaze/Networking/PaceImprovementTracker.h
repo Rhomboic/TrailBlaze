@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (BOOL) isAtStartPosition: (CLLocation *) userLocation firstPoint: (NSArray *) firstPolylinePoint;
 - (BOOL) passedPoint: (NSArray *) nextTwoPoints currentLocation: (CLLocation *) currentLocation;
 - (NSArray *) paceCompare: (NSNumber *) previousIntervalPace currentIntervalPace: (NSNumber *)currentIntervalPace pointsForInterval: (NSArray *) pointsForInterval;
-- (void) paceTracker: (NSArray *) polylinePoints userLocation: (CLLocation *) userLocation bestPaces: (NSDictionary *) bestPaces;
+- (void) paceTracker:(CLLocation *) userLocation;
 - (void) saveImprovedPaceDictionary: (PFObject *) runObject;
 
 @end
