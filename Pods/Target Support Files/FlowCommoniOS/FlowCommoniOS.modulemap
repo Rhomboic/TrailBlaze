@@ -1,0 +1,6 @@
+framework module FlowCommoniOS {
+  umbrella header "FlowCommoniOS-umbrella.h"
+
+  export *
+  module * { export * }
+}

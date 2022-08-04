@@ -10,6 +10,7 @@ target 'TrailBlaze' do
      pod 'ParseLiveQuery'
      pod 'AFNetworking'
      pod 'DateTools' 
+     pod 'FlowCommoniOS'
 
   target 'TrailBlazeTests' do
     inherit! :search_paths

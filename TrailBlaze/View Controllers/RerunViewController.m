@@ -85,7 +85,7 @@
     UINavigationController *navController = tabBarController.viewControllers[1];
     HomeViewController *hvc = navController.childViewControllers[0];
     hvc.isRerun = true;
-    hvc.runObject = (PFObject *)(pastRuns[indexPath.row]);
+    hvc.runObject = pastRuns[indexPath.row];
     [tabBarController setSelectedViewController: navController];
     sceneDelegate.window.rootViewController = tabBarController;
 }
