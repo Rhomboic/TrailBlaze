@@ -106,7 +106,7 @@
 - (void) configureActivityIndicator {
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        CGRect frame = CGRectMake(self.view.center.x-25, self.view.center.y-25, 50, 50);
+        CGRect frame = CGRectMake(self.view.center.x-25, self.view.center.y-25, 37, 37);
         self.activityIndicator = [[CompassActivityIndicatorView alloc] initWithFrame:frame];
         [self.view addSubview: self.activityIndicator];
         [self.activityIndicator startAnimating];
