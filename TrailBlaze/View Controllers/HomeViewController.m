@@ -197,9 +197,10 @@
 
 - (void) configurePaceTracker: (NSString *) runID {
     if (_isRerun) {
-        rerunStartApproved = [PaceImprovementTracker isAtStartPosition:self->currentLocation firstPoint:self->pacer.polylinePoints[0]];
+        NSArray *rerunPolylinePoints = [Utils jsonStringToArray:self.runObject];
+        rerunStartApproved = [PaceImprovementTracker isAtStartPosition:self->currentLocation firstPoint:rerunPolylinePoints[0]];
         if (rerunStartApproved) {
-            NSArray *rerunPolylinePoints = [Utils jsonStringToArray:self.runObject];
+            
             CLLocationCoordinate2D *polylinePoints = malloc(rerunPolylinePoints.count * sizeof(CLLocationCoordinate2D));
             
             
@@ -263,11 +264,9 @@
     //placeholder run id
     [Run retreiveSpecificRunObject:@"dsfadkg" completion:^(PFObject * _Nonnull runObject, NSError * _Nullable err) {
         if (runObject) {
-            self->pacer.bestPacesDictionary = runObject[@"pacesDictionary"];
-            self->pacer.polylinePoints = [Utils jsonStringToArray:runObject[@"polylineCoords"]];
             self->pacer.runObject = runObject;
             if (self->rerunStartApproved) {
-                [self->pacer paceTracker:self->pacer.polylinePoints userLocation:self->currentLocation bestPaces:self->pacer.bestPacesDictionary];
+                [self->pacer paceTracker:self->currentLocation];
             }
         } else {
             //alert here
