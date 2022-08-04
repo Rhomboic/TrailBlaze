@@ -211,6 +211,15 @@
             [_mapView addOverlay:rerunPolyline];
             pacer = [[PaceImprovementTracker alloc] initWithRunID:runID];
         }
+    } else {
+        
+        [Run retreiveRunObject:PFUser.currentUser completion:^(PFObject * _Nonnull runObject, NSError * _Nullable err) {
+            if (runObject) {
+                self->pacer = [[PaceImprovementTracker alloc] initWithRunID:runObject.objectId];
+                [self->pacer recordPacesOnRegularRun:runObject userLocation:self->currentLocation];
+            }
+        }];
+        
     }
 }
 
