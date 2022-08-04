@@ -62,25 +62,25 @@ static double interpointDistanceWiggleValue = 2;
     return @[UIColor.systemRedColor, overlapPolyline];
 }
 
- - (void) paceTracker: (NSArray *) polylinePoints userLocation: (CLLocation *) userLocation bestPaces: (NSDictionary *) bestPaces{
+ - (void) paceTracker:(CLLocation *) userLocation {
     [self.pedometer startPedometerEventUpdatesWithHandler:^(CMPedometerEvent * _Nullable pedometerEvent, NSError * _Nullable error) {
         
     }];
-     self.nextPoints = [polylinePoints subarrayWithRange:NSMakeRange(self.i, 2)];
+     self.nextPoints = [self.polylinePoints subarrayWithRange:NSMakeRange(self.i, 2)];
     
-    if (![self.nextPoints[1] isEqual:polylinePoints[-1]]) {
+    if (![self.nextPoints[1] isEqual:self.polylinePoints[-1]]) {
         if ([self passedPoint:self.nextPoints currentLocation:userLocation]) {
-            NSNumber *previousPace = bestPaces[self.nextPoints[0]] ;
+            NSNumber *previousPace = self.bestPacesDictionary[self.nextPoints[0]] ;
             __block NSNumber *currentPace;
             NSDate *endDate = [NSDate date];
             [self.pedometer queryPedometerDataFromDate:self.startDate toDate:endDate withHandler:^(CMPedometerData * _Nullable pedometerData, NSError * _Nullable error) {
                 currentPace = pedometerData.averageActivePace;
-                self.currentPacesDictionary[polylinePoints[self.i-1]] = currentPace;
+                self.currentPacesDictionary[self.polylinePoints[self.i-1]] = currentPace;
                 
                 // make delegate to handle
-                [self paceCompare:previousPace currentIntervalPace:currentPace pointsForInterval:@[polylinePoints[self.i-1], polylinePoints[self.i]] ];
+                [self paceCompare:previousPace currentIntervalPace:currentPace pointsForInterval:@[self.polylinePoints[self.i-1], self.polylinePoints[self.i]] ];
                 self.i += 1;
-                self.nextPoints = [polylinePoints subarrayWithRange:NSMakeRange(self.i, 2)];
+                self.nextPoints = [self.polylinePoints subarrayWithRange:NSMakeRange(self.i, 2)];
                 self.startDate = endDate;
             }];
         } 
