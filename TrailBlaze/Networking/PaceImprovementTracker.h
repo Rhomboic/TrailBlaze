@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSArray *) paceCompare: (NSNumber *) previousIntervalPace currentIntervalPace: (NSNumber *)currentIntervalPace pointsForInterval: (NSArray *) pointsForInterval;
 - (void) paceTracker:(CLLocation *) userLocation;
 - (void) saveImprovedPaceDictionary: (PFObject *) runObject;
+- (void) recordPacesOnRegularRun: (PFObject *) runObject userLocation:(CLLocation *) userLocation;
 
 @end
 
