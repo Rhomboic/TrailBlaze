@@ -12,11 +12,20 @@
 #import "Run.h"
 #import "Utils.h"
 
-@implementation PaceImprovementTracker
+@implementation PaceImprovementTracker {
+    CMPedometer  *pedometer;
+    NSArray *polylinePoints;
+    NSMutableDictionary *currentPacesDictionary;
+    NSDictionary *bestPacesDictionary;
+    NSArray *nextPoints;
+    int indexOfNextPoint;
+    NSDate *startDate;
+}
 /// this wiggle value is to account for the fact that the user it not always going to be running directly on the polyline (see triangle analogy in PIT implementation plan)
 static double interpointDistanceWiggleValue = 2;
 
-+ (BOOL) isAtStartPosition: (CLLocation *) userLocation firstPoint: (NSArray *) firstPolylinePoint {
++ (BOOL) isAtStartPosition: (CLLocation *) userLocation firstPoint: (NSArray *) firstPolylinePoint{
+    
     CLLocation *firstPointLocation = [[CLLocation alloc] initWithLatitude:[firstPolylinePoint[0] doubleValue] longitude:[firstPolylinePoint[1] doubleValue]];
     if ([firstPointLocation distanceFromLocation:userLocation] < 10) {
         return true;
@@ -25,11 +34,13 @@ static double interpointDistanceWiggleValue = 2;
 }
 
 - (instancetype)initWithRunID: (NSString *) objectId {
-    self.pedometer = [[CMPedometer alloc] init];
-    self.currentPacesDictionary = [NSMutableDictionary new];
-    self.i = 1;
-    self.nextPoints = [[NSArray alloc] init];
-    self.startDate = [NSDate date];
+    pedometer = [[CMPedometer alloc] init];
+    currentPacesDictionary = [NSMutableDictionary new];
+    indexOfNextPoint = 1;
+    nextPoints = [[NSArray alloc] init];
+    startDate = [NSDate date];
+    bestPacesDictionary = self.runObject[@"pacesDictionary"];
+    polylinePoints = [Utils jsonStringToArray:self.runObject[@"polylineCoords"]];
     return self;
 }
 
@@ -63,25 +74,25 @@ static double interpointDistanceWiggleValue = 2;
 }
 
  - (void) paceTracker:(CLLocation *) userLocation {
-    [self.pedometer startPedometerEventUpdatesWithHandler:^(CMPedometerEvent * _Nullable pedometerEvent, NSError * _Nullable error) {
+    [pedometer startPedometerEventUpdatesWithHandler:^(CMPedometerEvent * _Nullable pedometerEvent, NSError * _Nullable error) {
         
     }];
-     self.nextPoints = [self.polylinePoints subarrayWithRange:NSMakeRange(self.i, 2)];
+     nextPoints = [polylinePoints subarrayWithRange:NSMakeRange(indexOfNextPoint, 2)];
     
-    if (![self.nextPoints[1] isEqual:self.polylinePoints[-1]]) {
-        if ([self passedPoint:self.nextPoints currentLocation:userLocation]) {
-            NSNumber *previousPace = self.bestPacesDictionary[self.nextPoints[0]] ;
+    if (![nextPoints[1] isEqual:polylinePoints[-1]]) {
+        if ([self passedPoint:nextPoints currentLocation:userLocation]) {
+            NSNumber *previousPace = bestPacesDictionary[nextPoints[0]] ;
             __block NSNumber *currentPace;
             NSDate *endDate = [NSDate date];
-            [self.pedometer queryPedometerDataFromDate:self.startDate toDate:endDate withHandler:^(CMPedometerData * _Nullable pedometerData, NSError * _Nullable error) {
+            [pedometer queryPedometerDataFromDate:startDate toDate:endDate withHandler:^(CMPedometerData * _Nullable pedometerData, NSError * _Nullable error) {
                 currentPace = pedometerData.averageActivePace;
-                self.currentPacesDictionary[self.polylinePoints[self.i-1]] = currentPace;
+                self->currentPacesDictionary[self->polylinePoints[self->indexOfNextPoint-1]] = currentPace;
                 
                 // make delegate to handle
-                [self paceCompare:previousPace currentIntervalPace:currentPace pointsForInterval:@[self.polylinePoints[self.i-1], self.polylinePoints[self.i]] ];
-                self.i += 1;
-                self.nextPoints = [self.polylinePoints subarrayWithRange:NSMakeRange(self.i, 2)];
-                self.startDate = endDate;
+                [self paceCompare:previousPace currentIntervalPace:currentPace pointsForInterval:@[self->polylinePoints[self->indexOfNextPoint-1], self->polylinePoints[self->indexOfNextPoint]] ];
+                self->indexOfNextPoint += 1;
+                self->nextPoints = [self->polylinePoints subarrayWithRange:NSMakeRange(self->indexOfNextPoint, 2)];
+                self->startDate = endDate;
             }];
         } 
     } else {
@@ -90,8 +101,8 @@ static double interpointDistanceWiggleValue = 2;
 }
 
 - (void) saveImprovedPaceDictionary: (PFObject *) runObject{
-    NSArray *currentPacesArray = [self.currentPacesDictionary allValues];
-    NSArray *bestPacesArray = [self.bestPacesDictionary allValues];
+    NSArray *currentPacesArray = [currentPacesDictionary allValues];
+    NSArray *bestPacesArray = [bestPacesDictionary allValues];
     double currentPaceTotalToAverage = 0;
     double bestPaceTotalToAverage = 0;
     
@@ -103,7 +114,7 @@ static double interpointDistanceWiggleValue = 2;
     bestPaceTotalToAverage/=bestPacesArray.count;
     
     if (currentPaceTotalToAverage >= bestPaceTotalToAverage) {
-        [runObject setValue:_currentPacesDictionary forKey:@"pacesDict"];
+        [runObject setValue:currentPacesDictionary forKey:@"pacesDict"];
         [runObject setValue:[NSString stringWithFormat:@"%f", currentPaceTotalToAverage] forKey:@"overallAveragePace"];
         [runObject save];
     }
