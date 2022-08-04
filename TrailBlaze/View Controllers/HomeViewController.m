@@ -229,7 +229,7 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     currentLocation = [locations lastObject];
-    [pacer paceTracker:pacer.polylinePoints userLocation:self->currentLocation bestPaces:pacer.bestPacesDictionary];
+    [pacer paceTracker: self->currentLocation];
 }
 
 - (void)mapView:(MKMapView *)mapView didChangeUserTrackingMode:(MKUserTrackingMode)mode animated:(BOOL)animated {
