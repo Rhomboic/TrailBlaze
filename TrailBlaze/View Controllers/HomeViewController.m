@@ -65,6 +65,7 @@
     PFQuery *interceptionPathQuery;
     
     PaceImprovementTracker *pacer;
+    PFObject *currentRunObjectForNonRerun;
     BOOL rerunStartApproved;
 }
 
@@ -105,7 +106,7 @@
                         if (runObject) {
                             if (!self->pacer) {
                             self->pacer = [[PaceImprovementTracker alloc] initWithRunID:runObject.objectId];
-                            [self->pacer recordPacesOnRegularRun:runObject userLocation:self->currentLocation];
+                                self->currentRunObjectForNonRerun = runObject;
                             }
                         }
                     }];
@@ -234,7 +235,8 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     currentLocation = [locations lastObject];
-    [pacer paceTracker: self->currentLocation];
+    if (_isRerun) {[pacer paceTracker: self->currentLocation];}
+    else {[self->pacer recordPacesOnRegularRun:currentRunObjectForNonRerun userLocation:self->currentLocation];}
 }
 
 - (void)mapView:(MKMapView *)mapView didChangeUserTrackingMode:(MKUserTrackingMode)mode animated:(BOOL)animated {
