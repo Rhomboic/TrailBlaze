@@ -216,7 +216,6 @@
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="chart.bar.fill" catalog="system" title=""/>
                                 <connections>
-                                    <action selector="didTapStats:" destination="7Ds-Ra-0om" eventType="touchUpInside" id="gUs-IU-Hig"/>
                                     <segue destination="HdA-bp-vrF" kind="show" id="BQ7-4e-Pd5"/>
                                 </connections>
                             </button>
