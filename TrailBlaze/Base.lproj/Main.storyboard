@@ -302,7 +302,7 @@
         <!--Home-->
         <scene sceneID="Vq0-hR-sjM">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="FMB-vC-zP1" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="FMB-vC-zP1" colorLabel="IBBuiltInLabel-Yellow" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Home" image="house" catalog="system" selectedImage="house.fill" id="Chc-Xg-TiW">
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
@@ -314,6 +314,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="chc-KY-F2G">
                         <rect key="frame" x="0.0" y="44" width="390" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="1" green="0.95076917660000004" blue="0.0064871742859999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -483,6 +484,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="n9t-zi-rGh">
                         <rect key="frame" x="0.0" y="44" width="390" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="1" green="0.95076917660000004" blue="0.0064871742859999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -791,6 +793,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="tUt-LE-OI5">
                         <rect key="frame" x="0.0" y="44" width="390" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="1" green="0.95076917660000004" blue="0.0064871742859999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
