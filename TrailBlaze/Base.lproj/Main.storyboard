@@ -289,13 +289,18 @@
                         <outlet property="locationButton" destination="Bda-Vi-N8l" id="Hzf-rc-zqP"/>
                         <outlet property="locationField" destination="Ftg-OI-953" id="Z5Z-GS-mur"/>
                         <outlet property="mapView" destination="T9Y-EL-DwS" id="OBu-qA-NI5"/>
+                        <outlet property="satelliteViewTapGesture" destination="FSs-gW-jW2" id="sEq-Xg-xeo"/>
                         <outlet property="statsButton" destination="l21-ku-eI0" id="vKb-Tb-caX"/>
                         <outlet property="timerLabel" destination="poh-Rn-6JW" id="wUV-s9-ceb"/>
                         <outlet property="trailrunButton" destination="Vwl-V6-YMQ" id="7tx-eS-Oo5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0US-Hz-y89" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="FSs-gW-jW2"/>
+                <tapGestureRecognizer numberOfTouchesRequired="3" id="FSs-gW-jW2">
+                    <connections>
+                        <action selector="didThreeFingerTap:" destination="7Ds-Ra-0om" id="dW1-0T-Ing"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="184.61538461538461" y="2255.6872037914691"/>
         </scene>
