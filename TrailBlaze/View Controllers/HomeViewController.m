@@ -105,7 +105,7 @@
                 [Run retreiveRunObject:PFUser.currentUser completion:^(PFObject * _Nonnull runObject, NSError * _Nullable err) {
                         if (runObject) {
                             if (!self->pacer) {
-                            self->pacer = [[PaceImprovementTracker alloc] initWithRunID:runObject.objectId];
+                            self->pacer = [[PaceImprovementTracker alloc] initForFirstRecord:runObject];
                                 self->currentRunObjectForNonRerun = runObject;
                             }
                         }
@@ -214,7 +214,7 @@
             }
               MKPolyline *rerunPolyline = [MKPolyline polylineWithCoordinates:polylinePoints count:rerunPolylinePoints.count];
             [_mapView addOverlay:rerunPolyline];
-            pacer = [[PaceImprovementTracker alloc] initWithRunID:runID];
+            pacer = [[PaceImprovementTracker alloc] initWithRunObject:self.runObject];
         }
     }
 }
@@ -356,7 +356,11 @@
     }];
     [UIView transitionWithView:self.view duration:1 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         [self.timerLabel setHidden:YES];
-    } completion:nil];
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [Utils loadHomeVC];
+        }
+    }];
     
     [_locationButton setHidden:NO];
     [_statsButton setHidden:NO];
