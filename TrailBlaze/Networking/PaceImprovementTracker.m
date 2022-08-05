@@ -41,7 +41,7 @@ static double interpointDistanceWiggleValue = 2;
     nextPoints = [[NSArray alloc] init];
     startDate = [NSDate date];
     bestPacesDictionary = self.runObject[@"pacesDictionary"];
-    polylinePoints = [Utils jsonStringToArray:self.runObject[@"polylineCoords"]];
+    polylinePoints = [Utils jsonStringToArray:self.runObject[@"polylinePoints"]];
     return self;
 }
 
