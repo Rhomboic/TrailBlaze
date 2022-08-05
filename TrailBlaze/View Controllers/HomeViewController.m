@@ -99,13 +99,17 @@
             if (_isRerun) {
                 [self setUpHomeViewForRerunStart];
             } else {
-                [Run uploadRun:currentRoute withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
-                    if (succeeded) {
-                        NSLog(@"run sent!");
-                    } else {
-                        NSLog(@"run not sent");
-                    }
-                }];
+                [Run uploadRun:currentRoute];
+                    
+                [Run retreiveRunObject:PFUser.currentUser completion:^(PFObject * _Nonnull runObject, NSError * _Nullable err) {
+                        if (runObject) {
+                            if (!self->pacer) {
+                            self->pacer = [[PaceImprovementTracker alloc] initWithRunID:runObject.objectId];
+                            [self->pacer recordPacesOnRegularRun:runObject userLocation:self->currentLocation];
+                            }
+                        }
+                    }];
+                
             }
         } else if (_cloudPolyline) {
             isCurrentlyRunning = true;
@@ -197,7 +201,7 @@
 
 - (void) configurePaceTracker: (NSString *) runID {
     if (_isRerun) {
-        NSArray *rerunPolylinePoints = [Utils jsonStringToArray:self.runObject];
+        NSArray *rerunPolylinePoints = [Utils jsonStringToArray:self.runObject[@"polylineCoords"]];
         rerunStartApproved = [PaceImprovementTracker isAtStartPosition:self->currentLocation firstPoint:rerunPolylinePoints[0]];
         if (rerunStartApproved) {
             
@@ -244,13 +248,6 @@
 }
 #pragma mark: State Helpers
 - (void) setUpHomeViewForRunStart {
-    [Run retreiveRunObject:PFUser.currentUser completion:^(PFObject * _Nonnull runObject, NSError * _Nullable err) {
-        if (runObject) {
-            self->pacer = [[PaceImprovementTracker alloc] initWithRunID:runObject.objectId];
-            [self->pacer recordPacesOnRegularRun:runObject userLocation:self->currentLocation];
-        }
-    }];
-    
     self->isCurrentlyRunning = true;
     _timerLabel.text = @"00:00:00";
     [UIView transitionWithView:self.view duration:2 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
