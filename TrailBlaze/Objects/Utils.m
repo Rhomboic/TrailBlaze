@@ -31,8 +31,8 @@
     return pointsJSON;
 }
 
-+ (NSArray *) jsonStringToArray: (PFObject *) object {
-    NSData *data = [object[@"polylineCoords"] dataUsingEncoding:NSUTF8StringEncoding];
++ (NSArray *) jsonStringToArray: (NSString *) polylineCoords {
+    NSData *data = [polylineCoords dataUsingEncoding:NSUTF8StringEncoding];
     NSError *err;
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&err];
     return json[@"points"];
