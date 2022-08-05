@@ -234,8 +234,11 @@
         [render setStrokeColor:UIColor.systemYellowColor];
         [render setLineWidth:5.0];
 
-    } else {
+    } else if (overlay == _cloudPolyline) {
         [render setStrokeColor:UIColor.systemGreenColor];
+        [render setLineWidth:5.0];
+    } else {
+        [render setStrokeColor:((CustomPolyline *) overlay).color];
         [render setLineWidth:5.0];
     }
     return render;
