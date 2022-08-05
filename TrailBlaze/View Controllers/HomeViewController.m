@@ -256,6 +256,11 @@
 
     }
 }
+
+- (void) sendPolylineToHomeView:(CustomPolyline *)customPolyline {
+    [_mapView addOverlay:customPolyline];
+}
+
 #pragma mark: State Helpers
 - (void) setUpHomeViewForRunStart {
     self->isCurrentlyRunning = true;
