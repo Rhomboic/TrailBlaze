@@ -95,16 +95,15 @@ static double interpointDistanceWiggleValue = 2;
     }];
      nextPoints = [polylinePoints subarrayWithRange:NSMakeRange(indexOfNextPoint, 2)];
     
-    if (![nextPoints[1] isEqual:polylinePoints[-1]]) {
+    if (![[nextPoints firstObject] isEqual:[polylinePoints lastObject]]) {
         if ([self passedPoint:nextPoints currentLocation:userLocation]) {
-            NSNumber *previousPace = bestPacesDictionary[nextPoints[0]] ;
+            NSNumber *previousPace = [bestPacesDictionary valueForKey:nextPoints[0]] ;
             __block NSNumber *currentPace;
             NSDate *endDate = [NSDate date];
             [pedometer queryPedometerDataFromDate:startDate toDate:endDate withHandler:^(CMPedometerData * _Nullable pedometerData, NSError * _Nullable error) {
                 currentPace = pedometerData.averageActivePace;
                 [self->currentPacesDictionary setValue:currentPace forKey:self->polylinePoints[self->indexOfNextPoint-1]];
                 
-                // make delegate to handle
                 CustomPolyline *polylineVerdict = [self paceCompare:previousPace currentIntervalPace:currentPace pointsForInterval:@[self->polylinePoints[self->indexOfNextPoint-1], self->polylinePoints[self->indexOfNextPoint]] ];
                 [self.delegate sendPolylineToHomeView: polylineVerdict];
                 
