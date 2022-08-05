@@ -34,14 +34,26 @@ static double interpointDistanceWiggleValue = 2;
     return false;
 }
 
-- (instancetype)initWithRunID: (NSString *) objectId {
+- (instancetype)initWithRunObject: (PFObject *) runObj {
     pedometer = [[CMPedometer alloc] init];
     currentPacesDictionary = [NSMutableDictionary new];
     indexOfNextPoint = 1;
     nextPoints = [[NSArray alloc] init];
     startDate = [NSDate date];
-    bestPacesDictionary = self.runObject[@"pacesDictionary"];
-    polylinePoints = [Utils jsonStringToArray:self.runObject[@"polylinePoints"]];
+    bestPacesDictionary = runObj[@"pacesDictionary"];
+    polylinePoints = [Utils jsonStringToArray:runObj[@"polylineCoords"]];
+    
+    return self;
+}
+
+- (instancetype)initForFirstRecord: (PFObject *) runObj {
+    pedometer = [[CMPedometer alloc] init];
+    currentPacesDictionary = [NSMutableDictionary new];
+    indexOfNextPoint = 1;
+    nextPoints = [[NSArray alloc] init];
+    startDate = [NSDate date];
+    polylinePoints = [Utils jsonStringToArray:runObj[@"polylineCoords"]];
+    
     return self;
 }
 
@@ -74,7 +86,7 @@ static double interpointDistanceWiggleValue = 2;
     return @[UIColor.systemRedColor, overlapPolyline];
 }
 
- - (void) paceTracker:(CLLocation *) userLocation {
+- (void) paceTracker:(CLLocation *) userLocation {
     [pedometer startPedometerEventUpdatesWithHandler:^(CMPedometerEvent * _Nullable pedometerEvent, NSError * _Nullable error) {
         
     }];
@@ -95,7 +107,7 @@ static double interpointDistanceWiggleValue = 2;
                 self->nextPoints = [self->polylinePoints subarrayWithRange:NSMakeRange(self->indexOfNextPoint, 2)];
                 self->startDate = endDate;
             }];
-        } 
+        }
     } else {
         [self saveImprovedPaceDictionary:self.runObject];
     }
@@ -108,7 +120,7 @@ static double interpointDistanceWiggleValue = 2;
     }];
      nextPoints = [Points subarrayWithRange:NSMakeRange(indexOfNextPoint, 2)];
     
-    if (![nextPoints[1] isEqual:polylinePoints[-1]]) {
+    if (![[nextPoints firstObject] isEqual:[polylinePoints lastObject]]) {
         if ([self passedPoint:nextPoints currentLocation:userLocation]) {
             
             __block NSNumber *currentPace;

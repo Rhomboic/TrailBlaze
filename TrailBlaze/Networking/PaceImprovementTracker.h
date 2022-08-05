@@ -16,7 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface PaceImprovementTracker : NSObject
 @property (strong, nonatomic) PFObject *runObject;
 
-- (instancetype)initWithRunID: (NSString *) objectId;
+- (instancetype)initWithRunObject: (PFObject *) runObj;
+- (instancetype)initForFirstRecord: (PFObject *) runObj;
 + (BOOL) isAtStartPosition: (CLLocation *) userLocation firstPoint: (NSArray *) firstPolylinePoint;
 - (BOOL) passedPoint: (NSArray *) nextTwoPoints currentLocation: (CLLocation *) currentLocation;
 - (NSArray *) paceCompare: (NSNumber *) previousIntervalPace currentIntervalPace: (NSNumber *)currentIntervalPace pointsForInterval: (NSArray *) pointsForInterval;
