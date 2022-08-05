@@ -23,6 +23,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *locationField;
 @property (weak, nonatomic) IBOutlet UIButton *statsButton;
 @property (weak, nonatomic) IBOutlet UILabel *timerLabel;
+@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *satelliteViewTapGesture;
 
 @end
 
@@ -85,6 +86,13 @@
 
 - (IBAction)didTapCurrentLocation:(id)sender {
     [self centerOnUserLocation:0.01];
+}
+- (IBAction)didThreeFingerTap:(id)sender {
+    if (_mapView.mapType == MKMapTypeHybridFlyover) {
+        _mapView.mapType = MKMapTypeStandard;
+    } else {
+        _mapView.mapType = MKMapTypeHybridFlyover;
+    }
 }
 
 - (IBAction)didTapStats:(id)sender {
