@@ -10,7 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CustomPolyline : MKPolyline
-
+@property (strong, nonatomic) UIColor *color;
 @end
 
 NS_ASSUME_NONNULL_END
