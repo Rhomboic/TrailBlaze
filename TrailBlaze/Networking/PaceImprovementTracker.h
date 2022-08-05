@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol PacePolylineDelegate <NSObject>
 - (void) sendPolylineToHomeView: (CustomPolyline *) customPolyline;
+- (void) notifyWhenPointPassed: (int) number;
 @end
 
 @interface PaceImprovementTracker : NSObject
@@ -25,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initForFirstRecord: (PFObject *) runObj;
 + (BOOL) isAtStartPosition: (CLLocation *) userLocation firstPoint: (NSArray *) firstPolylinePoint;
 - (BOOL) passedPoint: (NSArray *) nextTwoPoints currentLocation: (CLLocation *) currentLocation;
+- (BOOL) passedPointSecond: (NSArray *) nextTwoPoints currentLocation: (CLLocation *) currentLocation;
 - (CustomPolyline *) paceCompare: (NSNumber *) previousIntervalPace currentIntervalPace: (NSNumber *)currentIntervalPace pointsForInterval: (NSArray *) pointsForInterval;
 - (void) paceTracker:(CLLocation *) userLocation;
 - (void) saveImprovedPaceDictionary: (PFObject *) runObject;
