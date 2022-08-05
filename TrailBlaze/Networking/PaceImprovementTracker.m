@@ -11,6 +11,7 @@
 #import "CoreMotion/CoreMotion.h"
 #import "Run.h"
 #import "Utils.h"
+#import "CustomPolyline.h"
 
 @implementation PaceImprovementTracker {
     CMPedometer  *pedometer;
@@ -73,17 +74,19 @@ static double interpointDistanceWiggleValue = 2;
     return false;
 }
 
-- (NSArray *) paceCompare: (NSNumber *) previousIntervalPace currentIntervalPace: (NSNumber *)currentIntervalPace pointsForInterval: (NSArray *) pointsForInterval {
+- (CustomPolyline *) paceCompare: (NSNumber *) previousIntervalPace currentIntervalPace: (NSNumber *)currentIntervalPace pointsForInterval: (NSArray *) pointsForInterval {
     CLLocationCoordinate2D *endPoints = malloc(2 * sizeof(CLLocationCoordinate2D));
     
     for (int i = 0; i < 2; i++) {
         endPoints[i] = CLLocationCoordinate2DMake([pointsForInterval[i][0] doubleValue] , [pointsForInterval[i][1] doubleValue]);
     }
-      MKPolyline *overlapPolyline = [MKPolyline polylineWithCoordinates:endPoints count:2];
+      CustomPolyline *overlapPolyline = [CustomPolyline polylineWithCoordinates:endPoints count:2];
     if (currentIntervalPace >= previousIntervalPace) {
-        return @[UIColor.systemGreenColor, overlapPolyline];
+        [overlapPolyline setColor:UIColor.systemGreenColor];
+        return overlapPolyline;
     }
-    return @[UIColor.systemRedColor, overlapPolyline];
+    [overlapPolyline setColor:UIColor.systemGreenColor];
+    return overlapPolyline;
 }
 
 - (void) paceTracker:(CLLocation *) userLocation {
@@ -102,7 +105,9 @@ static double interpointDistanceWiggleValue = 2;
                 [self->currentPacesDictionary setValue:currentPace forKey:self->polylinePoints[self->indexOfNextPoint-1]];
                 
                 // make delegate to handle
-                [self paceCompare:previousPace currentIntervalPace:currentPace pointsForInterval:@[self->polylinePoints[self->indexOfNextPoint-1], self->polylinePoints[self->indexOfNextPoint]] ];
+                CustomPolyline *polylineVerdict = [self paceCompare:previousPace currentIntervalPace:currentPace pointsForInterval:@[self->polylinePoints[self->indexOfNextPoint-1], self->polylinePoints[self->indexOfNextPoint]] ];
+                [self.delegate sendPolylineToHomeView: polylineVerdict];
+                
                 self->indexOfNextPoint += 1;
                 self->nextPoints = [self->polylinePoints subarrayWithRange:NSMakeRange(self->indexOfNextPoint, 2)];
                 self->startDate = endDate;
