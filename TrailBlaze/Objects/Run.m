@@ -18,13 +18,15 @@
 @dynamic endTime;
 @dynamic polylineCoords;
 @dynamic distance;
+@dynamic startLocationAddress;
+@dynamic endLocationAddress;
 
 
 + (nonnull NSString *)parseClassName {
     return @"Run";
 }
 
-+ (void) uploadRun: (MKRoute *) route withCompletion: (PFBooleanResultBlock _Nullable)completion {
++ (void) uploadRun: (MKRoute *) route {
     
     Run *newRun = [Run new];
     
@@ -33,15 +35,10 @@
     
     
     newRun.polylineCoords = [Utils arrayToJSONString:route.polyline];
-    newRun.distance =  [NSString stringWithFormat:@"%.2lf", route.distance];
+    newRun.distance =  [NSString stringWithFormat:@"%.2f", route.distance];
     NSLog(@"%@", newRun.distance);
 
-    [newRun saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-    if (succeeded) {
-        NSLog(@"Save run successfully!");
-    } else {
-        NSLog(@"%@", error.localizedDescription);    }
-  }];
+    [newRun save];
 
 }
 
@@ -56,7 +53,7 @@
             NSDictionary *thisUserRun = [runs firstObject];
             NSLog(@"%@", thisUserRun);
               
-            NSArray *pointsPairs = [Utils jsonStringToArray:(PFObject *)thisUserRun];
+            NSArray *pointsPairs = [Utils jsonStringToArray:((PFObject *)thisUserRun)[@"polylineCoords"]];
             CLLocationCoordinate2D *CLLocations = malloc(pointsPairs.count * sizeof(CLLocationCoordinate2D));
             NSLog(@"%@", pointsPairs);
             for (int i = 0; i < pointsPairs.count; i++) {
@@ -135,6 +132,12 @@
               NSLog(@"Could not retrieve run");
           }
       }];
+}
+
++ (void) savePaceData: (PFObject *) runObject dataDict: (NSMutableDictionary *) currentPacesDictionary dataAverage: (double) currentPaceTotalToAverage {
+    [runObject setValue:currentPacesDictionary forKey:@"pacesDict"];
+    [runObject setValue:[NSString stringWithFormat:@"%f", currentPaceTotalToAverage] forKey:@"overallAveragePace"];
+    [runObject save];
 }
 
 @end

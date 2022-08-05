@@ -29,6 +29,7 @@
 @implementation HomeViewController {
     BOOL firstCenteredOnUserLocation;
     CLLocationManager *locationManager;
+    CLGeocoder *geocoder;
 
     CLLocation *currentLocation;
     CLLocation *destinationLocation;
@@ -36,6 +37,7 @@
     MKPointAnnotation* runnerPin;
     MKMapItem *rendezvousPoint;
     
+    CLLocation *startLocation;
     float destinationLocationLatitude;
     float destinationLocationLongitude;
     
@@ -61,6 +63,10 @@
     
     PFQuery *interceptRequestQuery;
     PFQuery *interceptionPathQuery;
+    
+    PaceImprovementTracker *pacer;
+    PFObject *currentRunObjectForNonRerun;
+    BOOL rerunStartApproved;
 }
 
 - (void)viewDidLoad {
@@ -70,6 +76,7 @@
     [self configureLocationManager];
     [self configureSubviews];
     [self parseLiveQuerySetUp];
+    [self configurePaceTracker: self.runObject.objectId];
     
     
     
@@ -87,18 +94,23 @@
     if (isReadyToStartRun || (_cloudPolyline && !isCurrentlyRunning)) {
         [self centerOnUserLocation:0.004];
         [self setUpHomeViewForRunStart];
+        startLocation = currentLocation;
         if (isReadyToStartRun) {
             self->isReadyToStartRun = false;
             if (_isRerun) {
                 [self setUpHomeViewForRerunStart];
             } else {
-                [Run uploadRun:currentRoute withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
-                    if (succeeded) {
-                        NSLog(@"run sent!");
-                    } else {
-                        NSLog(@"run not sent");
-                    }
-                }];
+                [Run uploadRun:currentRoute];
+                    
+                [Run retreiveRunObject:PFUser.currentUser completion:^(PFObject * _Nonnull runObject, NSError * _Nullable err) {
+                        if (runObject) {
+                            if (!self->pacer) {
+                            self->pacer = [[PaceImprovementTracker alloc] initWithRunID:runObject.objectId];
+                                self->currentRunObjectForNonRerun = runObject;
+                            }
+                        }
+                    }];
+                
             }
         } else if (_cloudPolyline) {
             isCurrentlyRunning = true;
@@ -180,10 +192,31 @@
     isReadyToStartRun = false;
     isCurrentlyRunning = false;
     
+    geocoder = [[CLGeocoder alloc] init];
+    
     
     //sending user location to Parse 
     [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(onTimer) userInfo:nil repeats:true];
 
+}
+
+- (void) configurePaceTracker: (NSString *) runID {
+    if (_isRerun) {
+        NSArray *rerunPolylinePoints = [Utils jsonStringToArray:self.runObject[@"polylineCoords"]];
+        rerunStartApproved = [PaceImprovementTracker isAtStartPosition:self->currentLocation firstPoint:rerunPolylinePoints[0]];
+        if (rerunStartApproved) {
+            
+            CLLocationCoordinate2D *polylinePoints = malloc(rerunPolylinePoints.count * sizeof(CLLocationCoordinate2D));
+            
+            
+            for (int i = 0; i < rerunPolylinePoints.count; i++) {
+                polylinePoints[i] = CLLocationCoordinate2DMake([rerunPolylinePoints[i][0] doubleValue] , [rerunPolylinePoints[i][1] doubleValue]);
+            }
+              MKPolyline *rerunPolyline = [MKPolyline polylineWithCoordinates:polylinePoints count:rerunPolylinePoints.count];
+            [_mapView addOverlay:rerunPolyline];
+            pacer = [[PaceImprovementTracker alloc] initWithRunID:runID];
+        }
+    }
 }
 
 #pragma mark:  Delegates
@@ -202,6 +235,8 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     currentLocation = [locations lastObject];
+    if (_isRerun) {[pacer paceTracker: self->currentLocation];}
+    else {[self->pacer recordPacesOnRegularRun:currentRunObjectForNonRerun userLocation:self->currentLocation];}
 }
 
 - (void)mapView:(MKMapView *)mapView didChangeUserTrackingMode:(MKUserTrackingMode)mode animated:(BOOL)animated {
@@ -235,11 +270,9 @@
     //placeholder run id
     [Run retreiveSpecificRunObject:@"dsfadkg" completion:^(PFObject * _Nonnull runObject, NSError * _Nullable err) {
         if (runObject) {
-            PaceImprovementTracker *pacer = [[PaceImprovementTracker alloc] initWithRunID:@"dfsadfsg"];
-            pacer.bestPacesDictionary = runObject[@"pacesDictionary"];
-            pacer.polylinePoints = [Utils jsonStringToArray:runObject[@"polylineCoords"]];
-            if ([PaceImprovementTracker isAtStartPosition:self->currentLocation firstPoint:pacer.polylinePoints[0]]) {
-                [pacer paceTracker:pacer.polylinePoints userLocation:self->currentLocation bestPaces:pacer.bestPacesDictionary];
+            self->pacer.runObject = runObject;
+            if (self->rerunStartApproved) {
+                [self->pacer paceTracker:self->currentLocation];
             }
         } else {
             //alert here
@@ -270,7 +303,46 @@
         if (runObject) {
             [runObject setValue:[Utils currentDateTime] forKey:@"endTime"];
             [runObject setValue:self->_timerLabel.text forKey:@"duration"];
-            [runObject saveInBackground];
+            
+            [self->geocoder reverseGeocodeLocation:self->startLocation completionHandler:^(NSArray *placemarks, NSError *error) {
+                    if (error){
+                        NSLog(@"Geocode failed with error: %@", error);
+                    } else {
+
+                    MKPlacemark *placemark1 = [placemarks lastObject];
+
+                    if(placemark1) {
+
+                        NSString *startAddress = [[placemark1.subThoroughfare stringByAppendingString:@" "] stringByAppendingString:placemark1.thoroughfare] ;
+                        
+                        [self->geocoder reverseGeocodeLocation:[[CLLocation alloc] initWithLatitude:self->destinationLocationLatitude longitude:self->destinationLocationLongitude] completionHandler:^(NSArray *placemarks, NSError *error) {
+                                if (error){
+                                    NSLog(@"Geocode failed with error: %@", error);
+                                } else {
+
+                                MKPlacemark *placemark2 = [placemarks lastObject];
+
+                                if(placemark2) {
+                                    NSString *endAddress;
+                                    if (placemark2.subThoroughfare) {
+                                        endAddress = [[placemark2.subThoroughfare stringByAppendingString:@" "] stringByAppendingString:placemark2.thoroughfare] ;
+                                    } else {
+                                        endAddress = placemark2.thoroughfare;
+                                    }
+                                    [runObject setValue:startAddress forKey:@"startLocationAddress"];
+                                    [runObject setValue:endAddress forKey:@"endLocationAddress"];
+                                    [runObject save];
+                                    
+                                } else {
+                                    NSLog(@"Geocode 1 failed");
+                                }
+                                }
+                        }];
+                    } else {
+                        NSLog(@"Geocode 2 failed");
+                    }
+                    }
+            }];
         } else {
             NSLog(@"%@", err.localizedDescription);
         }
@@ -362,8 +434,10 @@
             PFGeoPoint *rendezvousGeoPoint = object[@"rendezvous"];
             CLLocation *rendezvousLocation = [[CLLocation alloc] initWithLatitude:rendezvousGeoPoint.latitude longitude:rendezvousGeoPoint.longitude];
             MKPointAnnotation *rendezvousPoint = [[MKPointAnnotation alloc] initWithCoordinate:rendezvousLocation.coordinate title:@"Rendezvous" subtitle:@""];
+            dispatch_async(dispatch_get_main_queue(), ^{
             [strongself->_mapView addAnnotation:rendezvousPoint];
             [strongself->_mapView addOverlay:interceptRoutePolyline level:MKOverlayLevelAboveRoads];
+            });
 
         }
     }];
@@ -460,7 +534,6 @@
 }
 
 - (void) getLocation {
-    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
     [geocoder geocodeAddressString:_locationField.text completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
         if (placemarks) {
             self->destinationLocation = placemarks.firstObject.location;

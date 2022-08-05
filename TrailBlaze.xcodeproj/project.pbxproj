@@ -29,6 +29,8 @@
 		4EAAB558287002C60093B30B /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EAAB557287002C60093B30B /* ProfileViewController.m */; };
 		4EB1C50E2874F7EB00A61A10 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EB1C50D2874F7EB00A61A10 /* CoreLocation.framework */; };
 		4ECC3773287DDE4200708C8E /* keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4ECC3772287DDE4200708C8E /* keys.plist */; };
+		4ED63CB1289B1B880010FE9D /* RerunViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ED63CB0289B1B880010FE9D /* RerunViewController.m */; };
+		4ED63CB4289B1E2B0010FE9D /* RerunCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ED63CB3289B1E2B0010FE9D /* RerunCell.m */; };
 		4EE182E72888AED9001A60DD /* Interceptor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE182E62888AED9001A60DD /* Interceptor.m */; };
 		4EE674C22866D6C800A93C15 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE674C12866D6C800A93C15 /* AppDelegate.m */; };
 		4EE674C52866D6C800A93C15 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EE674C42866D6C800A93C15 /* SceneDelegate.m */; };
@@ -108,6 +110,10 @@
 		4EAAB557287002C60093B30B /* ProfileViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
 		4EB1C50D2874F7EB00A61A10 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		4ECC3772287DDE4200708C8E /* keys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = keys.plist; sourceTree = "<group>"; };
+		4ED63CAF289B1B880010FE9D /* RerunViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RerunViewController.h; sourceTree = "<group>"; };
+		4ED63CB0289B1B880010FE9D /* RerunViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RerunViewController.m; sourceTree = "<group>"; };
+		4ED63CB2289B1E2B0010FE9D /* RerunCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RerunCell.h; sourceTree = "<group>"; };
+		4ED63CB3289B1E2B0010FE9D /* RerunCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RerunCell.m; sourceTree = "<group>"; };
 		4EE182E52888AED9001A60DD /* Interceptor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Interceptor.h; sourceTree = "<group>"; };
 		4EE182E62888AED9001A60DD /* Interceptor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Interceptor.m; sourceTree = "<group>"; };
 		4EE674BD2866D6C800A93C15 /* TrailBlaze.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrailBlaze.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -212,6 +218,8 @@
 				4E0BB91E2891F4FC0037CC01 /* Interception.m */,
 				4E0BB923289462650037CC01 /* Utils.h */,
 				4E0BB924289462650037CC01 /* Utils.m */,
+				4ED63CB2289B1E2B0010FE9D /* RerunCell.h */,
+				4ED63CB3289B1E2B0010FE9D /* RerunCell.m */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -297,6 +305,8 @@
 				4E3483EB287F42430032C796 /* FindMatesViewController.m */,
 				4E7363CB2886132D00CE65AE /* MateDetailViewController.h */,
 				4E7363CC2886132D00CE65AE /* MateDetailViewController.m */,
+				4ED63CAF289B1B880010FE9D /* RerunViewController.h */,
+				4ED63CB0289B1B880010FE9D /* RerunViewController.m */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -386,6 +396,7 @@
 				TargetAttributes = {
 					4EE674BC2866D6C800A93C15 = {
 						CreatedOnToolsVersion = 13.4.1;
+						LastSwiftMigration = 1340;
 					};
 					4EE674D72866D6C900A93C15 = {
 						CreatedOnToolsVersion = 13.4.1;
@@ -564,6 +575,7 @@
 				4EE674C22866D6C800A93C15 /* AppDelegate.m in Sources */,
 				4EA6A7C32889C02D001AB835 /* RunnerAnnotation.m in Sources */,
 				4EAAB558287002C60093B30B /* ProfileViewController.m in Sources */,
+				4ED63CB4289B1E2B0010FE9D /* RerunCell.m in Sources */,
 				4E701DFA2876084800DD375B /* MateCell.m in Sources */,
 				4EE674D32866D6C900A93C15 /* main.m in Sources */,
 				4EE674C52866D6C800A93C15 /* SceneDelegate.m in Sources */,
@@ -578,6 +590,7 @@
 				4EE182E72888AED9001A60DD /* Interceptor.m in Sources */,
 				4E0BB925289462650037CC01 /* Utils.m in Sources */,
 				4E701DFD28768D0900DD375B /* MapViewController.m in Sources */,
+				4ED63CB1289B1B880010FE9D /* RerunViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -749,10 +762,23 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 37QBJHTCRH;
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)/**",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/AFNetworking/AFNetworking.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Bolts-Swift/BoltsSwift.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Bolts/Bolts.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/DateTools/DateTools.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/\"/**",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/NVActivityIndicatorView/NVActivityIndicatorView.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Parse/Parse.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/ParseLiveQuery/ParseLiveQuery.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Starscream/Starscream.framework/Headers\"",
+				);
 				INFOPLIST_FILE = TrailBlaze/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
@@ -774,6 +800,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.rhomboic.TrailBlaze;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "TrailBlaze/Objects/TrailBlaze-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -784,10 +813,23 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 37QBJHTCRH;
 				GENERATE_INFOPLIST_FILE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)/**",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/AFNetworking/AFNetworking.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Bolts-Swift/BoltsSwift.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Bolts/Bolts.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/DateTools/DateTools.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/\"/**",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/NVActivityIndicatorView/NVActivityIndicatorView.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Parse/Parse.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/ParseLiveQuery/ParseLiveQuery.framework/Headers\"",
+					"\"${PODS_CONFIGURATION_BUILD_DIR}/Starscream/Starscream.framework/Headers\"",
+				);
 				INFOPLIST_FILE = TrailBlaze/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
@@ -809,6 +851,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.rhomboic.TrailBlaze;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "TrailBlaze/Objects/TrailBlaze-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

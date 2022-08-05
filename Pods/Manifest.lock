@@ -17,6 +17,7 @@ PODS:
   - Bolts-Swift (1.5.0)
   - Bolts/Tasks (1.9.1)
   - DateTools (2.0.0)
+  - DGActivityIndicatorView (2.1.1)
   - Parse (1.19.3):
     - Parse/Core (= 1.19.3)
   - Parse/Core (1.19.3):
@@ -30,6 +31,7 @@ PODS:
 DEPENDENCIES:
   - AFNetworking
   - DateTools
+  - DGActivityIndicatorView
   - Parse
   - ParseLiveQuery
 
@@ -39,6 +41,7 @@ SPEC REPOS:
     - Bolts
     - Bolts-Swift
     - DateTools
+    - DGActivityIndicatorView
     - Parse
     - ParseLiveQuery
     - Starscream
@@ -48,10 +51,11 @@ SPEC CHECKSUMS:
   Bolts: 8c1e8aab2f603387b8b9924f57d1d64f43d3ffdc
   Bolts-Swift: afbbaf8c8186e7f769be4afa656949c14087ba44
   DateTools: 933ac9c490f21f92127cf690ccd8c397e0126caf
+  DGActivityIndicatorView: ff2c76073d79692f724863c8dd38685866a03cb6
   Parse: 0abb63a0ff6fa34a3f64b81d595a294e2ece143a
   ParseLiveQuery: 7bc437c3b986880ffe5f241a9921e37f45df0677
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
 
-PODFILE CHECKSUM: ce28278bc391db618d030e3ca65c92624a862f03
+PODFILE CHECKSUM: 5f284db7d4b342a0e0c2a76e0c6cfac1d8b140b6
 
 COCOAPODS: 1.11.3

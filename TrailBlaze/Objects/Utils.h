@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSString *) currentDateTime;
 + (NSString *) arrayToJSONString: (MKPolyline *) route;
-+ (NSArray *) jsonStringToArray: (PFObject *) object;
++ (NSArray *) jsonStringToArray: (NSString *) polylineCoords;
 
 @end
 
