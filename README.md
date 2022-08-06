@@ -6,10 +6,10 @@ Time spent: **27** days spent in total
 
 ## Weekly Milestones
 **Week 1 - July 4**
-Setting up basic view controllers
-Setting up MapKit
-[TrailRun] Track users location
-[TrailRun] Drawing route
+- [x] Setting up basic view controllers
+- [x] Setting up MapKit
+- [x] [TrailRun] Track users location
+- [x] [TrailRun] Drawing route
 
 **Week 2 - July 11**
 - [x] [TrailRun] Set up data structure for Route
