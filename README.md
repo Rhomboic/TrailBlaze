@@ -112,7 +112,7 @@ The following **required** functionality is completed:
 - [AFNetworking](https://github.com/AFNetworking/AFNetworking) - Networking task library
 - [Parse](https://github.com/parse-community) - Database library
 - [DGActivityIndicator](https://github.com/ninjaprox/DGActivityIndicatorView) - External visual polish library
-- [MapKIT](https://developer.apple.com/documentation/mapkit?language=objc)
+- [MapKIT](https://developer.apple.com/documentation/mapkit?language=objc) - Maps framework
 
 
 ## License
