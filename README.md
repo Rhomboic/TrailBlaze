@@ -10,13 +10,15 @@ The following **required** functionality is completed:
 
 ## Video Walkthroughs
 - [Intercept Feature](https://pxl.cl/29mkX)
+- [Friends (Social) Feature](https://user-images.githubusercontent.com/74246331/183229855-ae5060e1-8470-4214-8a7c-914950b6f847.gif)
+
+-   
 
 Here's a walkthrough of implemented user stories:
 
 ## Credits
 
 - [AFNetworking](https://github.com/AFNetworking/AFNetworking) - Networking task library
-- [DateTools](https://github.com/MatthewYork/DateTools) - Date formatting library
 - [Parse](https://github.com/parse-community) - Database library
 - [DGActivityIndicator](https://github.com/ninjaprox/DGActivityIndicatorView) - External visual polish library
 
