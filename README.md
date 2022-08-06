@@ -94,15 +94,14 @@ The following **required** functionality is completed:
 
 ## Video Walkthroughs
 - [Intercept Feature]
-![](https://i.imgur.com/miiuIyR.gif)
+![ezgif com-gif-maker (5)](https://user-images.githubusercontent.com/74246331/183230386-82448b54-816c-4a9a-ace7-894e58ec773a.gif)
+
 
 
 - [Friends (Social) Feature]
-    
-
 ![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/74246331/183229876-84fabb0c-5601-40ef-8f2c-c01e2cffda35.gif)
 
-Here's a walkthrough of implemented user stories:
+
 
 ## Credits
 
