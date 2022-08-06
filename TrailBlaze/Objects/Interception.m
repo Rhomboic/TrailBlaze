@@ -8,7 +8,8 @@
 #import "Interception.h"
 #import "MapKit/Mapkit.h"
 @import Parse;
-#import "Utils.h"
+#import "DateTimeUtils.h"
+#import "JSONUtils.h"
 
 
 @implementation Interception
@@ -27,10 +28,10 @@
     [newReq setRendezvous:rendezvous];
     
     
-    [newReq setPolylineCoords:[Utils arrayToJSONString:polyline]];
+    [newReq setPolylineCoords:[JSONUtils arrayToJSONString:polyline]];
     
     
-    [newReq setStartTime:[Utils currentDateTime]];
+    [newReq setStartTime:[DateTimeUtils currentDateTime]];
     [newReq setReceiver: receiver.objectId];
 
     [newReq saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {

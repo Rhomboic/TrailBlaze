@@ -1,22 +1,14 @@
 //
-//  Utils.m
+//  JSONUtils.m
 //  TrailBlaze
 //
-//  Created by Adam Issah on 7/29/22.
+//  Created by Adam Issah on 8/5/22.
 //
 
-#import "Utils.h"
-#import "CoreLocation/CoreLocation.h"
-#import "MapKit/MapKit.h"
-@import Parse;
+#import "JSONUtils.h"
+@import MapKit;
 
-@implementation Utils
-+ (NSString *) currentDateTime {
-    NSDateFormatter *DateFormatter=[[NSDateFormatter alloc] init];
-    [DateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
-    return [DateFormatter stringFromDate:[NSDate date]];
-}
-
+@implementation JSONUtils
 + (NSString *) arrayToJSONString: (MKPolyline *) polyline {
     NSUInteger pointCount = polyline.pointCount;
     CLLocationCoordinate2D *routeCoordinates = malloc(pointCount * sizeof(CLLocationCoordinate2D));
@@ -37,4 +29,5 @@
     NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&err];
     return json[@"points"];
 }
+
 @end

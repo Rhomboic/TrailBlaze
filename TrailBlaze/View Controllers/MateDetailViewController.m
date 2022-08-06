@@ -68,7 +68,6 @@
     NSString *clientKey = [dict objectForKey: @"clientKey"];
     liveQueryClient = [[PFLiveQueryClient alloc] initWithServer:@"https://tblaze.b4a.io" applicationId:appID clientKey:clientKey];
     approvalQuery = [PFQuery queryWithClassName:@"InterceptRequest"];
-//    [approvalQuery whereKey:@"approved" equalTo: [NSNumber numberWithBool:YES]];
     [approvalQuery whereKey:@"requester" equalTo: PFUser.currentUser.objectId];
     liveQuerySubscription = [liveQueryClient subscribeToQuery:approvalQuery];
     __weak typeof(self) weakself = self;

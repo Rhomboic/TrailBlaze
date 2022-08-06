@@ -12,7 +12,8 @@
 #import "Interception.h"
 #import "QueryManager.h"
 #import "ParseLiveQuery/ParseLiveQuery-umbrella.h"
-#import "Utils.h"
+#import "DateTimeUtils.h"
+#import "JSONUtils.h"
 #import "PaceImprovementTracker.h"
 
 @interface HomeViewController ()  <MKMapViewDelegate, CLLocationManagerDelegate>
@@ -23,6 +24,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *locationField;
 @property (weak, nonatomic) IBOutlet UIButton *statsButton;
 @property (weak, nonatomic) IBOutlet UILabel *timerLabel;
+@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *satelliteViewTapGesture;
 
 @end
 
@@ -48,7 +50,6 @@
     MKMapItem *startItem;
     MKMapItem *destinationItem;
     
-    BOOL isReadyToStartRun;
     BOOL isCurrentlyRunning;
     
     NSTimer *timer;
@@ -66,6 +67,7 @@
     
     PaceImprovementTracker *pacer;
     PFObject *currentRunObjectForNonRerun;
+    MKPolyline *rerunPolyline;
     BOOL rerunStartApproved;
 }
 
@@ -80,23 +82,32 @@
     
     
     
+    
 }
 #pragma mark:  Button Actions
 
 - (IBAction)didTapCurrentLocation:(id)sender {
     [self centerOnUserLocation:0.01];
 }
+- (IBAction)didThreeFingerTap:(id)sender {
+    if (_mapView.mapType == MKMapTypeHybridFlyover) {
+        _mapView.mapType = MKMapTypeStandard;
+    } else {
+        _mapView.mapType = MKMapTypeHybridFlyover;
+    }
+}
 
 - (IBAction)didTapStats:(id)sender {
 }
 
 - (IBAction)didTapTrailRun:(id)sender {
-    if (isReadyToStartRun || (_cloudPolyline && !isCurrentlyRunning)) {
+    if (self.isReadyToStartRun || (_cloudPolyline && !isCurrentlyRunning)) {
         [self centerOnUserLocation:0.004];
         [self setUpHomeViewForRunStart];
         startLocation = currentLocation;
-        if (isReadyToStartRun) {
-            self->isReadyToStartRun = false;
+        if (self.isReadyToStartRun) {
+            self.isReadyToStartRun = false;
+
             if (_isRerun) {
                 [self setUpHomeViewForRerunStart];
             } else {
@@ -105,7 +116,8 @@
                 [Run retreiveRunObject:PFUser.currentUser completion:^(PFObject * _Nonnull runObject, NSError * _Nullable err) {
                         if (runObject) {
                             if (!self->pacer) {
-                            self->pacer = [[PaceImprovementTracker alloc] initWithRunID:runObject.objectId];
+                            self->pacer = [[PaceImprovementTracker alloc] initForFirstRecord:runObject];
+                                self->pacer.delegate = self;
                                 self->currentRunObjectForNonRerun = runObject;
                             }
                         }
@@ -189,7 +201,9 @@
     [locationManager requestAlwaysAuthorization];
     locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     [locationManager startUpdatingLocation];
-    isReadyToStartRun = false;
+    if (!self.isReadyToStartRun) {
+    self.isReadyToStartRun = false;
+    }
     isCurrentlyRunning = false;
     
     geocoder = [[CLGeocoder alloc] init];
@@ -202,7 +216,7 @@
 
 - (void) configurePaceTracker: (NSString *) runID {
     if (_isRerun) {
-        NSArray *rerunPolylinePoints = [Utils jsonStringToArray:self.runObject[@"polylineCoords"]];
+        NSArray *rerunPolylinePoints = [JSONUtils jsonStringToArray:self.runObject[@"polylineCoords"]];
         rerunStartApproved = [PaceImprovementTracker isAtStartPosition:self->currentLocation firstPoint:rerunPolylinePoints[0]];
         if (rerunStartApproved) {
             
@@ -212,9 +226,10 @@
             for (int i = 0; i < rerunPolylinePoints.count; i++) {
                 polylinePoints[i] = CLLocationCoordinate2DMake([rerunPolylinePoints[i][0] doubleValue] , [rerunPolylinePoints[i][1] doubleValue]);
             }
-              MKPolyline *rerunPolyline = [MKPolyline polylineWithCoordinates:polylinePoints count:rerunPolylinePoints.count];
+              rerunPolyline = [MKPolyline polylineWithCoordinates:polylinePoints count:rerunPolylinePoints.count];
             [_mapView addOverlay:rerunPolyline];
-            pacer = [[PaceImprovementTracker alloc] initWithRunID:runID];
+            pacer = [[PaceImprovementTracker alloc] initWithRunObject:self.runObject];
+            self->pacer.delegate = self;
         }
     }
 }
@@ -222,12 +237,15 @@
 #pragma mark:  Delegates
 - (MKOverlayRenderer *)mapView:(MKMapView *)mapView rendererForOverlay:(id<MKOverlay>)overlay {
     MKPolylineRenderer *render = [[MKPolylineRenderer alloc] initWithOverlay:overlay];
-    if (overlay == currentPolyline) {
+    if (overlay == currentPolyline || overlay == rerunPolyline) {
         [render setStrokeColor:UIColor.systemYellowColor];
         [render setLineWidth:5.0];
 
-    } else {
+    } else if (overlay == _cloudPolyline) {
         [render setStrokeColor:UIColor.systemGreenColor];
+        [render setLineWidth:5.0];
+    } else {
+        [render setStrokeColor:((CustomPolyline *) overlay).color];
         [render setLineWidth:5.0];
     }
     return render;
@@ -248,6 +266,15 @@
 
     }
 }
+
+- (void) sendPolylineToHomeView:(CustomPolyline *)customPolyline {
+    [_mapView addOverlay:customPolyline];
+}
+
+- (void) notifyWhenPointPassed:(int)number {
+    NSLog(@"%@", [NSString stringWithFormat:@"Point: %i", number]);
+}
+
 #pragma mark: State Helpers
 - (void) setUpHomeViewForRunStart {
     self->isCurrentlyRunning = true;
@@ -267,21 +294,41 @@
 }
 
 - (void) setUpHomeViewForRerunStart {
-    //placeholder run id
-    [Run retreiveSpecificRunObject:@"dsfadkg" completion:^(PFObject * _Nonnull runObject, NSError * _Nullable err) {
-        if (runObject) {
-            self->pacer.runObject = runObject;
-            if (self->rerunStartApproved) {
-                [self->pacer paceTracker:self->currentLocation];
-            }
-        } else {
-            //alert here
-        }
-    }];
+    self->isCurrentlyRunning = true;
+    self.isReadyToStartRun = true;
+    
+    self->pacer.runObject = _runObject;
+    if (self->rerunStartApproved) {
+        self->isCurrentlyRunning = true;
+        _timerLabel.text = @"00:00:00";
+        [UIView transitionWithView:self.view duration:2 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+            [self.timerLabel setHidden:NO];
+            self.timerLabel.frame = CGRectMake(self.timerLabel.frame.origin.x, self.timerLabel.frame.origin.y + 600, self.timerLabel.frame.size.width, self.timerLabel.frame.size.height);
+        } completion:nil];
+        
+        timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerCounter) userInfo:nil repeats:true];
+        [PFUser.currentUser setValue:[NSNumber numberWithBool:YES] forKey:@"isRunning"];
+        [PFUser.currentUser saveInBackground];
+        [_statsButton setHidden:YES];
+        [_locationButton setHidden:YES];
+        [_trailrunButton setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+        [_trailrunButton setTitle:@"END" forState:UIControlStateNormal];
+        [self->pacer paceTracker:self->currentLocation];
+    } else {
+        UIAlertController * alertvc = [UIAlertController alertControllerWithTitle: @ "Go to Starting Point"
+                                     message:@"You are not at the start point of this Run" preferredStyle: UIAlertControllerStyleAlert
+                                    ];
+        UIAlertAction * okAction = [UIAlertAction actionWithTitle: @ "OK" style: UIAlertActionStyleDefault handler: ^ (UIAlertAction * _Nonnull action) {
+            NSLog(@ "not at startPoint Tapped");
+        }];
+                                  
+        [alertvc addAction: okAction];
+    }
 }
 
 - (void) setUpHomeViewForInterceptRun {
     isCurrentlyRunning = false;
+    _isRerun = false;
     timerCount = 0;
     [timer invalidate];
     [_trailrunButton setTitle:@"" forState:UIControlStateNormal];
@@ -301,7 +348,7 @@
     [PFUser.currentUser setValue: [NSNumber numberWithBool:NO] forKey:@"isRunning"];
     [Run retreiveRunObject:PFUser.currentUser completion:^(PFObject * _Nonnull runObject, NSError * _Nullable err) {
         if (runObject) {
-            [runObject setValue:[Utils currentDateTime] forKey:@"endTime"];
+            [runObject setValue:[DateTimeUtils currentDateTime] forKey:@"endTime"];
             [runObject setValue:self->_timerLabel.text forKey:@"duration"];
             
             [self->geocoder reverseGeocodeLocation:self->startLocation completionHandler:^(NSArray *placemarks, NSError *error) {
@@ -356,7 +403,11 @@
     }];
     [UIView transitionWithView:self.view duration:1 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         [self.timerLabel setHidden:YES];
-    } completion:nil];
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [DateTimeUtils loadHomeVC];
+        }
+    }];
     
     [_locationButton setHidden:NO];
     [_statsButton setHidden:NO];
@@ -571,13 +622,13 @@
         if (response) {
             MKRoute *route = [response.routes firstObject];
             self->currentRoute = route;
-            self->isReadyToStartRun = true;
+            self.isReadyToStartRun = true;
             self->currentPolyline = route.polyline;
             PFGeoPoint *rendezvousGeoPoint = [[PFGeoPoint alloc] init];
             rendezvousGeoPoint.latitude = self->rendezvousPoint.placemark.coordinate.latitude;
             rendezvousGeoPoint.longitude = self->rendezvousPoint.placemark.coordinate.longitude;
             if (self->_cloudUser) {
-                self->isReadyToStartRun = false;
+                self.isReadyToStartRun = false;
                 [Interception uploadRequest:rendezvousGeoPoint polyline:self->currentPolyline receiver:self->_cloudUser withCompletion:^(BOOL succeeded, NSError * _Nullable error) {
                     if (succeeded) {
                         NSLog(@"uploaded inteception data");
@@ -625,7 +676,6 @@
             }
         }];
     }
-
 
 
 @end
