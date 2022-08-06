@@ -9,7 +9,7 @@ Time spent: **27** days spent in total
 The following **required** functionality is completed:
 
 ## Video Walkthroughs
-- [Intercept Feature] (https://pxl.cl/29mkX)
+- [Intercept Feature](https://pxl.cl/29mkX)
 
 Here's a walkthrough of implemented user stories:
 
@@ -18,7 +18,7 @@ Here's a walkthrough of implemented user stories:
 - [AFNetworking](https://github.com/AFNetworking/AFNetworking) - Networking task library
 - [DateTools](https://github.com/MatthewYork/DateTools) - Date formatting library
 - [Parse](https://github.com/parse-community) - Database library
-- [DGActivityIndicator] (https://github.com/ninjaprox/DGActivityIndicatorView) - External visual polish library
+- [DGActivityIndicator](https://github.com/ninjaprox/DGActivityIndicatorView) - External visual polish library
 
 
 ## License
