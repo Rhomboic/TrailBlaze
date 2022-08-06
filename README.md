@@ -10,7 +10,8 @@ The following **required** functionality is completed:
 
 ## Video Walkthroughs
 - [Intercept Feature](https://pxl.cl/29mkX)
-- [Friends (Social) Feature](https://user-images.githubusercontent.com/74246331/183229855-ae5060e1-8470-4214-8a7c-914950b6f847.gif)
+- [Friends (Social) Feature]
+    ![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/74246331/183229876-84fabb0c-5601-40ef-8f2c-c01e2cffda35.gif)
 
 -   
 
