@@ -2,28 +2,24 @@
 
 **Trail Blaze** is a running/biking app using Parse as its backend.
 
-Time spent: **X** hours spent in total
+Time spent: **27** days spent in total
 
 ## User Stories
 
 The following **required** functionality is completed:
 
-- [ ] User can sign up to create a new account using Parse authentication
-
-## Video Walkthrough
+## Video Walkthroughs
+- [Intercept Feature](https://pxl.cl/29mkX)
 
 Here's a walkthrough of implemented user stories:
 
-GIF created with [Kap](https://getkap.co/).
-
 ## Credits
 
-- [AFNetworking](https://github.com/AFNetworking/AFNetworking) - networking task library
-- [DateTools](https://github.com/MatthewYork/DateTools) - date formatting library
-- [Parse](https://github.com/parse-community) - database library
+- [AFNetworking](https://github.com/AFNetworking/AFNetworking) - Networking task library
+- [DateTools](https://github.com/MatthewYork/DateTools) - Date formatting library
+- [Parse](https://github.com/parse-community) - Database library
+- [DGActivityIndicator](https://github.com/ninjaprox/DGActivityIndicatorView) - External visual polish library
 
-## Notes
-...
 
 ## License
 
