@@ -12,7 +12,8 @@
 #import "Interception.h"
 #import "QueryManager.h"
 #import "ParseLiveQuery/ParseLiveQuery-umbrella.h"
-#import "Utils.h"
+#import "DateTimeUtils.h"
+#import "JSONUtils.h"
 #import "PaceImprovementTracker.h"
 
 @interface HomeViewController ()  <MKMapViewDelegate, CLLocationManagerDelegate>
@@ -81,6 +82,7 @@
     
     
     
+    
 }
 #pragma mark:  Button Actions
 
@@ -105,6 +107,7 @@
         startLocation = currentLocation;
         if (self.isReadyToStartRun) {
             self.isReadyToStartRun = false;
+
             if (_isRerun) {
                 [self setUpHomeViewForRerunStart];
             } else {
@@ -213,7 +216,7 @@
 
 - (void) configurePaceTracker: (NSString *) runID {
     if (_isRerun) {
-        NSArray *rerunPolylinePoints = [Utils jsonStringToArray:self.runObject[@"polylineCoords"]];
+        NSArray *rerunPolylinePoints = [JSONUtils jsonStringToArray:self.runObject[@"polylineCoords"]];
         rerunStartApproved = [PaceImprovementTracker isAtStartPosition:self->currentLocation firstPoint:rerunPolylinePoints[0]];
         if (rerunStartApproved) {
             
@@ -291,6 +294,7 @@
 }
 
 - (void) setUpHomeViewForRerunStart {
+    self->isCurrentlyRunning = true;
     self.isReadyToStartRun = true;
     
     self->pacer.runObject = _runObject;
@@ -324,6 +328,7 @@
 
 - (void) setUpHomeViewForInterceptRun {
     isCurrentlyRunning = false;
+    _isRerun = false;
     timerCount = 0;
     [timer invalidate];
     [_trailrunButton setTitle:@"" forState:UIControlStateNormal];
@@ -343,7 +348,7 @@
     [PFUser.currentUser setValue: [NSNumber numberWithBool:NO] forKey:@"isRunning"];
     [Run retreiveRunObject:PFUser.currentUser completion:^(PFObject * _Nonnull runObject, NSError * _Nullable err) {
         if (runObject) {
-            [runObject setValue:[Utils currentDateTime] forKey:@"endTime"];
+            [runObject setValue:[DateTimeUtils currentDateTime] forKey:@"endTime"];
             [runObject setValue:self->_timerLabel.text forKey:@"duration"];
             
             [self->geocoder reverseGeocodeLocation:self->startLocation completionHandler:^(NSArray *placemarks, NSError *error) {
@@ -400,7 +405,7 @@
         [self.timerLabel setHidden:YES];
     } completion:^(BOOL finished) {
         if (finished) {
-            [Utils loadHomeVC];
+            [DateTimeUtils loadHomeVC];
         }
     }];
     
@@ -671,10 +676,6 @@
             }
         }];
     }
-
-- (void) configureRerunStart {
-    self.isReadyToStartRun = true;
-}
 
 
 @end

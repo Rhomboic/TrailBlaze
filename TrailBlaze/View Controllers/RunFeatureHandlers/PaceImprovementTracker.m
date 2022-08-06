@@ -10,7 +10,7 @@
 #import "MapKit/MapKit.h"
 #import "CoreMotion/CoreMotion.h"
 #import "Run.h"
-#import "Utils.h"
+#import "JSONUtils.h"
 #import "CustomPolyline.h"
 
 @implementation PaceImprovementTracker {
@@ -44,7 +44,7 @@ static double interpointDistanceWiggleValue = 10;
     nextPoints = [[NSArray alloc] init];
     startDate = [NSDate date];
     bestPacesDictionary = runObj[@"pacesDictionary"];
-    polylinePoints = [Utils jsonStringToArray:runObj[@"polylineCoords"]];
+    polylinePoints = [JSONUtils jsonStringToArray:runObj[@"polylineCoords"]];
     lastDistanceToNextPoint = FLT_MAX;
     lastDistanceToNextTwoPoints = FLT_MAX;
     
@@ -57,7 +57,7 @@ static double interpointDistanceWiggleValue = 10;
     indexOfNextPoint = 1;
     nextPoints = [[NSArray alloc] init];
     startDate = [NSDate date];
-    polylinePoints = [Utils jsonStringToArray:runObj[@"polylineCoords"]];
+    polylinePoints = [JSONUtils jsonStringToArray:runObj[@"polylineCoords"]];
     lastDistanceToNextPoint = FLT_MAX;
     lastDistanceToNextTwoPoints = FLT_MAX;
     
@@ -150,7 +150,7 @@ static double interpointDistanceWiggleValue = 10;
 }
 
 - (void) recordPacesOnRegularRun: (PFObject *) runObject userLocation:(CLLocation *) userLocation{
-    NSArray *Points = [Utils jsonStringToArray:runObject[@"polylineCoords"]];
+    NSArray *Points = [JSONUtils jsonStringToArray:runObject[@"polylineCoords"]];
     [pedometer startPedometerEventUpdatesWithHandler:^(CMPedometerEvent * _Nullable pedometerEvent, NSError * _Nullable error) {
         
     }];

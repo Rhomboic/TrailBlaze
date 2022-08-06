@@ -9,10 +9,11 @@
 /* Begin PBXBuildFile section */
 		4E0BB91928909A900037CC01 /* InterceptRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E0BB91828909A900037CC01 /* InterceptRequest.m */; };
 		4E0BB91F2891F4FC0037CC01 /* Interception.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E0BB91E2891F4FC0037CC01 /* Interception.m */; };
-		4E0BB925289462650037CC01 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E0BB924289462650037CC01 /* Utils.m */; };
+		4E0BB925289462650037CC01 /* DateTimeUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E0BB924289462650037CC01 /* DateTimeUtils.m */; };
 		4E3483E5287EB0EE0032C796 /* QueryManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3483E4287EB0EE0032C796 /* QueryManager.m */; };
 		4E3483EC287F42430032C796 /* FindMatesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3483EB287F42430032C796 /* FindMatesViewController.m */; };
 		4E577636289D84E600F0BDD6 /* CustomPolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E577635289D84E600F0BDD6 /* CustomPolyline.m */; };
+		4E57763B289DE28200F0BDD6 /* JSONUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E57763A289DE28200F0BDD6 /* JSONUtils.m */; };
 		4E5831F7287F7CB7006D9982 /* FriendRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5831F6287F7CB7006D9982 /* FriendRequest.m */; };
 		4E5831FA287FA565006D9982 /* RunCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E5831F9287FA565006D9982 /* RunCell.m */; };
 		4E64D18E287E1151007A87A1 /* Run.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E64D18D287E1151007A87A1 /* Run.m */; };
@@ -73,14 +74,16 @@
 		4E0BB91828909A900037CC01 /* InterceptRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InterceptRequest.m; sourceTree = "<group>"; };
 		4E0BB91D2891F4FC0037CC01 /* Interception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Interception.h; sourceTree = "<group>"; };
 		4E0BB91E2891F4FC0037CC01 /* Interception.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Interception.m; sourceTree = "<group>"; };
-		4E0BB923289462650037CC01 /* Utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
-		4E0BB924289462650037CC01 /* Utils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
+		4E0BB923289462650037CC01 /* DateTimeUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DateTimeUtils.h; sourceTree = "<group>"; };
+		4E0BB924289462650037CC01 /* DateTimeUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DateTimeUtils.m; sourceTree = "<group>"; };
 		4E3483E3287EB0EE0032C796 /* QueryManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QueryManager.h; sourceTree = "<group>"; };
 		4E3483E4287EB0EE0032C796 /* QueryManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QueryManager.m; sourceTree = "<group>"; };
 		4E3483EA287F42430032C796 /* FindMatesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FindMatesViewController.h; sourceTree = "<group>"; };
 		4E3483EB287F42430032C796 /* FindMatesViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FindMatesViewController.m; sourceTree = "<group>"; };
 		4E577634289D84E600F0BDD6 /* CustomPolyline.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomPolyline.h; sourceTree = "<group>"; };
 		4E577635289D84E600F0BDD6 /* CustomPolyline.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomPolyline.m; sourceTree = "<group>"; };
+		4E577639289DE28200F0BDD6 /* JSONUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JSONUtils.h; sourceTree = "<group>"; };
+		4E57763A289DE28200F0BDD6 /* JSONUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JSONUtils.m; sourceTree = "<group>"; };
 		4E5831F5287F7CB7006D9982 /* FriendRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FriendRequest.h; sourceTree = "<group>"; };
 		4E5831F6287F7CB7006D9982 /* FriendRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FriendRequest.m; sourceTree = "<group>"; };
 		4E5831F8287FA565006D9982 /* RunCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RunCell.h; sourceTree = "<group>"; };
@@ -185,15 +188,33 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		4E577637289DE17D00F0BDD6 /* RunFeatureHandlers */ = {
+			isa = PBXGroup;
+			children = (
+				4EE182E52888AED9001A60DD /* Interceptor.h */,
+				4EE182E62888AED9001A60DD /* Interceptor.m */,
+				4EFE7BBF289858E400DBBA56 /* PaceImprovementTracker.h */,
+				4EFE7BC0289858E400DBBA56 /* PaceImprovementTracker.m */,
+			);
+			path = RunFeatureHandlers;
+			sourceTree = "<group>";
+		};
+		4E577638289DE1C200F0BDD6 /* SharedUtilities */ = {
+			isa = PBXGroup;
+			children = (
+				4E0BB923289462650037CC01 /* DateTimeUtils.h */,
+				4E0BB924289462650037CC01 /* DateTimeUtils.m */,
+				4E577639289DE28200F0BDD6 /* JSONUtils.h */,
+				4E57763A289DE28200F0BDD6 /* JSONUtils.m */,
+			);
+			path = SharedUtilities;
+			sourceTree = "<group>";
+		};
 		4E64D192287E39E3007A87A1 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
 				4E3483E3287EB0EE0032C796 /* QueryManager.h */,
 				4E3483E4287EB0EE0032C796 /* QueryManager.m */,
-				4EE182E52888AED9001A60DD /* Interceptor.h */,
-				4EE182E62888AED9001A60DD /* Interceptor.m */,
-				4EFE7BBF289858E400DBBA56 /* PaceImprovementTracker.h */,
-				4EFE7BC0289858E400DBBA56 /* PaceImprovementTracker.m */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -217,8 +238,6 @@
 				4EA6A7C22889C02D001AB835 /* RunnerAnnotation.m */,
 				4E0BB91D2891F4FC0037CC01 /* Interception.h */,
 				4E0BB91E2891F4FC0037CC01 /* Interception.m */,
-				4E0BB923289462650037CC01 /* Utils.h */,
-				4E0BB924289462650037CC01 /* Utils.m */,
 				4ED63CB2289B1E2B0010FE9D /* RerunCell.h */,
 				4ED63CB3289B1E2B0010FE9D /* RerunCell.m */,
 				4E577634289D84E600F0BDD6 /* CustomPolyline.h */,
@@ -252,6 +271,7 @@
 		4EE674BF2866D6C800A93C15 /* TrailBlaze */ = {
 			isa = PBXGroup;
 			children = (
+				4E577638289DE1C200F0BDD6 /* SharedUtilities */,
 				4E64D192287E39E3007A87A1 /* Networking */,
 				4EA7BFB82874B9D800D1D797 /* Objects */,
 				4EE674F52866D6D500A93C15 /* View Controllers */,
@@ -309,6 +329,7 @@
 				4E7363CC2886132D00CE65AE /* MateDetailViewController.m */,
 				4ED63CAF289B1B880010FE9D /* RerunViewController.h */,
 				4ED63CB0289B1B880010FE9D /* RerunViewController.m */,
+				4E577637289DE17D00F0BDD6 /* RunFeatureHandlers */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -589,8 +610,9 @@
 				4E64D18E287E1151007A87A1 /* Run.m in Sources */,
 				4EAAB550286E6DBB0093B30B /* HomeViewController.m in Sources */,
 				4EE182E72888AED9001A60DD /* Interceptor.m in Sources */,
-				4E0BB925289462650037CC01 /* Utils.m in Sources */,
+				4E0BB925289462650037CC01 /* DateTimeUtils.m in Sources */,
 				4E701DFD28768D0900DD375B /* MapViewController.m in Sources */,
+				4E57763B289DE28200F0BDD6 /* JSONUtils.m in Sources */,
 				4E577636289D84E600F0BDD6 /* CustomPolyline.m in Sources */,
 				4ED63CB1289B1B880010FE9D /* RerunViewController.m in Sources */,
 			);

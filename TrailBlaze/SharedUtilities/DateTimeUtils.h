@@ -13,11 +13,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface Utils : NSObject
+@interface DateTimeUtils : NSObject
 
 + (NSString *) currentDateTime;
-+ (NSString *) arrayToJSONString: (MKPolyline *) route;
-+ (NSArray *) jsonStringToArray: (NSString *) polylineCoords;
 + (void) loadHomeVC;
 
 @end

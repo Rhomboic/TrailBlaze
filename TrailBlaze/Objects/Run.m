@@ -8,7 +8,8 @@
 #import "Run.h"
 @import Parse;
 @import MapKit;
-#import "Utils.h"
+#import "DateTimeUtils.h"
+#import "JSONUtils.h"
 
 
 @implementation Run
@@ -31,10 +32,10 @@
     Run *newRun = [Run new];
     
     newRun.user = [PFUser currentUser];
-    newRun.startTime = [Utils currentDateTime];
+    newRun.startTime = [DateTimeUtils currentDateTime];
     
     
-    newRun.polylineCoords = [Utils arrayToJSONString:route.polyline];
+    newRun.polylineCoords = [JSONUtils arrayToJSONString:route.polyline];
     newRun.distance =  [NSString stringWithFormat:@"%.2f", route.distance];
     NSLog(@"%@", newRun.distance);
 
@@ -53,7 +54,7 @@
             NSDictionary *thisUserRun = [runs firstObject];
             NSLog(@"%@", thisUserRun);
               
-            NSArray *pointsPairs = [Utils jsonStringToArray:((PFObject *)thisUserRun)[@"polylineCoords"]];
+            NSArray *pointsPairs = [JSONUtils jsonStringToArray:((PFObject *)thisUserRun)[@"polylineCoords"]];
             CLLocationCoordinate2D *CLLocations = malloc(pointsPairs.count * sizeof(CLLocationCoordinate2D));
             NSLog(@"%@", pointsPairs);
             for (int i = 0; i < pointsPairs.count; i++) {
