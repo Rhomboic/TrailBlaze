@@ -440,7 +440,7 @@
     (void)[liveQuerySubscription addCreateHandler:^(PFQuery<PFObject *> * _Nonnull query, PFObject * _Nonnull object) {
         __strong typeof(self) strongself = weakself;
         if (object) {
-            NSLog(@"🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸%@",object);
+            NSLog(@"%@",object);
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSLog(@"inside dispatch async block main thread from main thread");
                 PFQuery *query = [PFQuery queryWithClassName:@"_User"];
@@ -471,7 +471,7 @@
     (void)[liveQuerySubscription2 addCreateHandler:^(PFQuery<PFObject *> * _Nonnull query, PFObject * _Nonnull object) {
         __strong typeof(self) strongself = weakself;
         if (object) {
-            NSLog(@"🐤🐤🐤🐤🐤🐤%@",object);
+            NSLog(@"%@",object);
             NSError *err;
             NSData *data = [object[@"polylineCoords"] dataUsingEncoding:NSUTF8StringEncoding];
             NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&err];
@@ -515,7 +515,7 @@
         (void)[liveQuerySubscription addUpdateHandler:^(PFQuery<PFObject *> * _Nonnull query, PFObject * _Nonnull object) {
             __strong typeof(self) strongself = weakself;
             if (object) {
-                NSLog(@"🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸🐸%@",object);
+                NSLog(@"%@",object);
                 dispatch_async(dispatch_get_main_queue(), ^{
                     NSLog(@"inside dispatch async block main thread from main thread");
                     
@@ -665,7 +665,7 @@
                 [Interceptor getBestETAPoint: 16 allPoints:points interceptorLocation:self->locationManager.location runnerLocation:self->cloudUserLocation completion:^(MKMapItem * _Nonnull bestPoint, NSError * _Nonnull err) {
                     if (bestPoint) {
                         self->rendezvousPoint = bestPoint;
-                        NSLog(@"🌗🌗🌗🌗v%@", bestPoint);
+                        NSLog(@"%@", bestPoint);
                         MKPointAnnotation *rendezvousPin = [[MKPointAnnotation alloc] initWithCoordinate:bestPoint.placemark.coordinate title:@"Rendezvous" subtitle:@"Meet here"];
                         [self->_mapView addAnnotation:rendezvousPin];
                         [self getDirections:bestPoint.placemark.coordinate.latitude destlongitude:bestPoint.placemark.coordinate.longitude];

@@ -156,7 +156,6 @@ static double interpointDistanceWiggleValue = 10;
     }];
      nextPoints = [Points subarrayWithRange:NSMakeRange(indexOfNextPoint, 2)];
         if ([self passedPointSecond:nextPoints currentLocation:userLocation]) {
-            NSLog(@"💀💀💀💀💀💀💀💀");
             [self.delegate notifyWhenPointPassed: indexOfNextPoint];
             
             __block NSNumber *currentPace;

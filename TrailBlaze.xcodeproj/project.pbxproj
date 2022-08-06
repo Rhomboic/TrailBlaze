@@ -272,6 +272,7 @@
 			isa = PBXGroup;
 			children = (
 				4E577638289DE1C200F0BDD6 /* SharedUtilities */,
+				4E577637289DE17D00F0BDD6 /* RunFeatureHandlers */,
 				4E64D192287E39E3007A87A1 /* Networking */,
 				4EA7BFB82874B9D800D1D797 /* Objects */,
 				4EE674F52866D6D500A93C15 /* View Controllers */,
@@ -329,7 +330,6 @@
 				4E7363CC2886132D00CE65AE /* MateDetailViewController.m */,
 				4ED63CAF289B1B880010FE9D /* RerunViewController.h */,
 				4ED63CB0289B1B880010FE9D /* RerunViewController.m */,
-				4E577637289DE17D00F0BDD6 /* RunFeatureHandlers */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";

@@ -138,7 +138,7 @@
     
     
     for (NSString *st in received) {
-        NSLog(@"🐤🐤🐤🐤🐤🐤🐤🐤%@, %@", thisUserObject.objectId, st);
+        NSLog(@"%@, %@", thisUserObject.objectId, st);
         if ([st isEqualToString:thisUserObject.objectId]) {
             [cell.friendStatusIcon setImage:[UIImage systemImageNamed:@"person.fill.questionmark"]];
             [cell.friendStatusIcon setTintColor:UIColor.darkGrayColor];

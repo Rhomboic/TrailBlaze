@@ -36,7 +36,7 @@
 + (NSArray *) prunePoints: (NSArray *) routePoints numberOfPoints: (int) numberOfPoints{
     NSMutableArray *pruned = [NSMutableArray new];
     NSUInteger gap = routePoints.count/numberOfPoints;
-    NSLog(@"🌈🌈🌈🌈🌈%lu", (unsigned long)gap);
+    NSLog(@"%lu", (unsigned long)gap);
     for (int i = (int) gap; i < numberOfPoints; i+=gap) {
         [pruned addObject:[routePoints objectAtIndex:i]];
         NSLog(@"🐤🐤🐤%@", pruned);
@@ -48,8 +48,8 @@
     float etaDifferenceThreshold = maxWaitTime*60;
     NSArray *prunedPoints = [self prunePoints:[self getRemainingRoutePoints:allPoints runnerLocation:runnerLocation] numberOfPoints:10];
     NSLog(@"%lu", (unsigned long)allPoints.count);
-    NSLog(@"🧪🧪🧪🧪🧪%lu", (unsigned long)[self getRemainingRoutePoints:allPoints runnerLocation:runnerLocation].count);
-    NSLog(@"🌈🌈🌈🌈🌈%@", prunedPoints);
+    NSLog(@"%lu", (unsigned long)[self getRemainingRoutePoints:allPoints runnerLocation:runnerLocation].count);
+    NSLog(@"%@", prunedPoints);
     NSMutableArray *etasDifferences = [NSMutableArray array];
     NSMutableDictionary *etaPointPairs = [[NSMutableDictionary alloc] init];
     dispatch_queue_t serialQueue = dispatch_queue_create("serialQueue", nil);
