@@ -11,9 +11,9 @@ The following **required** functionality is completed:
 ## Video Walkthroughs
 - [Intercept Feature](https://pxl.cl/29mkX)
 - [Friends (Social) Feature]
-    ![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/74246331/183229876-84fabb0c-5601-40ef-8f2c-c01e2cffda35.gif)
+    
 
--   
+![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/74246331/183229876-84fabb0c-5601-40ef-8f2c-c01e2cffda35.gif)
 
 Here's a walkthrough of implemented user stories:
 
