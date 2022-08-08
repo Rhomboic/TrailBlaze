@@ -8,25 +8,29 @@ Time spent: **27** days spent in total
 ## Video Walkthroughs
 - [Trail Run]
 	Users can input a destination and are given a suggested route to run. There is also a timer for keeping track of how long your run took and pace data is recorded in the background for viewing later.
+	
+	
+	![ezgif com-gif-maker (11)](https://user-images.githubusercontent.com/74246331/183526887-13ce4758-a5fb-4763-9599-1d0222ad2261.gif)
+
 
 - [Intercept Feature]
 	Given two users currently online in the app, where one user happens to currently be on an active run and the other isn’t, if both users are friends, the currently nonrunning user can request to meet the actively running user at an arbitrary point on the runner’s path that has a similar ETA to both users
 
-![ezgif com-gif-maker (5)](https://user-images.githubusercontent.com/74246331/183230386-82448b54-816c-4a9a-ace7-894e58ec773a.gif)
+	![ezgif com-gif-maker (5)](https://user-images.githubusercontent.com/74246331/183230386-82448b54-816c-4a9a-ace7-894e58ec773a.gif)
 
 
 
 - [Friends (Social) Feature]
 	Users can send and receive friend requests and by extension become friends to enable them keep track of each other’s runs
 
-![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/74246331/183229876-84fabb0c-5601-40ef-8f2c-c01e2cffda35.gif)
+	![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/74246331/183229876-84fabb0c-5601-40ef-8f2c-c01e2cffda35.gif)
 
 
 - [Pace Improvement Tracking Feature]
 	Users can run a previous route against their previous self and see their improvement with colorful visual aids on the map. Red line over sections where they run slower than their past run and green lines on faster sections.
 	
 
-![ezgif com-gif-maker (10)](https://user-images.githubusercontent.com/74246331/183526191-c1dcf600-6fdb-4ad3-8d7a-dd8ec27377c6.gif)
+	![ezgif com-gif-maker (10)](https://user-images.githubusercontent.com/74246331/183526191-c1dcf600-6fdb-4ad3-8d7a-dd8ec27377c6.gif)
 
 
 ## Weekly Milestones
