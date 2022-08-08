@@ -106,6 +106,7 @@ The following **required** functionality is completed:
 ![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/74246331/183229876-84fabb0c-5601-40ef-8f2c-c01e2cffda35.gif)
 
 
+- [Pace Improvement Tracking Feature]
 
 ## Credits
 
