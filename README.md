@@ -1,8 +1,25 @@
 # Project 3 - *Trail Blaze*
 
 **Trail Blaze** is a running app using Parse as its backend.
+TrailBlaze is essentially a running fitness app that tracks your improvement over time and allows you to make your run more exciting by allowing friends to join you during the course of your runs. This idea arose from a conversation I had with my intern mates in which the majority of them expressed some interest in running/hiking. I initially began as a general purpose running and hiking app but was later geared towards running alone. Setting up the social aspects such as sending and receiving friend requests as well as keeping track of intercepting friend’s and their live data was pretty challenging. For this I had to learn about threads and asynchronous functions, as well as building a view programmatically (without the use of the storyboard). This was all encompassed in the Intercept feature, one of two technically ambiguous challenges in the app’s development. The second being the Pace Improvement Tracking feature (or PIT) which involves showing the user their improvement live on running a specific route as they traverse it over multiple runs. 
 
 Time spent: **27** days spent in total
+
+## Video Walkthroughs
+- [Intercept Feature]
+
+
+![ezgif com-gif-maker (5)](https://user-images.githubusercontent.com/74246331/183230386-82448b54-816c-4a9a-ace7-894e58ec773a.gif)
+
+
+
+- [Friends (Social) Feature]
+
+
+![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/74246331/183229876-84fabb0c-5601-40ef-8f2c-c01e2cffda35.gif)
+
+
+- [Pace Improvement Tracking Feature]
 
 ## Weekly Milestones
 **Week 1 - July 4**
@@ -89,24 +106,6 @@ Time spent: **27** days spent in total
     - [x] Reorganize file system
 - [ ] (Stretch)MKMapSnapshot of the whole run route, save as part of Run Object
 
-
-The following **required** functionality is completed:
-
-## Video Walkthroughs
-- [Intercept Feature]
-
-
-![ezgif com-gif-maker (5)](https://user-images.githubusercontent.com/74246331/183230386-82448b54-816c-4a9a-ace7-894e58ec773a.gif)
-
-
-
-- [Friends (Social) Feature]
-
-
-![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/74246331/183229876-84fabb0c-5601-40ef-8f2c-c01e2cffda35.gif)
-
-
-- [Pace Improvement Tracking Feature]
 
 ## Credits
 
