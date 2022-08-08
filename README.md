@@ -30,7 +30,8 @@ Time spent: **27** days spent in total
 	Users can run a previous route against their previous self and see their improvement with colorful visual aids on the map. Red line over sections where they run slower than their past run and green lines on faster sections.
 	
 
-	![ezgif com-gif-maker (10)](https://user-images.githubusercontent.com/74246331/183526191-c1dcf600-6fdb-4ad3-8d7a-dd8ec27377c6.gif)
+	![ezgif com-gif-maker (13)](https://user-images.githubusercontent.com/74246331/183527439-b5a10b66-8d98-4851-9c61-f60df9ebc1ca.gif)
+
 
 
 ## Weekly Milestones
