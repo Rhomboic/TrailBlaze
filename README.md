@@ -23,7 +23,12 @@ Time spent: **27** days spent in total
 
 
 - [Pace Improvement Tracking Feature]
-	Users can run a route they have previously run against their previous self and see their improvement with colorful visual aids on the map.
+	Users can run a previous route against their previous self and see their improvement with colorful visual aids on the map. Red line over sections where they run slower than their past run and green lines on faster sections.
+	
+
+![ezgif com-gif-maker (10)](https://user-images.githubusercontent.com/74246331/183526191-c1dcf600-6fdb-4ad3-8d7a-dd8ec27377c6.gif)
+
+
 ## Weekly Milestones
 **Week 1 - July 4**
 - [x] Setting up basic view controllers
