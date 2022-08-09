@@ -48,7 +48,7 @@ Time spent: **27** days spent in total
 	- [x] Duration
 	- [x] StartTime
 	- [x] EndTime
-	- [x] MKRoute Object
+	- [x] MKRoute Object polyline as JSON array of (latitude, longitude) points
 - [x] [TrailRun] Save routes + Networking
 - [x] [Social] Introduce multiple users
 	- [x] Set up profile tab to show list of Friends 
